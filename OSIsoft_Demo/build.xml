@@ -1,0 +1,6 @@
+<project name="${projectName}" default="createjar">    
+  <property name="projectHome" location="." />
+  <target name="createjar">
+    <jar destfile="${projectHome}/build/${projectName}.jar" basedir="${projectHome}/bin" />
+  </target>    
+</project>
