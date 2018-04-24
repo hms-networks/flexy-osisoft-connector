@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import com.ewon.ewonitf.EWException;
-import com.ewon.ewonitf.ScheduledActionManager;
 import com.ewon.ewonitf.SysControlBlock;
 
 /**
@@ -22,30 +20,24 @@ public class OSIsoft_DemoMain {
    **********************************************************************************
    */
 
-   // IP address of OSIsoft Server
-   static String targetIP = "192.168.0.124";
+   // IP address of OSIsoft PI Server
+   static String piServerIP    = "192.168.0.124";
 
    // Your BASE64 encoded BASIC authentication credentials
    // Visit https://www.base64encode.org/
    // Encode: "username:password"
-   static String authCredentials = "UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh";
+   static String piServerLogin = "UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh";
 
    // Path to the directory containing your OSIsoft server's certificate
    static String eWONCertificatePath = "/usr/Certificates";
-
-   // URL for the OSIsoft Server
-   // Do not change
-   static String targetURL = "https://" + targetIP + "/piwebapi/streams/";
-
-   // Post Headers
-   // Do not change
-   static String postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
 
    // End Server Parameters
    // --------------------------------------------------------------------------------
 
    // Update rate for all tags in milliseconds
    static int cycleTimeMs = 1000;
+   
+   static OSIsoftServer piServer;
 
    public static void main(String[] args) {
 
@@ -83,6 +75,8 @@ public class OSIsoft_DemoMain {
       // Set the path to the directory holding the certificate for the server
       // Only needed if the certificate is self signed
       setCertificatePath(eWONCertificatePath);
+      
+      piServer = new OSIsoftServer(piServerIP, piServerLogin);
 
       // Infinite loop
       while (true) {
@@ -96,21 +90,13 @@ public class OSIsoft_DemoMain {
 
             // Post all tags in Tags
             for (int i = 0; i < tags.size(); i++) {
-               postTag((Tag) tags.get(i));
+               piServer.postTag((Tag) tags.get(i));
             }
          }
       }
    }
 
-   // Posts a tag value to the OSIsoft server
-   public static void postTag(Tag tag) {
-      try {
-         ScheduledActionManager.RequestHttpX(targetURL + tag.getWebID() + "/Value", "Post", postHeaders,
-               buildBody(tag.getTagValue()), "", "");
-      } catch (EWException e) {
-         e.printStackTrace();
-      }
-   }
+  
 
    // Sets the directory that the eWON uses to check for SSL Certificates
    public static void setCertificatePath(String path) {
@@ -125,14 +111,5 @@ public class OSIsoft_DemoMain {
          System.out.println("Error: Setting certificate directory failed");
          System.exit(0);
       }
-   }
-
-   // Builds and returns the body content
-   // Hardcoded JSON payload
-   public static String buildBody(String value) {
-      String jsonBody = "{\r\n" + "    \"Timestamp\": \"1970-01-01T00:00:00Z\",\r\n" + "    \"Value\": " + value
-            + ",\r\n" + "    \"UnitsAbbreviation\": \"\",\r\n" + "    \"Good\": true,\r\n"
-            + "    \"Questionable\": false,\r\n" + "}";
-      return jsonBody;
-   }
+   }   
 }
