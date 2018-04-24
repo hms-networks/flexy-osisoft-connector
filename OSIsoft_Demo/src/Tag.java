@@ -50,6 +50,11 @@ public class Tag {
    public String getWebID() {
       return webID;
    }
+   
+   // Sets the OSIsoft webID
+   public void setWebID(String newWebID) {
+      webID = newWebID;
+   }
 
    // Returns a string representation of the eWON's long value of the tag
    public String getTagValue() {
