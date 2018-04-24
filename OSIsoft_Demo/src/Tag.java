@@ -15,10 +15,10 @@ import com.ewon.ewonitf.TagControl;
 
 public class Tag {
 
-   String eWONTagName;
-   String webID;
+   private String eWONTagName;
+   private String webID;
 
-   TagControl tagControl;
+   private TagControl tagControl;
    
    public Tag(String tagName) {
       eWONTagName = tagName;
