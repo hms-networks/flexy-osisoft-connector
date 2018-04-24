@@ -20,12 +20,12 @@ public class Tag {
 
    TagControl tagControl;
 
-   public Tag(String eWONname, String id) {
-      eWONTagName = eWONname;
+   public Tag(String tagName, String id) {
+      eWONTagName = tagName;
       webID = id;
 
       try {
-         tagControl = new TagControl(eWONname);
+         tagControl = new TagControl(tagName);
       } catch (EWException e) {
          e.printStackTrace();
       }
