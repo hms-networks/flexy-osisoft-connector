@@ -19,6 +19,16 @@ public class Tag {
    String webID;
 
    TagControl tagControl;
+   
+   public Tag(String tagName) {
+      eWONTagName = tagName;
+      
+      try {
+         tagControl = new TagControl(tagName);
+      } catch (EWException e) {
+         e.printStackTrace();
+      }
+   }
 
    public Tag(String tagName, String id) {
       eWONTagName = tagName;
