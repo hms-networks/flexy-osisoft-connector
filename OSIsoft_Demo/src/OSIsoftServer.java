@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.ArrayList;
 
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.ScheduledActionManager;
@@ -103,6 +104,13 @@ public class OSIsoftServer {
       {
          System.out.println("Error: Failed to delete the HTTPS response file");
       }         
+   }
+   
+   // Initializes a list of tags
+   public void initTags(ArrayList tagList) throws JSONException{
+      for (int i = 0; i < tagList.size(); i++) {
+         setTagWebId((Tag) tagList.get(i));
+      }
    }
    
    // Posts a tag value to the OSIsoft server
