@@ -35,12 +35,11 @@ public class OSIsoft_DemoMain {
       
       piServer = new OSIsoftServer(piConfig.getServerIP(), piConfig.getServerLogin(), piConfig.getServerWebID());
       
-      for (int i = 0; i < piConfig.getTags().size(); i++) {
-         try {
-            piServer.setTagWebId((Tag) piConfig.getTags().get(i));
-         } catch (JSONException e) {
-            e.printStackTrace();
-         }
+      try {
+         piServer.initTags(piConfig.getTags());
+      } catch (JSONException e) {
+         System.out.println("Error: Linking eWON tags to OSIsoft PI server failed");
+         e.printStackTrace();
       }
       // Infinite loop
       while (true) {
