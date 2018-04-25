@@ -27,15 +27,19 @@ public class OSIsoftServer {
    // BASE64 encoded BASIC authentication credentials
    private String authCredentials;
    
+   // WebID for the database being used
+   private String dbWebID;
+   
    // URL for the OSIsoft Server
    private String targetURL;
 
    // Post Headers
    private String postHeaders;
    
-   public OSIsoftServer(String ip, String login) {
+   public OSIsoftServer(String ip, String login, String webID) {
       serverIP = ip;
       authCredentials = login;
+      dbWebID = webID;
       targetURL = "https://" + serverIP + "/piwebapi/streams/";
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
    }
