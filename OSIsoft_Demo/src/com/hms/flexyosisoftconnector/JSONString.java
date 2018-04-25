@@ -1,3 +1,4 @@
+package com.hms.flexyosisoftconnector;
 
 /**
  * The <code>JSONString</code> interface allows a <code>toJSONString()</code> 
