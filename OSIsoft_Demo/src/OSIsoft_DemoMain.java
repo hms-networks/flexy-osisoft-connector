@@ -22,7 +22,10 @@ public class OSIsoft_DemoMain {
 
    // IP address of OSIsoft PI Server
    static String piServerIP    = "192.168.0.124";
-
+   
+   // WebID of the OSIsoft PI Dataserver
+   static String dataServerWebID = "s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD";
+   
    // Your BASE64 encoded BASIC authentication credentials
    // Visit https://www.base64encode.org/
    // Encode: "username:password"
@@ -76,7 +79,7 @@ public class OSIsoft_DemoMain {
       // Only needed if the certificate is self signed
       setCertificatePath(eWONCertificatePath);
       
-      piServer = new OSIsoftServer(piServerIP, piServerLogin);
+      piServer = new OSIsoftServer(piServerIP, piServerLogin, dataServerWebID);
 
       // Infinite loop
       while (true) {
