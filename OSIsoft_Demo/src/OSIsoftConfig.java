@@ -13,39 +13,59 @@ import java.util.ArrayList;
 public class OSIsoftConfig {
  
     // IP address of OSIsoft PI Server
-    String piServerIP    = "192.168.0.124";
+    String piServerIP;
     
     // WebID of the OSIsoft PI Dataserver
-    String dataServerWebID = "s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD";
+    String dataServerWebID;
     
     // Your BASE64 encoded BASIC authentication credentials
     // Visit https://www.base64encode.org/
     // Encode: "username:password"
-    String piServerLogin = "UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh";
+    String piServerLogin;
 
     // Path to the directory containing your OSIsoft server's certificate
-    String eWONCertificatePath = "/usr/Certificates";
+    String eWONCertificatePath;
 
     // Update rate for all tags in milliseconds
-    int cycleTimeMs = 1000;
+    int cycleTimeMs;
     
     // List of tags 
     ArrayList tags = new ArrayList();
 
 
-    public OSIsoftConfig() {
+    // Build the OSIsoft config from a configuration json file
+    public OSIsoftConfig(String configFile) throws JSONException {
        
-       Tag exampleTag1 = new Tag("ExampleTag1");
-       tags.add(exampleTag1);
-
-       Tag exampleTag2 = new Tag("ExampleTag2");
-       tags.add(exampleTag2);
-
-       Tag exampleTag3 = new Tag("ExampleTag3");
-       tags.add(exampleTag3);
-
-       Tag exampleTag4 = new Tag("ExampleTag4");
-       tags.add(exampleTag4);
+       //Read in the JSON file to a string 
+       JSONTokener JsonT = new JSONTokener(FileReader.readFile("file://" + configFile));
+       
+       //Build a JSON Object containing the whole file
+       JSONObject configJSON = new JSONObject(JsonT);
+       
+       //Build a JSON Object containing the "ServerConfig"
+       JSONObject serverConfig = configJSON.getJSONObject("ServerConfig");
+       
+       //Set the server config parameters
+       piServerIP = serverConfig.getString("IP");
+       dataServerWebID = serverConfig.getString("WebID");
+       piServerLogin = serverConfig.getString("Credentials");
+       
+       //Build a JSON Object containing the "eWONConfig"
+       JSONObject eWONConfig = configJSON.getJSONObject("eWONConfig");
+       eWONCertificatePath = eWONConfig.getString("CertificatePath");
+       
+       //Build a JSON Object containing the "AppConfig"
+       JSONObject appConfig = configJSON.getJSONObject("AppConfig");
+       cycleTimeMs = appConfig.getInt("CycleTimeMs");
+     
+       //Build a JSON Array containing the tag names
+       JSONArray tagNames = configJSON.getJSONArray("TagList");
+       
+       //For each tagname in the config file create a tag and add it to 
+       //the arraylist of tags
+       for(int i = 0; i < tagNames.length(); i++) {
+          tags.add(new Tag(tagNames.getString(i)));
+       }
     }
     
     // Returns the IP Address of the OSIsoft Server

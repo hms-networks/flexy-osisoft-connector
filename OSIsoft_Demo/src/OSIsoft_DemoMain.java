@@ -24,7 +24,11 @@ public class OSIsoft_DemoMain {
       long lastUpdateTimeMs = 0;
       long currentTimeMs;
 
-      piConfig = new OSIsoftConfig();
+      try {
+         piConfig = new OSIsoftConfig("/usr/ServerConfig.json");
+      } catch (JSONException e1) {
+         e1.printStackTrace();
+      }
       
       // Set the path to the directory holding the certificate for the server
       // Only needed if the certificate is self signed
