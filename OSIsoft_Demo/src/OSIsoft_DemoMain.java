@@ -52,20 +52,16 @@ public class OSIsoft_DemoMain {
 
       ArrayList tags = new ArrayList();
 
-      Tag exampleTag1 = new Tag("ExampleTag1",
-            "A0E_6AQvaWb6Emua0jP1uU4Mg3_I9yFg_6BGrQwgAJwekvw-RujgJKJ2kyYeSxDRtIAQAUEktU0VSVkVSLVBDXERBVEFCQVNFMVxURVNUfFRFU1QgVkFMVUU");
+      Tag exampleTag1 = new Tag("ExampleTag1");
       tags.add(exampleTag1);
 
-      Tag exampleTag2 = new Tag("ExampleTag2",
-            "A0E_6AQvaWb6Emua0jP1uU4Mg3_I9yFg_6BGrQwgAJwekvw6xirSCtPFkKs-ZfpFM_78wUEktU0VSVkVSLVBDXERBVEFCQVNFMVxURVNUfEVYQU1QTEVUQUcy");
+      Tag exampleTag2 = new Tag("ExampleTag2");
       tags.add(exampleTag2);
 
-      Tag exampleTag3 = new Tag("ExampleTag3",
-            "A0E_6AQvaWb6Emua0jP1uU4Mg3_I9yFg_6BGrQwgAJwekvwwG6znx7wwkyYapia14gTxAUEktU0VSVkVSLVBDXERBVEFCQVNFMVxURVNUfEVYQU1QTEVUQUcz");
+      Tag exampleTag3 = new Tag("ExampleTag3");
       tags.add(exampleTag3);
 
-      Tag exampleTag4 = new Tag("ExampleTag4",
-            "A0E_6AQvaWb6Emua0jP1uU4Mg3_I9yFg_6BGrQwgAJwekvw8wyi8vpTeEeFRR7WdeC_FwUEktU0VSVkVSLVBDXERBVEFCQVNFMVxURVNUfEVYQU1QTEVUQUc0");
+      Tag exampleTag4 = new Tag("ExampleTag4");
       tags.add(exampleTag4);
 
       // End Tag Parameters
@@ -80,7 +76,14 @@ public class OSIsoft_DemoMain {
       setCertificatePath(eWONCertificatePath);
       
       piServer = new OSIsoftServer(piServerIP, piServerLogin, dataServerWebID);
-
+      
+      for (int i = 0; i < tags.size(); i++) {
+         try {
+            piServer.setTagWebId((Tag) tags.get(i));
+         } catch (JSONException e) {
+            e.printStackTrace();
+         }
+      }
       // Infinite loop
       while (true) {
 
