@@ -1,0 +1,14 @@
+{
+   "ServerConfig":{
+      "IP":"192.168.0.124",
+      "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
+      "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
+   },
+   "eWONConfig":{
+      "CertificatePath":"/usr/Certificates"
+   },
+   "AppConfig":{
+      "CycleTimeMs":1000
+   },
+   "TagList":["ExampleTag1", "ExampleTag2", "ExampleTag3", "ExampleTag4"]
+}
