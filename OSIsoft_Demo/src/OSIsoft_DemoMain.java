@@ -14,72 +14,27 @@ import com.ewon.ewonitf.SysControlBlock;
  */
 public class OSIsoft_DemoMain {
 
-   /*--------------------------------------------------------------------------------
-   **********************************************************************************
-   ** Server Parameters
-   **********************************************************************************
-   */
+   static OSIsoftConfig piConfig;
 
-   // IP address of OSIsoft PI Server
-   static String piServerIP    = "192.168.0.124";
-   
-   // WebID of the OSIsoft PI Dataserver
-   static String dataServerWebID = "s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD";
-   
-   // Your BASE64 encoded BASIC authentication credentials
-   // Visit https://www.base64encode.org/
-   // Encode: "username:password"
-   static String piServerLogin = "UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh";
-
-   // Path to the directory containing your OSIsoft server's certificate
-   static String eWONCertificatePath = "/usr/Certificates";
-
-   // End Server Parameters
-   // --------------------------------------------------------------------------------
-
-   // Update rate for all tags in milliseconds
-   static int cycleTimeMs = 1000;
-   
    static OSIsoftServer piServer;
 
    public static void main(String[] args) {
-
-      /*--------------------------------------------------------------------------------
-      **********************************************************************************
-      ** Tag Parameters
-      **********************************************************************************
-      */
-
-      ArrayList tags = new ArrayList();
-
-      Tag exampleTag1 = new Tag("ExampleTag1");
-      tags.add(exampleTag1);
-
-      Tag exampleTag2 = new Tag("ExampleTag2");
-      tags.add(exampleTag2);
-
-      Tag exampleTag3 = new Tag("ExampleTag3");
-      tags.add(exampleTag3);
-
-      Tag exampleTag4 = new Tag("ExampleTag4");
-      tags.add(exampleTag4);
-
-      // End Tag Parameters
-      // --------------------------------------------------------------------------------
 
       // Time keeping variables
       long lastUpdateTimeMs = 0;
       long currentTimeMs;
 
+      piConfig = new OSIsoftConfig();
+      
       // Set the path to the directory holding the certificate for the server
       // Only needed if the certificate is self signed
-      setCertificatePath(eWONCertificatePath);
+      setCertificatePath(piConfig.getCertificatePath());
       
-      piServer = new OSIsoftServer(piServerIP, piServerLogin, dataServerWebID);
+      piServer = new OSIsoftServer(piConfig.getServerIP(), piConfig.getServerLogin(), piConfig.getServerWebID());
       
-      for (int i = 0; i < tags.size(); i++) {
+      for (int i = 0; i < piConfig.getTags().size(); i++) {
          try {
-            piServer.setTagWebId((Tag) tags.get(i));
+            piServer.setTagWebId((Tag) piConfig.getTags().get(i));
          } catch (JSONException e) {
             e.printStackTrace();
          }
@@ -89,14 +44,14 @@ public class OSIsoft_DemoMain {
 
          currentTimeMs = System.currentTimeMillis();
 
-         if ((currentTimeMs - lastUpdateTimeMs) >= cycleTimeMs) {
+         if ((currentTimeMs - lastUpdateTimeMs) >= piConfig.getCycleTimeMs()) {
 
             // Update the last update time
             lastUpdateTimeMs = currentTimeMs;
 
             // Post all tags in Tags
-            for (int i = 0; i < tags.size(); i++) {
-               piServer.postTag((Tag) tags.get(i));
+            for (int i = 0; i < piConfig.getTags().size(); i++) {
+               piServer.postTag((Tag) piConfig.getTags().get(i));
             }
          }
       }
