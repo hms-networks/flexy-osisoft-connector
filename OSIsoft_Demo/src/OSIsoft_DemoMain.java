@@ -26,7 +26,9 @@ public class OSIsoft_DemoMain {
       try {
          piConfig = new OSIsoftConfig("/usr/ServerConfig.json");
       } catch (JSONException e1) {
+         System.out.println("Error: ServerConfig.json is malformed");
          e1.printStackTrace();
+         System.exit(0);
       }
       
       // Set the path to the directory holding the certificate for the server
