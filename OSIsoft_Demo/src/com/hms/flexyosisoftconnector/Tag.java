@@ -1,3 +1,4 @@
+package com.hms.flexyosisoftconnector;
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.TagControl;
 
