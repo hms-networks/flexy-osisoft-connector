@@ -1,0 +1,1 @@
+-heapsize 5M -classpath /usr/flexy-osisoft-connector.jar -emain com.hms.flexyosisoftconnector.Main
