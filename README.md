@@ -2,7 +2,7 @@
 
 ## About
 
-This demo reads multiple tag values from an eWON Flexy IO Server and POSTs them to an OSIsoft PI Server.
+This application connects tags from a Flexy to an OSIsoft PI dataserver.
 
 ## Certificates
 
