@@ -1,5 +1,6 @@
 package com.hms.flexyosisoftconnector;
 import com.ewon.ewonitf.SysControlBlock;
+import com.hms.flexyosisoftconnector.JSON.JSONException;
 
 /**
  * eWON Flexy java demo for OSIsoft Server

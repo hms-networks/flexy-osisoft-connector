@@ -1,4 +1,4 @@
-package com.hms.flexyosisoftconnector;
+package com.hms.flexyosisoftconnector.JSON;
 
 
 import java.io.IOException;

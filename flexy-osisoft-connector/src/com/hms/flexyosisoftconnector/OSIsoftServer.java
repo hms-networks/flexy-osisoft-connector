@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.ScheduledActionManager;
+import com.hms.flexyosisoftconnector.JSON.*;
 
 /**
  * 
