@@ -94,3 +94,7 @@ The certificate must be placed somewhere in the /usr directory of the Flexy. The
 // Path to the directory containing your OSIsoft server's certificate 
 static String eWONCertificatePath = "/usr/Certificates";
 ```
+
+## Customizing the application
+
+If you wish to modify, debug, or rebuild the application the toolkit and documentation is available here https://developer.ewon.biz/content/java-0. The instructions for setting up your development environment are here  https://developer.ewon.biz/system/files_force/AUG-072-0-EN-%28JAVA%20J2SE%20Toolkit%20for%20eWON%20Flexy%29.pdf?download=1
