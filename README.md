@@ -4,6 +4,61 @@
 
 This application connects tags from a Flexy to an OSIsoft PI dataserver.
 
+## Getting Started
+
+### Configuration 
+
+All user configuration is done through the ConnectorConfig.json file.  This file must be modified to match your configuration.
+
+#### Example ConnectorConfig.json
+```
+{
+   "ServerConfig":{
+      "IP":"192.168.0.124",
+      "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
+      "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
+   },
+   "eWONConfig":{
+      "CertificatePath":"/usr/Certificates"
+   },
+   "AppConfig":{
+      "CycleTimeMs":1000
+   },
+   "TagList":["ExampleTag1", "ExampleTag2", "ExampleTag3", "ExampleTag4"]
+}
+```
+#### ServerConfig
+
+IP - IP address of your OSIsoft PI server
+
+WebID - WebID of your OSIsoft PI dataserver
+
+#### Credentials - Base64 encoded user credentials for basic authentication 
+
+To generate your Base64 encoded user credentials visit https://www.base64encode.org/ and encode "username:password"
+
+Example: If your username is 'username' and your password is 'password' you would encode "username:password" and should get "dXNlcm5hbWU6cGFzc3dvcmQ="
+
+#### eWONConfig
+
+CertificatePath - Path to the directory containing your server's certificate.  For more information see the Certificates section
+
+#### AppConfig
+
+CycleTimeMs - Cycle time of the application.  All tags will be posted at this specified interval
+
+#### TagList
+
+TagList - List of eWON tags that should be connected to the OSIsoft PI server.  If PI Points with (non case sensitive) matching names do not exist on the PI server they will be created automatically. 
+
+### Installation
+
+Using FTP transfer flexy-osisoft-connector.jar, jvmrun, and ServerConfig.json to the /usr/ directory of your eWON.  You must also follow all steps in the Certificates section below.
+
+### Running
+
+The application will start automatically on startup
+
 ## Certificates
 
 The Flexy by default only allows HTTPS connections with servers that have certificates verified by a trusted certificate authority.  To enable a HTTPS connections with a server that has a self signed certificate the Flexy must have a copy of that certificate.  Follow the steps outlined in this section to create and install a new certificate.
