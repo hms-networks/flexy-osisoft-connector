@@ -34,7 +34,7 @@ Run "PI Web API Admin Utility". Configure the server normally.  When you get to 
 
 ### Transfer certificate to Flexy
 
-The certificate must be placed somewhere in the /usr directory of the Flexy. The certificate can be transfered to the Flexy using FTP. In this example a Certificates directory is used.  If another directory is to be used the eWONCertificatePath string in OSIsoft_DemoMain.java must be updated.
+The certificate must be placed somewhere in the /usr directory of the Flexy. The certificate can be transfered to the Flexy using FTP. The "CertificatePath" in ConnectorConfig.json must be updated with the path to where you store the certificate file. 
 ```
 // Path to the directory containing your OSIsoft server's certificate 
 static String eWONCertificatePath = "/usr/Certificates";
