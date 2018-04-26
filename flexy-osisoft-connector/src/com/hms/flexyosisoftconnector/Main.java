@@ -12,7 +12,7 @@ import com.ewon.ewonitf.SysControlBlock;
  * @author thk
  *
  */
-public class OSIsoft_DemoMain {
+public class Main {
 
    static OSIsoftConfig piConfig;
 
