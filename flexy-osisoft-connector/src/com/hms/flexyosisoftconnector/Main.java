@@ -18,6 +18,9 @@ public class Main {
    static OSIsoftConfig piConfig;
 
    static OSIsoftServer piServer;
+   
+   //Filename of connector config file
+   static String connectorConfigFilename= "/usr/ConnectorConfig.json";
 
    public static void main(String[] args) {
 
@@ -26,9 +29,9 @@ public class Main {
       long currentTimeMs;
 
       try {
-         piConfig = new OSIsoftConfig("/usr/ServerConfig.json");
+         piConfig = new OSIsoftConfig(connectorConfigFilename);
       } catch (JSONException e1) {
-         System.out.println("Error: ServerConfig.json is malformed");
+         System.out.println("Error: " + connectorConfigFilename + " is malformed");
          e1.printStackTrace();
          System.exit(0);
       }
