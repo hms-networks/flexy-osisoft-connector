@@ -81,6 +81,8 @@ openssl pkcs12 -inkey key.pem -in certificate.crt -export -out certificate.p12
 You will be prompted to enter an export password, the again to verify.  Remember this password.
 
 ### Install the certificate on server
+These installation instructions are specific to Windows 7.  If your server is running on a different OS the process may differ.
+
 In Windows, right click on your certificate.crt file and click Install Certificate.  Follow the prompts and place the certificate in the "Trusted Root Certification Authorities" store.  When you click finish a security prompt will warn you that it cannot validate the certificate's origin and ask if you want to install this certificate, click yes. 
 
 Run mmc.exe.  Click "File"->"Add/Remove Snap-in...".  From the "Availbile snap-ins" add "Certificates" to the "Selected snap-ins", set the permissions to "Computer account" when prompted, then select your local computer.  Click "Finish", then "Ok".  Expand "Certificates (Local Computer)", then expand "Personal", then expand and select "Certificates". Click "Action"->"All Tasks"->"Import". Click "Next" then "Browse".  The the file open window select the file extension to be "Personal Information Exchange (*.pfx;*.p12)".  Find and select your "certificate.p12" file, then click open then next.  You will now be prompted to enter in your export password from when you created your certificate.p12 file, after doing so click next.  Place the certificate in the "Personal" certificate store, then click "Next" then "Finish".  You should be prompted that the import was successful, click "OK".
