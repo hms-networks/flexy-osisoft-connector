@@ -6,7 +6,7 @@ This application connects tags from a Flexy to an OSIsoft PI dataserver.
 
 ## Getting Started
 
-### Configuration 
+### Configuration
 
 All user configuration is done through the ConnectorConfig.json file.  This file must be modified to match your configuration.
 
@@ -33,7 +33,7 @@ IP - IP address of your OSIsoft PI server
 
 WebID - WebID of your OSIsoft PI dataserver
 
-#### Credentials - Base64 encoded user credentials for basic authentication 
+#### Credentials - Base64 encoded user credentials for basic authentication
 
 To generate your Base64 encoded user credentials visit https://www.base64encode.org/ and encode "username:password"
 
@@ -49,7 +49,7 @@ CycleTimeMs - Cycle time of the application.  All tags will be posted at this sp
 
 #### TagList
 
-TagList - List of eWON tags that should be connected to the OSIsoft PI server.  If PI Points with (non case sensitive) matching names do not exist on the PI server they will be created automatically. 
+TagList - List of eWON tags that should be connected to the OSIsoft PI server.  If PI Points with (non case sensitive) matching names do not exist on the PI server they will be created automatically.
 
 ### Installation
 
@@ -63,7 +63,7 @@ The application will start automatically on startup
 
 The Flexy by default only allows HTTPS connections with servers that have certificates verified by a trusted certificate authority.  To enable a HTTPS connections with a server that has a self signed certificate the Flexy must have a copy of that certificate.  Follow the steps outlined in this section to create and install a new certificate.
 
-### Generate the certificate 
+### Generate the certificate
 
 Here is an example of generating a certificate using openssl.
 
@@ -83,7 +83,7 @@ You will be prompted to enter an export password, the again to verify.  Remember
 ### Install the certificate on server
 These installation instructions are specific to Windows 7.  If your server is running on a different OS the process may differ.
 
-In Windows, right click on your certificate.crt file and click Install Certificate.  Follow the prompts and place the certificate in the "Trusted Root Certification Authorities" store.  When you click finish a security prompt will warn you that it cannot validate the certificate's origin and ask if you want to install this certificate, click yes. 
+In Windows, right click on your certificate.crt file and click Install Certificate.  Follow the prompts and place the certificate in the "Trusted Root Certification Authorities" store.  When you click finish a security prompt will warn you that it cannot validate the certificate's origin and ask if you want to install this certificate, click yes.
 
 Run mmc.exe.  Click "File"->"Add/Remove Snap-in...".  From the "Availbile snap-ins" add "Certificates" to the "Selected snap-ins", set the permissions to "Computer account" when prompted, then select your local computer.  Click "Finish", then "Ok".  Expand "Certificates (Local Computer)", then expand "Personal", then expand and select "Certificates". Click "Action"->"All Tasks"->"Import". Click "Next" then "Browse".  The the file open window select the file extension to be "Personal Information Exchange (*.pfx;*.p12)".  Find and select your "certificate.p12" file, then click open then next.  You will now be prompted to enter in your export password from when you created your certificate.p12 file, after doing so click next.  Place the certificate in the "Personal" certificate store, then click "Next" then "Finish".  You should be prompted that the import was successful, click "OK".
 
@@ -91,9 +91,9 @@ Run "PI Web API Admin Utility". Configure the server normally.  When you get to 
 
 ### Transfer certificate to Flexy
 
-The certificate must be placed somewhere in the /usr directory of the Flexy. The certificate can be transfered to the Flexy using FTP. The "CertificatePath" in ConnectorConfig.json must be updated with the path to where you store the certificate file. 
+The certificate must be placed somewhere in the /usr directory of the Flexy. The certificate can be transfered to the Flexy using FTP. The "CertificatePath" in ConnectorConfig.json must be updated with the path to where you store the certificate file.
 ```
-// Path to the directory containing your OSIsoft server's certificate 
+// Path to the directory containing your OSIsoft server's certificate
 static String eWONCertificatePath = "/usr/Certificates";
 ```
 
