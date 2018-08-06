@@ -29,9 +29,11 @@ All user configuration is done through the ConnectorConfig.json file.  This file
 ```
 #### ServerConfig
 
-IP - IP address of your OSIsoft PI server
+The OSIsoft PI Database Web API must be installed for this connector to work.  The connector requires three items to connect to the OSIsoft PI Web API they are the IP address of the server running the PI Web API, WebID of the PI Web API and a valid user name and password for the system running the PI Web API software.
 
-WebID - WebID of your OSIsoft PI dataserver
+IP – IP address of the system running the Web API (in this example assume the IP address is 192.168.0.124)
+
+WebID – WebID of your OSIsoft Web API.  This value can be attained by pointing a browser to the IP address (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step.  (A security warning may occur when trying to access this page, this warning should be ignored)
 
 #### Credentials - Base64 encoded user credentials for basic authentication
 
