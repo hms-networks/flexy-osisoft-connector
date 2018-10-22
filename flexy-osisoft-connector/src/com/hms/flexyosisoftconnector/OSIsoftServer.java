@@ -115,7 +115,9 @@ public class OSIsoftServer {
 
    // Looks up and sets a tags PI Point web id.  If the tag does not exist
    // in the data server a PI Point is created for that tag.
-   public void setTagWebId(Tag tag) throws JSONException {
+   public int setTagWebId(Tag tag) throws JSONException {
+
+      int res = NO_ERROR;
       
       //HTTPS responses are stored in this file
       String responseFilename = "/usr/response.txt";
@@ -124,60 +126,54 @@ public class OSIsoftServer {
       String url = "https://" + serverIP +"/piwebapi/dataservers/" + dbWebID + "/points";
 
       //Check if the tag already exists in the dataserver
-      try {
-         //RequestHttpX stores the response in a file
-         ScheduledActionManager.RequestHttpX(url + "?nameFilter=" + tag.getTagName(), "Get", postHeaders,"", "", responseFilename);
-      } catch (EWException e) {
-         e.printStackTrace();
-      }
-      
-      //Parse the JSON response and retrieve the JSON Array of items
-      JSONTokener JsonT = new JSONTokener(FileReader.readFile("file://" +responseFilename));
-      JSONObject requestResponse = new JSONObject(JsonT);
-      JSONArray items = requestResponse.getJSONArray("Items");
-      
-      if (items.length() > 0) {
-         //tag exists
-         tag.setWebID(items.getJSONObject(0).getString("WebId"));
-      } else {
-         //tag does not exist and must be created
-         try {
-            //RequestHttpX stores the response in a file
-            ScheduledActionManager.RequestHttpX(url, "Post", postHeaders,buildNewPointBody(tag.getTagName()), "", responseFilename);
-         } catch (EWException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-         }
-         
-         //The WebID is sent back in the headers of the previous post
-         //however, there is no mechanism currently to retrieve it so 
-         //another request must be issued.
-         try {
-            //RequestHttpX stores the response in a file
-            ScheduledActionManager.RequestHttpX(url + "?nameFilter=" + tag.getTagName(), "Get", postHeaders,"", "", responseFilename);
-         } catch (EWException e) {
-            e.printStackTrace();
-         }
-         
+      res = RequestHTTPS(url + "?nameFilter=" + tag.getTagName(), "Get", postHeaders,"", "", responseFilename);
+      if (res == NO_ERROR)
+      {
          //Parse the JSON response and retrieve the JSON Array of items
-         JsonT = new JSONTokener(FileReader.readFile("file://" +responseFilename));
-         requestResponse = new JSONObject(JsonT);
-         items = requestResponse.getJSONArray("Items");
+         JSONTokener JsonT = new JSONTokener(FileReader.readFile("file://" +responseFilename));
+         JSONObject requestResponse = new JSONObject(JsonT);
+         JSONArray items = new JSONArray();
+         if(requestResponse.has("Items")) items = requestResponse.getJSONArray("Items");
+
          if (items.length() > 0) {
             //tag exists
             tag.setWebID(items.getJSONObject(0).getString("WebId"));
          } else {
-            //tag does not exist, error
-            System.out.println("Error: PI Point creation failed");
-         } 
+            //tag does not exist and must be created
+            res = RequestHTTPS(url, "Post", postHeaders,buildNewPointBody(tag.getTagName()), "", responseFilename);
+
+            if (res == NO_ERROR)
+            {
+               //The WebID is sent back in the headers of the previous post
+               //however, there is no mechanism currently to retrieve it so
+               //another request must be issued.
+               res = RequestHTTPS(url + "?nameFilter=" + tag.getTagName(), "Get", postHeaders,"", "", responseFilename);
+               if (res == NO_ERROR)
+               {
+                  //Parse the JSON response and retrieve the JSON Array of items
+                  JsonT = new JSONTokener(FileReader.readFile("file://" +responseFilename));
+                  requestResponse = new JSONObject(JsonT);
+                  if(requestResponse.has("Items")) items = requestResponse.getJSONArray("Items");
+                  if (items.length() > 0) {
+                     //tag exists
+                     tag.setWebID(items.getJSONObject(0).getString("WebId"));
+                  } else {
+                     //tag does not exist, error
+                     Logger.LOG_ERR("PI Point creation failed");
+                  }
+               }
+            }
+         }
+
+         //Delete the https response file
+         File file = new File(responseFilename);
+         if(!file.delete())
+         {
+            Logger.LOG_ERR("Failed to delete the HTTPS response file");
+         }
       }
-   
-      //Delete the https response file
-      File file = new File(responseFilename);
-      if(!file.delete())
-      {
-         System.out.println("Error: Failed to delete the HTTPS response file");
-      }         
+
+      return res;
    }
    
    // Initializes a list of tags
