@@ -188,11 +188,17 @@ public class OSIsoftServer {
    
    // Posts a tag value to the OSIsoft server
    public void postTag(Tag tag) {
+      int res = NO_ERROR;
       try {
-         ScheduledActionManager.RequestHttpX(targetURL + tag.getWebID() + "/Value", "Post", postHeaders,
-               buildBody(tag.getTagValue()), "", "");
-      } catch (EWException e) {
-         e.printStackTrace();
+         res = RequestHTTPS(targetURL + tag.getWebID() + "/Value", "Post", postHeaders, buildBody(tag.getTagValue()), "", "");
+      } catch (JSONException e) {
+         Logger.LOG_ERR("Failed to post value of " + tag.getTagName() + "due to malformed JSON response");
+         Logger.LOG_EXCEPTION(e);
+      }
+
+      if(res != NO_ERROR)
+      {
+         Logger.LOG_ERR("Failed to post value of " + tag.getTagName());
       }
    }
    
