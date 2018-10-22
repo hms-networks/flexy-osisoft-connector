@@ -177,10 +177,13 @@ public class OSIsoftServer {
    }
    
    // Initializes a list of tags
-   public void initTags(ArrayList tagList) throws JSONException{
+   public int initTags(ArrayList tagList) throws JSONException{
+      int retval = NO_ERROR;
       for (int i = 0; i < tagList.size(); i++) {
-         setTagWebId((Tag) tagList.get(i));
+         int res = setTagWebId((Tag) tagList.get(i));
+         if (res != NO_ERROR) return retval = res;
       }
+      return retval;
    }
    
    // Posts a tag value to the OSIsoft server
