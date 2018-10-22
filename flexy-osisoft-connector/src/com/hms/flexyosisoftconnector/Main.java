@@ -41,14 +41,18 @@ public class Main {
       setCertificatePath(piConfig.getCertificatePath());
       setTimeouts();
       
+      int res = OSIsoftServer.NO_ERROR;
       piServer = new OSIsoftServer(piConfig.getServerIP(), piConfig.getServerLogin(), piConfig.getServerWebID());
       
-      try {
-         piServer.initTags(piConfig.getTags());
-      } catch (JSONException e) {
-         System.out.println("Error: Linking eWON tags to OSIsoft PI server failed");
-         e.printStackTrace();
-      }
+      do {
+         try {
+            res = piServer.initTags(piConfig.getTags());
+         } catch (JSONException e) {
+            Logger.LOG_ERR("Linking eWON tags to OSIsoft PI server failed");
+            Logger.LOG_EXCEPTION(e);
+         }
+      } while (res != OSIsoftServer.NO_ERROR);
+
       // Infinite loop
       while (true) {
 
