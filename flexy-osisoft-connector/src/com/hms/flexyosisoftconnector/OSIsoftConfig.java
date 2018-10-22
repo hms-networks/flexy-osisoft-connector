@@ -66,7 +66,14 @@ public class OSIsoftConfig {
        //For each tagname in the config file create a tag and add it to 
        //the arraylist of tags
        for(int i = 0; i < tagNames.length(); i++) {
-          tags.add(new Tag(tagNames.getString(i)));
+          Tag tag = new Tag(tagNames.getString(i));
+          if (tag.isValidTag()) 
+          {
+             tags.add(tag);
+          } else
+          {
+             Logger.LOG_ERR("Tag \"" + tag.getTagName() + "\" does not exist on this eWON");
+          }
        }
     }
     
