@@ -31,7 +31,7 @@ public class Main {
       try {
          piConfig = new OSIsoftConfig(connectorConfigFilename);
       } catch (JSONException e1) {
-         System.out.println("Error: " + connectorConfigFilename + " is malformed");
+         Logger.LOG_ERR(connectorConfigFilename + " is malformed");
          e1.printStackTrace();
          System.exit(0);
       }
@@ -83,7 +83,7 @@ public class Main {
          SCB.setItem("HttpCertDir", path);
          SCB.saveBlock(true);
       } catch (Exception e) {
-         System.out.println("Error: Setting certificate directory failed");
+         Logger.LOG_ERR("Setting certificate directory failed");
          System.exit(0);
       }
    }
