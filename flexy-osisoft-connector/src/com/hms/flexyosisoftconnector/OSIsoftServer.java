@@ -33,6 +33,19 @@ public class OSIsoftServer {
    // Post Headers
    private String postHeaders;
    
+   private boolean connected = true;
+
+   public static final int HTTP_ERROR = 32601;
+
+   static final int NO_ERROR = 0;
+   static final int EWON_ERROR = 1;
+   static final int AUTH_ERROR = 2;
+   static final int WEB_ID_ERROR = 2;
+   static final int GENERIC_ERROR = 254;
+
+   static final String AUTH_ERROR_STRING = "Authorization has been denied for this request.";
+   static final String WEB_ID_ERROR_STRING = "Unknown or invalid WebID format:";
+
    public OSIsoftServer(String ip, String login, String webID) {
       serverIP = ip;
       authCredentials = login;
@@ -41,6 +54,65 @@ public class OSIsoftServer {
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
    }
    
+   public int RequestHTTPS(String CnxParam, String Method, String Headers, String TextFields, String FileFields, String FileName) throws JSONException
+   {
+      int res = NO_ERROR;
+
+      try {
+         res = ScheduledActionManager.RequestHttpX(CnxParam, Method, Headers, TextFields, FileFields, FileName);
+      } catch (EWException e) {
+         Logger.LOG_EXCEPTION(e);
+         res = EWON_ERROR;
+      }
+
+      if(!FileName.equals("") && res == NO_ERROR)
+      {
+         JSONTokener JsonT = new JSONTokener(FileReader.readFile("file://" +FileName));
+         JSONObject response = new JSONObject(JsonT);
+         if(response.has("Message"))
+         {
+            res = AUTH_ERROR;
+            Logger.LOG_ERR("User Credentials are incorrect");
+         }
+         if(response.has("Errors"))
+         {
+            JSONArray errors = response.getJSONArray("Errors");
+            for( int i = 0; i < errors.length(); i++ )
+            {
+               String error = errors.getString(i);
+               if(error.substring(0, WEB_ID_ERROR_STRING.length()).equals(WEB_ID_ERROR_STRING)) 
+               {
+                  res = WEB_ID_ERROR;
+                  Logger.LOG_ERR("WEB ID: \"" + dbWebID + "\"");
+                  Logger.LOG_ERR("WEB ID Error: Supplied Web ID does not exist on this server");
+               } else
+               {
+                  res = GENERIC_ERROR;
+                  Logger.LOG_ERR(error);
+               }
+            }
+         }
+      } else if (res == HTTP_ERROR)
+      {
+         if (connected == true)
+         {
+            Logger.LOG_ERR("Could not connect to OSIsoft Server");
+            connected = false;
+         }
+      } else if (res != NO_ERROR)
+      {
+         Logger.LOG_ERR("Sending Failed. Error #" + res );
+      }
+
+      if (res == NO_ERROR && connected == false)
+      {
+         connected = true;
+         Logger.LOG_ERR("Connection restored");
+      }
+
+      return res;
+   }
+
    // Looks up and sets a tags PI Point web id.  If the tag does not exist
    // in the data server a PI Point is created for that tag.
    public void setTagWebId(Tag tag) throws JSONException {
