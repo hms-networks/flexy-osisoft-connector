@@ -39,7 +39,7 @@ public class FileReader {
          return new String(Buffer, 0, Read);
 
       } catch (IOException ioe) {
-         System.out.println("Error: " + ioe.toString());
+         Logger.LOG_ERR(ioe.toString());
          //Returns an empty string in error case
          return "";
       }
