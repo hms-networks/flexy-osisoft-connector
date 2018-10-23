@@ -64,9 +64,8 @@ public class Main {
             lastUpdateTimeMs = currentTimeMs;
 
             // Post all tags in Tags
-            for (int i = 0; i < piConfig.getTags().size(); i++) {
-               piServer.postTag((Tag) piConfig.getTags().get(i));
-            }
+            piServer.postTagsLive(piConfig.getTags());
+
          }
       }
    }
