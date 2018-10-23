@@ -53,7 +53,7 @@ public class OSIsoftServer {
       serverIP = ip;
       authCredentials = login;
       dbWebID = webID;
-      targetURL = "https://" + serverIP + "/piwebapi/streams/";
+      targetURL = "https://" + serverIP + "/piwebapi/";
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
    }
    
