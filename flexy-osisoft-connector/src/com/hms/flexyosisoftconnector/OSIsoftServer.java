@@ -193,7 +193,7 @@ public class OSIsoftServer {
    public void postTag(Tag tag) {
       int res = NO_ERROR;
       try {
-         res = RequestHTTPS(targetURL + tag.getWebID() + "/Value", "Post", postHeaders, buildBody(tag.getTagValue()), "", "");
+         res = RequestHTTPS(targetURL + "streams/" + tag.getWebID() + "/Value", "Post", postHeaders, buildBody(tag.getTagValue(), getCurrentTimeString(), false), "", "");
       } catch (JSONException e) {
          Logger.LOG_ERR("Failed to post value of " + tag.getTagName() + "due to malformed JSON response");
          Logger.LOG_EXCEPTION(e);
