@@ -1,5 +1,8 @@
 package com.hms.flexyosisoftconnector;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.ArrayList;
 
 import com.ewon.ewonitf.EWException;
@@ -209,6 +212,16 @@ public class OSIsoftServer {
             + ",\r\n" + "    \"UnitsAbbreviation\": \"\",\r\n" + "    \"Good\": true,\r\n"
             + "    \"Questionable\": false,\r\n" + "}";
       return jsonBody;
+   }
+
+   // Creates an OSIsoft compatible timestamp string
+   private static String getCurrentTimeString()
+   {
+      Date d = new Date();
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
+      dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+      String timestamp = dateFormat.format(d);
+      return timestamp;
    }
    
    private static String buildNewPointBody(String tagName) {
