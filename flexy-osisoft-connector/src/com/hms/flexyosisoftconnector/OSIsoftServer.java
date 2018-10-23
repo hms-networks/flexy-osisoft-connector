@@ -189,6 +189,30 @@ public class OSIsoftServer {
       return retval;
    }
    
+   public void postTagsLive(ArrayList tags)
+   {
+      String body = "{\n";
+      for(int tagIndex = 0; tagIndex < tags.size(); tagIndex++)
+      {
+         body += "  \"" + Integer.toString(tagIndex-1) + "\": {\n";
+         body += "    \"Method\": \"POST\",\n";
+         body += "    \"Resource\": \"" + targetURL + "streams/" + ((Tag) tags.get(tagIndex)).getWebID() + "/Value\",\n";
+         body += "    \"Content\": \"" + buildBody(((Tag) tags.get(tagIndex)).getTagValue(), getCurrentTimeString(), true) + "\",\n";
+         body += "    \"Headers\": {\"Authorization\": \"Basic " + authCredentials + "\"" +"}\n";
+         if (tagIndex < tags.size())  body += "  },\n";
+         else body += "  }\n";
+      }
+      body += "}";
+
+      int res;
+      try {
+         res = RequestHTTPS(targetURL +"batch/", "Post", postHeaders, body, "", "");
+      } catch (JSONException e) {
+         Logger.LOG_ERR("Failed to post tags due to malformed JSON response");
+         Logger.LOG_EXCEPTION(e);
+      }
+   }
+
    // Posts a tag value to the OSIsoft server
    public void postTag(Tag tag) {
       int res = NO_ERROR;
