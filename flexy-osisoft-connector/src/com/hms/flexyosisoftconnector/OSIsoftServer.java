@@ -207,10 +207,19 @@ public class OSIsoftServer {
    
    // Builds and returns the body content
    // Hardcoded JSON payload
-   private static String buildBody(String value) {
-      String jsonBody = "{\r\n" + "    \"Timestamp\": \"1970-01-01T00:00:00Z\",\r\n" + "    \"Value\": " + value
-            + ",\r\n" + "    \"UnitsAbbreviation\": \"\",\r\n" + "    \"Good\": true,\r\n"
-            + "    \"Questionable\": false,\r\n" + "}";
+   private static String buildBody(String value, String timestamp, boolean escapeQuotes) {
+      String quote;
+      if(escapeQuotes)
+      {
+         quote = "\\\"";
+      } else
+      {
+         quote = "\"";
+      }
+
+      String jsonBody = "{" + quote + "Timestamp" + quote +": " + quote + timestamp + quote + "," + quote + "Value" + quote + ": " + value
+                        + "," + quote + "UnitsAbbreviation" + quote + ": " + quote + quote + "," + quote + "Good" + quote + ": true,"
+                        + quote + "Questionable" + quote + ": false" + "}";
       return jsonBody;
    }
 
