@@ -19,6 +19,10 @@ public class Main {
 
    static OSIsoftServer piServer;
    
+   //Application Version Numbers
+   static final int MajorVersion = 0;
+   static final int MinorVersion = 1;
+
    //Filename of connector config file
    static String connectorConfigFilename= "/usr/ConnectorConfig.json";
 
@@ -27,6 +31,9 @@ public class Main {
       // Time keeping variables
       long lastUpdateTimeMs = 0;
       long currentTimeMs;
+
+      // Indicate the version number and that the application is starting
+      Logger.LOG_CRITICAL("OSIsoft Connector v" + MajorVersion + "." + MinorVersion + " starting");
 
       try {
          piConfig = new OSIsoftConfig(connectorConfigFilename);
