@@ -4,12 +4,12 @@ import com.hms.flexyosisoftconnector.JSON.JSONException;
 
 /**
  * eWON Flexy java demo for OSIsoft Server
- * 
+ *
  * This demo reads multiple tag values from an eWON Flexy IO Server and POSTs
  * them to an OSIsoft PI Server.
- * 
+ *
  * HMS Industrial Networks Inc. Solution Center
- * 
+ *
  * @author thk
  *
  */
@@ -18,7 +18,7 @@ public class Main {
    static OSIsoftConfig piConfig;
 
    static OSIsoftServer piServer;
-   
+
    //Application Version Numbers
    static final int MajorVersion = 0;
    static final int MinorVersion = 1;
@@ -42,15 +42,15 @@ public class Main {
          e1.printStackTrace();
          System.exit(0);
       }
-      
+
       // Set the path to the directory holding the certificate for the server
       // Only needed if the certificate is self signed
       setCertificatePath(piConfig.getCertificatePath());
       setTimeouts();
-      
+
       int res = OSIsoftServer.NO_ERROR;
       piServer = new OSIsoftServer(piConfig.getServerIP(), piConfig.getServerLogin(), piConfig.getServerWebID());
-      
+
       do {
          try {
             res = piServer.initTags(piConfig.getTags());
@@ -77,7 +77,7 @@ public class Main {
       }
    }
 
-  
+
 
    // Sets the directory that the eWON uses to check for SSL Certificates
    public static void setCertificatePath(String path) {
@@ -95,7 +95,7 @@ public class Main {
    }
 
    // Sets the timeouts
-   // Note: This changes the eWON's global HTTP timeouts and stores 
+   // Note: This changes the eWON's global HTTP timeouts and stores
    //       these values in NV memory.
    public static void setTimeouts() {
       SysControlBlock SCB;
@@ -109,5 +109,5 @@ public class Main {
          Logger.LOG_ERR("Setting timeouts failed. Application ending");
          System.exit(0);
       }
-   }   
+   }
 }

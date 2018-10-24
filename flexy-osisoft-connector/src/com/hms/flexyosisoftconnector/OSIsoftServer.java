@@ -10,11 +10,11 @@ import com.ewon.ewonitf.ScheduledActionManager;
 import com.hms.flexyosisoftconnector.JSON.*;
 
 /**
- * 
+ *
  * Class object for an OSIsoft PI Server.
- * 
+ *
  * HMS Industrial Networks Inc. Solution Center
- * 
+ *
  * @author thk
  *
  */
@@ -26,16 +26,16 @@ public class OSIsoftServer {
 
    // BASE64 encoded BASIC authentication credentials
    private String authCredentials;
-   
+
    // WebID for the database being used
    private String dbWebID;
-   
+
    // URL for the OSIsoft Server
    private String targetURL;
 
    // Post Headers
    private String postHeaders;
-   
+
    private boolean connected = true;
 
    public static final int HTTP_ERROR = 32601;
@@ -56,7 +56,7 @@ public class OSIsoftServer {
       targetURL = "https://" + serverIP + "/piwebapi/";
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
    }
-   
+
    public int RequestHTTPS(String CnxParam, String Method, String Headers, String TextFields, String FileFields, String FileName) throws JSONException
    {
       int res = NO_ERROR;
@@ -83,7 +83,7 @@ public class OSIsoftServer {
             for( int i = 0; i < errors.length(); i++ )
             {
                String error = errors.getString(i);
-               if(error.substring(0, WEB_ID_ERROR_STRING.length()).equals(WEB_ID_ERROR_STRING)) 
+               if(error.substring(0, WEB_ID_ERROR_STRING.length()).equals(WEB_ID_ERROR_STRING))
                {
                   res = WEB_ID_ERROR;
                   Logger.LOG_ERR("WEB ID: \"" + dbWebID + "\"");
@@ -121,10 +121,10 @@ public class OSIsoftServer {
    public int setTagWebId(Tag tag) throws JSONException {
 
       int res = NO_ERROR;
-      
+
       //HTTPS responses are stored in this file
       String responseFilename = "/usr/response.txt";
-      
+
       //url for the dataserver's pi points
       String url = "https://" + serverIP +"/piwebapi/dataservers/" + dbWebID + "/points";
 
@@ -178,7 +178,7 @@ public class OSIsoftServer {
 
       return res;
    }
-   
+
    // Initializes a list of tags
    public int initTags(ArrayList tagList) throws JSONException{
       int retval = NO_ERROR;
@@ -188,7 +188,7 @@ public class OSIsoftServer {
       }
       return retval;
    }
-   
+
    public void postTagsLive(ArrayList tags)
    {
       String body = "{\n";
@@ -228,7 +228,7 @@ public class OSIsoftServer {
          Logger.LOG_ERR("Failed to post value of " + tag.getTagName());
       }
    }
-   
+
    // Builds and returns the body content
    // Hardcoded JSON payload
    private static String buildBody(String value, String timestamp, boolean escapeQuotes) {
@@ -256,16 +256,16 @@ public class OSIsoftServer {
       String timestamp = dateFormat.format(d);
       return timestamp;
    }
-   
+
    private static String buildNewPointBody(String tagName) {
-      String jsonBody = "{\r\n" + 
-            "  \"Name\": \""+ tagName +"\",\r\n" + 
-            "  \"Descriptor\": \""+tagName+"\",\r\n" + 
-            "  \"PointClass\": \"classic\",\r\n" + 
-            "  \"PointType\": \"Int32\",\r\n" +  
-            "  \"EngineeringUnits\": \"\",\r\n" + 
-            "  \"Step\": false,\r\n" + 
-            "  \"Future\": false\r\n" + 
+      String jsonBody = "{\r\n" +
+            "  \"Name\": \""+ tagName +"\",\r\n" +
+            "  \"Descriptor\": \""+tagName+"\",\r\n" +
+            "  \"PointClass\": \"classic\",\r\n" +
+            "  \"PointType\": \"Int32\",\r\n" +
+            "  \"EngineeringUnits\": \"\",\r\n" +
+            "  \"Step\": false,\r\n" +
+            "  \"Future\": false\r\n" +
             "}";
       return jsonBody;
    }

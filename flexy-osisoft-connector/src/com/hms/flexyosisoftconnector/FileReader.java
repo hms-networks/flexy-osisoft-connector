@@ -7,17 +7,17 @@ import javax.microedition.io.file.FileConnection;
 
 /**
  * FileReader class
- * 
+ *
  * Converts file to String form
- * 
+ *
  * HMS Industrial Networks Inc. Solution Center
- * 
+ *
  * @author thk
  *
  */
 
 public class FileReader {
-   
+
    // Reads a file and returns it as a string
    public static String readFile(String path) {
 
