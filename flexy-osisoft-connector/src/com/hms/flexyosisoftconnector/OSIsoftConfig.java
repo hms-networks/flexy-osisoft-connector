@@ -60,6 +60,15 @@ public class OSIsoftConfig {
        JSONObject appConfig = configJSON.getJSONObject("AppConfig");
        cycleTimeMs = appConfig.getInt("CycleTimeMs");
 
+       if(appConfig.has("LoggingLevel"))
+       {
+          boolean res = Logger.SET_LOG_LEVEL(appConfig.getInt("LoggingLevel"));
+          if (!res)
+          {
+             Logger.LOG_ERR("Invalid logging level specified");
+          }
+       }
+
        //Build a JSON Array containing the tag names
        JSONArray tagNames = configJSON.getJSONArray("TagList");
 
