@@ -27,6 +27,12 @@ User configuration of the application parameters is done through the ConnectorCo
    "TagList":["ExampleTag1", "ExampleTag2", "ExampleTag3", "ExampleTag4"]
 }
 ```
+### Flexy Clock Settings
+The Flexy's clock must be set to Coordinated Universal Time (UTC) in order to post accurate timestamps to OSIsoft.  This can be done manually on the Flexy's websever under Setup->System->Main->General->Date & Time or NTP can be used if there is an internet connection availible.  NTP is setup in Setup->System->Main->Net services->NTP (time).
+
+#### NTP
+If using NTP time make sure the GMT Offset is set to zero hours
+
 #### ServerConfig
 
 The OSIsoft PI Database Web API must be installed for this connector to work.  The connector requires three items to connect to the OSIsoft PI Web API they are the IP address of the server running the PI Web API, WebID of the PI Web API and a valid user name and password for the system running the PI Web API software.
