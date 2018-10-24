@@ -3,12 +3,12 @@ import com.ewon.ewonitf.TagControl;
 
 /**
  * Tag class
- * 
+ *
  * Class object for a Tag. Stores the eWON tag name and the OSIsoft PI webId of
  * attribute.
- * 
+ *
  * HMS Industrial Networks Inc. Solution Center
- * 
+ *
  * @author thk
  *
  */
@@ -20,10 +20,10 @@ public class Tag {
    private boolean validTag = true;
 
    private TagControl tagControl;
-   
+
    public Tag(String tagName) {
       eWONTagName = tagName;
-      
+
       try {
          tagControl = new TagControl(tagName);
       } catch (Exception e) {
@@ -48,7 +48,7 @@ public class Tag {
    public String getTagName() {
       return eWONTagName;
    }
-   
+
    public boolean isValidTag()
    {
       return validTag;
@@ -58,7 +58,7 @@ public class Tag {
    public String getWebID() {
       return webID;
    }
-   
+
    // Sets the OSIsoft webID
    public void setWebID(String newWebID) {
       webID = newWebID;

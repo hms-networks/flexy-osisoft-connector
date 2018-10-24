@@ -3,11 +3,11 @@ package com.hms.flexyosisoftconnector;
 
 /**
  * Logger.java
- * 
+ *
  * Provides an interface to selectively log output
- * 
+ *
  * HMS Industrial Networks Inc. Solution Center
- * 
+ *
  * @author thk
  *
  */
@@ -55,7 +55,7 @@ public class Logger {
    {
       LOG(LOG_LEVEL_DEBUG, logString);
    }
-   
+
    public static void LOG_INFO(String logString)
    {
       LOG(LOG_LEVEL_INFO, logString);
