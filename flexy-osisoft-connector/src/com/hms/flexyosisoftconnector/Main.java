@@ -80,7 +80,7 @@ public class Main {
 
 
    // Sets the directory that the eWON uses to check for SSL Certificates
-   public static void setCertificatePath(String path) {
+   private static void setCertificatePath(String path) {
 
       SysControlBlock SCB;
 
