@@ -46,7 +46,7 @@ public class Main {
       // Set the path to the directory holding the certificate for the server
       // Only needed if the certificate is self signed
       setCertificatePath(piConfig.getCertificatePath());
-      setTimeouts();
+      setHttpTimeouts();
 
       int res = OSIsoftServer.NO_ERROR;
       piServer = new OSIsoftServer(piConfig.getServerIP(), piConfig.getServerLogin(), piConfig.getServerWebID());
@@ -94,10 +94,10 @@ public class Main {
       }
    }
 
-   // Sets the timeouts
+   // Sets the http timeouts
    // Note: This changes the eWON's global HTTP timeouts and stores
    //       these values in NV memory.
-   private static void setTimeouts() {
+   private static void setHttpTimeouts() {
       SysControlBlock SCB;
       final String HTTPS_TIMEOUT_S = "2";
       try {
