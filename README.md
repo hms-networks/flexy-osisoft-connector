@@ -8,7 +8,7 @@ This application connects tags from a Flexy to an OSIsoft PI dataserver.
 
 ### Configuration
 
-All user configuration is done through the ConnectorConfig.json file.  This file must be modified to match your configuration.
+User configuration of the application parameters is done through the ConnectorConfig.json file.  This file must be modified to match your configuration.
 
 #### Example ConnectorConfig.json
 ```
