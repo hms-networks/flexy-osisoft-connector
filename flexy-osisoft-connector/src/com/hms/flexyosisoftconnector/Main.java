@@ -37,9 +37,9 @@ public class Main {
 
       try {
          piConfig = new OSIsoftConfig(connectorConfigFilename);
-      } catch (JSONException e1) {
+      } catch (JSONException e) {
          Logger.LOG_ERR(connectorConfigFilename + " is malformed");
-         e1.printStackTrace();
+         Logger.LOG_EXCEPTION(e);
          System.exit(0);
       }
 
