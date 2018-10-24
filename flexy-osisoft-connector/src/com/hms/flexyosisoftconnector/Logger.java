@@ -32,6 +32,7 @@ public class Logger {
       {
          loggingLevel = level;
          retval = true;
+         Logger.LOG_INFO("Set logging level to " + level);
       }
       return retval;
    }
