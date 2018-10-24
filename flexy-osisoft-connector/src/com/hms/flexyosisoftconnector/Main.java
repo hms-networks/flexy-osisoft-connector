@@ -97,7 +97,7 @@ public class Main {
    // Sets the timeouts
    // Note: This changes the eWON's global HTTP timeouts and stores
    //       these values in NV memory.
-   public static void setTimeouts() {
+   private static void setTimeouts() {
       SysControlBlock SCB;
       final String HTTPS_TIMEOUT_S = "2";
       try {
