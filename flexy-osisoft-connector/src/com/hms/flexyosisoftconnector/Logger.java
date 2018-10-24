@@ -31,6 +31,7 @@ public class Logger {
       if(level <= LOG_LEVEL_NONE && level >= LOG_LEVEL_TRACE)
       {
          loggingLevel = level;
+         retval = true;
       }
       return retval;
    }
