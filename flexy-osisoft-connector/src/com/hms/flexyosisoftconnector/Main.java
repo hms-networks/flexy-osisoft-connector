@@ -1,4 +1,6 @@
 package com.hms.flexyosisoftconnector;
+import java.util.Date;
+
 import com.ewon.ewonitf.SysControlBlock;
 import com.hms.flexyosisoftconnector.JSON.JSONException;
 
@@ -60,6 +62,9 @@ public class Main {
          }
       } while (res != OSIsoftServer.NO_ERROR);
 
+      DataPoster datathread = new DataPoster();
+      datathread.start();
+
       // Infinite loop
       while (true) {
 
@@ -70,9 +75,12 @@ public class Main {
             // Update the last update time
             lastUpdateTimeMs = currentTimeMs;
 
-            // Post all tags in Tags
-            piServer.postTagsLive(piConfig.getTags());
+            String time = piServer.convertTimeString(new Date());
+            for (int i = 0; i < piConfig.getTags().size(); i++) {
+               ((Tag) piConfig.getTags().get(i)).recordTagValue(time);
+            }
 
+            Thread.yield();
          }
       }
    }
