@@ -25,18 +25,18 @@ public class OSIsoftServer {
    private String serverIP;
 
    // BASE64 encoded BASIC authentication credentials
-   private String authCredentials;
+   private static String authCredentials;
 
    // WebID for the database being used
-   private String dbWebID;
+   private static String dbWebID;
 
    // URL for the OSIsoft Server
-   private String targetURL;
+   private static String targetURL;
 
    // Post Headers
-   private String postHeaders;
+   private static String postHeaders;
 
-   private boolean connected = true;
+   private static boolean connected = true;
 
    public static final int HTTP_ERROR = 32601;
 
