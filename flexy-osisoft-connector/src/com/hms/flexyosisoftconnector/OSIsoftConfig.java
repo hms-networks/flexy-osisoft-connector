@@ -32,7 +32,7 @@ public class OSIsoftConfig {
     int cycleTimeMs;
 
     // List of tags
-    ArrayList tags = new ArrayList();
+    public static ArrayList tags = new ArrayList();
 
 
     // Build the OSIsoft config from a configuration json file
