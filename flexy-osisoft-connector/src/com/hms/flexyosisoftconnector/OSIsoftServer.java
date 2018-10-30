@@ -49,12 +49,15 @@ public class OSIsoftServer {
    static final String AUTH_ERROR_STRING = "Authorization has been denied for this request.";
    static final String WEB_ID_ERROR_STRING = "Unknown or invalid WebID format:";
 
+   private static SimpleDateFormat dateFormat;
+
    public OSIsoftServer(String ip, String login, String webID) {
       serverIP = ip;
       authCredentials = login;
       dbWebID = webID;
       targetURL = "https://" + serverIP + "/piwebapi/";
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
+      dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
    }
 
    public static int RequestHTTPS(String CnxParam, String Method, String Headers, String TextFields, String FileFields, String FileName) throws JSONException
@@ -253,6 +256,12 @@ public class OSIsoftServer {
       Date d = new Date();
       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
       dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+      String timestamp = dateFormat.format(d);
+      return timestamp;
+   }
+
+   public String convertTimeString(Date d)
+   {
       String timestamp = dateFormat.format(d);
       return timestamp;
    }
