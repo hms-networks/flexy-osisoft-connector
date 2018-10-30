@@ -1,4 +1,9 @@
 package com.hms.flexyosisoftconnector;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
 import com.ewon.ewonitf.TagControl;
 
 /**
@@ -18,12 +23,13 @@ public class Tag {
    private String eWONTagName;
    private String webID;
    private boolean validTag = true;
+   private List dataPoints;
 
    private TagControl tagControl;
 
    public Tag(String tagName) {
       eWONTagName = tagName;
-
+      dataPoints = Collections.synchronizedList(new ArrayList());
       try {
          tagControl = new TagControl(tagName);
       } catch (Exception e) {
@@ -35,7 +41,7 @@ public class Tag {
    public Tag(String tagName, String id) {
       eWONTagName = tagName;
       webID = id;
-
+      dataPoints =  Collections.synchronizedList(new ArrayList());
       try {
          tagControl = new TagControl(tagName);
       } catch (Exception e) {
@@ -69,4 +75,68 @@ public class Tag {
       return Long.toString(tagControl.getTagValueAsLong());
    }
 
+   public void recordTagValue(String time)
+   {
+      if(validTag)
+      {
+         DataPoint point = new DataPoint(tagControl.getTagValueAsLong(), time);
+         synchronized (dataPoints)
+         {
+            dataPoints.add(point);
+         }
+      }
+   }
+
+   public ArrayList getNewestDataPoints(int num)
+   {
+      ArrayList points = new ArrayList();
+      synchronized (dataPoints)
+      {
+         int dataPointsSize = dataPoints.size();
+         if(num > dataPointsSize) num = dataPointsSize;
+         for(int i = 0; i < num; i++)
+         {
+            points.add(dataPoints.get(dataPointsSize - i - 1));
+         }
+      }
+      return points;
+   }
+
+   public int getNumDataPoints()
+   {
+      return dataPoints.size();
+   }
+
+   public void removeDataPoints(ArrayList pointsToRemove)
+   {
+      //Lock Access to the arraylist for thread saftey
+      synchronized (dataPoints)
+      {
+         int dataPointsSize = dataPoints.size();
+         if(dataPointsSize > 0  && pointsToRemove.size() > 0)
+         {
+            DataPoint p = (DataPoint) pointsToRemove.get(0);
+
+            //Iterate on the Arraylist from the end to the beginning
+            for(int i = (dataPointsSize-1); i >=0; i--)
+            {
+               if(pointsToRemove.size() == 0) break;
+
+               if(dataPoints.get(i).equals(p))
+               {
+                  dataPoints.remove(i);
+                  pointsToRemove.remove(0);
+                  if(pointsToRemove.size() > 0)
+                  {
+                     p = (DataPoint) pointsToRemove.get(0);
+                  }
+                  else
+                  {
+                     break;
+                  }
+               }
+            }
+         }
+      }
+   }
 }
