@@ -57,7 +57,7 @@ public class OSIsoftServer {
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
    }
 
-   public int RequestHTTPS(String CnxParam, String Method, String Headers, String TextFields, String FileFields, String FileName) throws JSONException
+   public static int RequestHTTPS(String CnxParam, String Method, String Headers, String TextFields, String FileFields, String FileName) throws JSONException
    {
       int res = NO_ERROR;
 
