@@ -49,6 +49,10 @@ public class OSIsoftServer {
    static final String AUTH_ERROR_STRING = "Authorization has been denied for this request.";
    static final String WEB_ID_ERROR_STRING = "Unknown or invalid WebID format:";
 
+   private static StringBuilderLite batchBuffer;
+   private static final int StringBuilderNumChars = 500000;
+   private static int batchCount;
+
    private static SimpleDateFormat dateFormat;
 
    public OSIsoftServer(String ip, String login, String webID) {
@@ -57,6 +61,7 @@ public class OSIsoftServer {
       dbWebID = webID;
       targetURL = "https://" + serverIP + "/piwebapi/";
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
+      batchBuffer = new StringBuilderLite(StringBuilderNumChars);
       dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
    }
 
@@ -192,6 +197,48 @@ public class OSIsoftServer {
       return retval;
    }
 
+   public static void startBatch()
+   {
+      batchCount = 0;
+      batchBuffer.clearString();
+      batchBuffer.append("{\n");
+   }
+
+   public static void addPointToBatch(Tag t, DataPoint d)
+   {
+      batchCount++;
+
+      batchBuffer.append("  \"" + Integer.toString(batchCount) + "\": {\n");
+      batchBuffer.append("    \"Method\": \"POST\",\n");
+      batchBuffer.append("    \"Resource\": \"" + targetURL + "streams/" + t.getWebID() + "/Value\",\n");
+      batchBuffer.append("    \"Content\": \"" + buildBody(Long.toString(d.getValueLong()), d.getTimeStamp(), true) + "\",\n");
+      batchBuffer.append("    \"Headers\": {\"Authorization\": \"Basic " + authCredentials + "\"" +"}\n");
+      batchBuffer.append("  },\n");
+   }
+
+   public static void endBatch()
+   {
+      batchBuffer.append("}");
+   }
+
+   public static boolean postBatch()
+   {
+      int res = NO_ERROR;
+      try {
+            res = RequestHTTPS(targetURL +"batch/", "Post", postHeaders, batchBuffer.toString(), "", "");
+      } catch (JSONException e) {
+            Logger.LOG_ERR("Failed to post tags due to malformed JSON response");
+            Logger.LOG_EXCEPTION(e);
+      }
+
+      if(res != NO_ERROR)
+      {
+         return false;
+      }
+      return true;
+   }
+
+
    public void postTagsLive(ArrayList tags)
    {
       String body = "{\n";
@@ -214,6 +261,24 @@ public class OSIsoftServer {
          Logger.LOG_ERR("Failed to post tags due to malformed JSON response");
          Logger.LOG_EXCEPTION(e);
       }
+   }
+
+   public static boolean postDataPoint(Tag tag, DataPoint dataPoint)
+   {
+      int res = NO_ERROR;
+      try {
+         res = RequestHTTPS(targetURL + "streams/" + tag.getWebID() + "/Value", "Post", postHeaders, buildBody(Long.toString(dataPoint.getValueLong()), dataPoint.getTimeStamp(), false), "", "");
+      } catch (JSONException e) {
+         Logger.LOG_ERR("Failed to post value of " + tag.getTagName() + "due to malformed JSON response");
+         Logger.LOG_EXCEPTION(e);
+      }
+
+      if(res != NO_ERROR)
+      {
+         Logger.LOG_ERR("Failed to post value of " + tag.getTagName());
+         return false;
+      }
+      return true;
    }
 
    // Posts a tag value to the OSIsoft server
