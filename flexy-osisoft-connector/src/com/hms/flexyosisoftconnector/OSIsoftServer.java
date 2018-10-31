@@ -38,7 +38,7 @@ public class OSIsoftServer {
 
    private static boolean connected = true;
 
-   public static final int HTTP_ERROR = 32601;
+   public static final int LINK_ERROR = 32601;
 
    static final int NO_ERROR = 0;
    static final int EWON_ERROR = 1;
@@ -103,7 +103,7 @@ public class OSIsoftServer {
                }
             }
          }
-      } else if (res == HTTP_ERROR)
+      } else if (res == LINK_ERROR)
       {
          if (connected == true)
          {
