@@ -107,7 +107,7 @@ public class OSIsoftServer {
       {
          if (connected == true)
          {
-            Logger.LOG_ERR("Could not connect to OSIsoft Server");
+            Logger.LOG_ERR("Could not connect to OSIsoft Server, link is down");
             connected = false;
          }
       } else if (res != NO_ERROR)
