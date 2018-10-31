@@ -39,6 +39,7 @@ public class OSIsoftServer {
    private static boolean connected = true;
 
    public static final int LINK_ERROR = 32601;
+   public static final int SEND_ERROR = 32603;
 
    static final int NO_ERROR = 0;
    static final int EWON_ERROR = 1;
@@ -108,6 +109,13 @@ public class OSIsoftServer {
          if (connected == true)
          {
             Logger.LOG_ERR("Could not connect to OSIsoft Server, link is down");
+            connected = false;
+         }
+      } else if (res == SEND_ERROR)
+      {
+         if (connected == true)
+         {
+            Logger.LOG_ERR("Could not connect to OSIsoft Server, server is offine or unreachable");
             connected = false;
          }
       } else if (res != NO_ERROR)
