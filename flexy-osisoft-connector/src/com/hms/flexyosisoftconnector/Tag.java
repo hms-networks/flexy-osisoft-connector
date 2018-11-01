@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.ewon.ewonitf.TagControl;
 
@@ -105,6 +106,21 @@ public class Tag {
    public int getNumDataPoints()
    {
       return dataPoints.size();
+   }
+
+   public void trimOldestEntries(int num)
+   {
+      for(int i = 0; i < num; i++)
+      {
+         try
+         {
+            dataPoints.remove(0);
+         } catch (IndexOutOfBoundsException e)
+         {
+            //The datapoint list is empty
+            Logger.LOG_DEBUG("Attemped to remove a datapoint from an empty list");
+         }
+      }
    }
 
    public void removeDataPoints(ArrayList pointsToRemove)
