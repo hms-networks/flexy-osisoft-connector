@@ -22,7 +22,8 @@ User configuration of the application parameters is done through the ConnectorCo
       "CertificatePath":"/usr/Certificates"
    },
    "AppConfig":{
-      "CycleTimeMs":1000
+      "CycleTimeMs":1000,
+      "PostDuplicateTagValues": false
    },
    "TagList":["ExampleTag1", "ExampleTag2", "ExampleTag3", "ExampleTag4"]
 }
@@ -54,6 +55,8 @@ CertificatePath - Path to the directory containing your server's certificate.  F
 #### AppConfig
 
 CycleTimeMs - Cycle time of the application.  All tags will be posted at this specified interval
+
+PostDuplicateTagValues - Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
 
 #### TagList
 
