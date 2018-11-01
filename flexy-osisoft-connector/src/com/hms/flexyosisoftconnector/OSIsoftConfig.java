@@ -60,6 +60,8 @@ public class OSIsoftConfig {
        JSONObject appConfig = configJSON.getJSONObject("AppConfig");
        cycleTimeMs = appConfig.getInt("CycleTimeMs");
 
+       boolean shouldLogDuplicateValues = appConfig.getBoolean("PostDuplicateTagValues");
+
        if(appConfig.has("LoggingLevel"))
        {
           boolean res = Logger.SET_LOG_LEVEL(appConfig.getInt("LoggingLevel"));
@@ -75,7 +77,7 @@ public class OSIsoftConfig {
        //For each tagname in the config file create a tag and add it to
        //the arraylist of tags
        for(int i = 0; i < tagNames.length(); i++) {
-          Tag tag = new Tag(tagNames.getString(i));
+          Tag tag = new Tag(tagNames.getString(i), shouldLogDuplicateValues);
           if (tag.isValidTag())
           {
              tags.add(tag);

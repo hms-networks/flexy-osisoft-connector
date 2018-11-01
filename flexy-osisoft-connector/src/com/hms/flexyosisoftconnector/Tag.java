@@ -25,11 +25,20 @@ public class Tag {
    private String webID;
    private boolean validTag = true;
    private List dataPoints;
-
    private TagControl tagControl;
 
-   public Tag(String tagName) {
+   //Flag to indicate if duplicate values should be logged
+   //true  - Always log datapoint
+   //false - Only log on value change
+   private boolean logDuplicateValues = true;
+   
+   //Previous posted datapoint
+   private DataPoint lastDataPoint;
+
+
+   public Tag(String tagName, boolean logDuplicates) {
       eWONTagName = tagName;
+      logDuplicateValues = logDuplicates;
       dataPoints = Collections.synchronizedList(new ArrayList());
       try {
          tagControl = new TagControl(tagName);
@@ -81,9 +90,13 @@ public class Tag {
       if(validTag)
       {
          DataPoint point = new DataPoint(tagControl.getTagValueAsLong(), time);
-         synchronized (dataPoints)
+         if(logDuplicateValues || !point.valueEquals(lastDataPoint))
          {
-            dataPoints.add(point);
+            synchronized (dataPoints)
+            {
+               lastDataPoint = point;
+               dataPoints.add(point);
+            }
          }
       }
    }
