@@ -45,4 +45,10 @@ public class DataPoint {
       if (p.getTimeStamp().equals(timestamp) && p.getValueLong()==valueLong)return true;
       return false;
    }
+
+   public boolean valueEquals(DataPoint p)
+   {
+      if (p != null && p.getValueLong()==valueLong)return true;
+      return false;
+   }
 }
