@@ -25,6 +25,14 @@ public class Main {
    static final int MajorVersion = 0;
    static final int MinorVersion = 1;
 
+   //Minimum amount of free memory before data trimming occurs
+   static final long MINIMUM_MEMORY = 5000000;
+
+   //Number of tags to trim when memory is low
+   static final int TAGS_TO_TRIM = 2;
+
+   static long AvailibleMemory;
+
    //Filename of connector config file
    static String connectorConfigFilename= "/usr/ConnectorConfig.json";
 
@@ -68,6 +76,7 @@ public class Main {
       // Infinite loop
       while (true) {
 
+         AvailibleMemory = Runtime.getRuntime().freeMemory();
          currentTimeMs = System.currentTimeMillis();
 
          if ((currentTimeMs - lastUpdateTimeMs) >= piConfig.getCycleTimeMs()) {
@@ -77,6 +86,10 @@ public class Main {
 
             String time = piServer.convertTimeString(new Date());
             for (int i = 0; i < piConfig.getTags().size(); i++) {
+               if(AvailibleMemory < MINIMUM_MEMORY)
+               {
+                  ((Tag) piConfig.getTags().get(i)).trimOldestEntries(TAGS_TO_TRIM);
+               }
                ((Tag) piConfig.getTags().get(i)).recordTagValue(time);
             }
 
