@@ -4,7 +4,7 @@ import java.util.Date;
 /**
  * DataPoint class
  *
- * Class object for a DataPoint.  This is a value and a time.
+ * Abstract class object for a DataPoint.  This is a value and a time.
  *
  * HMS Industrial Networks Inc. Solution Center
  *
@@ -12,21 +12,14 @@ import java.util.Date;
  *
  */
 
-public class DataPoint {
+public abstract class DataPoint {
 
-   private long valueLong;
-   private String timestamp;
+   public static final byte TYPE_BOOLEAN = 0;
+   public static final byte TYPE_FLOAT   = 1;
+   public static final byte TYPE_INT     = 2;
+   public static final byte TYPE_DWORD   = 3;
 
-   public DataPoint(long value, String time)
-   {
-      valueLong = value;
-      timestamp = time;
-   }
-
-   public long getValueLong()
-   {
-      return valueLong;
-   }
+   protected String timestamp;
 
    public String getTimeStamp()
    {
@@ -35,20 +28,20 @@ public class DataPoint {
 
    public String toString()
    {
-      String s = "";
-      s += valueLong + " " + timestamp;
-      return s;
+      return timestamp + " " + getValueString();
    }
 
-   public boolean equals(DataPoint p)
-   {
-      if (p.getTimeStamp().equals(timestamp) && p.getValueLong()==valueLong)return true;
-      return false;
-   }
+   //Compares the datapoint to another datapoint
+   //Returns true if the timestamp, type, and value are the same
+   public abstract boolean equals(DataPoint p);
 
-   public boolean valueEquals(DataPoint p)
-   {
-      if (p != null && p.getValueLong()==valueLong)return true;
-      return false;
-   }
+   //Compares the datapoint's value to another datapoint's value
+   //Returns true if the type and value are the same
+   public abstract boolean valueEquals(DataPoint p);
+
+   //Returns the datapoint's type
+   public abstract byte    getType();
+
+   //Returns the datapoint's value as a string
+   public abstract String  getValueString();
 }

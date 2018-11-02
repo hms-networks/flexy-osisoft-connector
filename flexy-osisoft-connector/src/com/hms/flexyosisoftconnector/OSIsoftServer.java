@@ -159,7 +159,7 @@ public class OSIsoftServer {
             tag.setWebID(items.getJSONObject(0).getString("WebId"));
          } else {
             //tag does not exist and must be created
-            res = RequestHTTPS(url, "Post", postHeaders,buildNewPointBody(tag.getTagName()), "", responseFilename);
+            res = RequestHTTPS(url, "Post", postHeaders,buildNewPointBody(tag.getTagName(), tag.getDataType()), "", responseFilename);
 
             if (res == NO_ERROR)
             {
@@ -219,7 +219,7 @@ public class OSIsoftServer {
       batchBuffer.append("  \"" + Integer.toString(batchCount) + "\": {\n");
       batchBuffer.append("    \"Method\": \"POST\",\n");
       batchBuffer.append("    \"Resource\": \"" + targetURL + "streams/" + t.getWebID() + "/Value\",\n");
-      batchBuffer.append("    \"Content\": \"" + buildBody(Long.toString(d.getValueLong()), d.getTimeStamp(), true) + "\",\n");
+      batchBuffer.append("    \"Content\": \"" + buildBody(d.getValueString(), d.getTimeStamp(), true) + "\",\n");
       batchBuffer.append("    \"Headers\": {\"Authorization\": \"Basic " + authCredentials + "\"" +"}\n");
       batchBuffer.append("  },\n");
    }
@@ -275,7 +275,7 @@ public class OSIsoftServer {
    {
       int res = NO_ERROR;
       try {
-         res = RequestHTTPS(targetURL + "streams/" + tag.getWebID() + "/Value", "Post", postHeaders, buildBody(Long.toString(dataPoint.getValueLong()), dataPoint.getTimeStamp(), false), "", "");
+         res = RequestHTTPS(targetURL + "streams/" + tag.getWebID() + "/Value", "Post", postHeaders, buildBody(dataPoint.getValueString(), dataPoint.getTimeStamp(), false), "", "");
       } catch (JSONException e) {
          Logger.LOG_ERR("Failed to post value of " + tag.getTagName() + "due to malformed JSON response");
          Logger.LOG_EXCEPTION(e);
@@ -339,12 +339,32 @@ public class OSIsoftServer {
       return timestamp;
    }
 
-   private static String buildNewPointBody(String tagName) {
-      String jsonBody = "{\r\n" +
+   private static String buildNewPointBody(String tagName, byte tagType) {
+      String type;
+
+      switch (tagType) {
+            case DataPoint.TYPE_BOOLEAN:
+               type = "Int16";
+               break;
+            case DataPoint.TYPE_FLOAT:
+               type = "Float64";
+               break;
+            case DataPoint.TYPE_INT:
+               type = "Int32";
+               break;
+            case DataPoint.TYPE_DWORD:
+               type = "Float64";
+               break;
+            default:
+               Logger.LOG_ERR("Invalid datatype of " + tagType + " for new PI Point");
+               return "";
+         }
+
+         String jsonBody = "{\r\n" +
             "  \"Name\": \""+ tagName +"\",\r\n" +
             "  \"Descriptor\": \""+tagName+"\",\r\n" +
             "  \"PointClass\": \"classic\",\r\n" +
-            "  \"PointType\": \"Int32\",\r\n" +
+            "  \"PointType\": \"" + type + "\",\r\n" +
             "  \"EngineeringUnits\": \"\",\r\n" +
             "  \"Step\": false,\r\n" +
             "  \"Future\": false\r\n" +

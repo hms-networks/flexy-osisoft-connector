@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.ewon.ewonitf.SysControlBlock;
 import com.ewon.ewonitf.TagControl;
 
 /**
@@ -26,6 +27,7 @@ public class Tag {
    private boolean validTag = true;
    private List dataPoints;
    private TagControl tagControl;
+   private byte dataType;
 
    //Flag to indicate if duplicate values should be logged
    //true  - Always log datapoint
@@ -45,6 +47,16 @@ public class Tag {
       } catch (Exception e) {
          Logger.LOG_DEBUG("Tag \"" + tagName + "\" does not exist on this eWON" );
          validTag = false;
+      }
+
+      if(validTag)
+      {
+         dataType = getTagType(tagName);
+         if(dataType == -1)
+         {
+            Logger.LOG_DEBUG("Could not find datatype for \"" + tagName + "\"");
+            validTag = false;
+         }
       }
    }
 
@@ -68,6 +80,12 @@ public class Tag {
       webID = newWebID;
    }
 
+   //Returns the data type of this tag
+   public byte getDataType()
+   {
+      return dataType;
+   }
+
    // Returns a string representation of the eWON's long value of the tag
    public String getTagValue() {
       return Long.toString(tagControl.getTagValueAsLong());
@@ -77,7 +95,24 @@ public class Tag {
    {
       if(validTag)
       {
-         DataPoint point = new DataPoint(tagControl.getTagValueAsLong(), time);
+         DataPoint point = null;
+         switch (dataType) {
+            case DataPoint.TYPE_BOOLEAN:
+               boolean val = (tagControl.getTagValueAsLong() != 0);
+               point = new DataPointBoolean(val, time);
+               break;
+            case DataPoint.TYPE_FLOAT:
+               point = new DataPointDouble(tagControl.getTagValueAsDouble(), time);
+               break;
+            case DataPoint.TYPE_INT:
+               point = new DataPointInt((int)tagControl.getTagValueAsLong(), time);
+               break;
+            case DataPoint.TYPE_DWORD:
+               point = new DataPointLong(tagControl.getTagValueAsLong(), time);
+               break;
+            default:
+               return;
+         }
          if(logDuplicateValues || !point.valueEquals(lastDataPoint))
          {
             synchronized (dataPoints)
@@ -155,5 +190,20 @@ public class Tag {
             }
          }
       }
+   }
+
+   //Gets the datatype of a tag on the Flexy
+   //in numeric form
+   private static byte getTagType(String tagName)
+   {
+      byte retval = -1;
+      SysControlBlock SCB;
+      try {
+         SCB = new SysControlBlock(SysControlBlock.TAG, tagName);
+         retval = (byte)Integer.parseInt(SCB.getItem("Type"));
+      } catch (Exception e) {
+         Logger.LOG_ERR("Error reading tag type for " + tagName);
+      }
+      return retval;
    }
 }
