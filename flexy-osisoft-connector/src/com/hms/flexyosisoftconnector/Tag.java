@@ -48,18 +48,6 @@ public class Tag {
       }
    }
 
-   public Tag(String tagName, String id) {
-      eWONTagName = tagName;
-      webID = id;
-      dataPoints =  Collections.synchronizedList(new ArrayList());
-      try {
-         tagControl = new TagControl(tagName);
-      } catch (Exception e) {
-         Logger.LOG_DEBUG("Tag \"" + tagName + "\" does not exist on this eWON" );
-         validTag = false;
-      }
-   }
-
    // Returns the eWON tag name
    public String getTagName() {
       return eWONTagName;
