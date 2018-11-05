@@ -39,7 +39,7 @@ public class DataPoster extends Thread{
 
          if(pointsAdded>0)
          {
-            Logger.LOG_CRITICAL("Size was not zero");
+            Logger.LOG_DEBUG("Sending " + pointsAdded + " points to server");
             //Post the tags to the server
             boolean retval = OSIsoftServer.postBatch();
 
