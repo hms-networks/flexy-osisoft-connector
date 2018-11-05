@@ -239,7 +239,7 @@ public class JSONArray {
      *  if the value cannot be converted to a number.
      */
     public int getInt(int index) throws JSONException {
-        Object o = get(index);
+        //Object o = get(index);
         return (int)getDouble(index);
     }
 //#endif
@@ -288,7 +288,7 @@ public class JSONArray {
      *  be converted to a number.
      */
     public long getLong(int index) throws JSONException {
-        Object o = get(index);
+        //Object o = get(index);
         return (long)getDouble(index);
     }
 //#endif
