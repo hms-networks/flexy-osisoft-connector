@@ -1,5 +1,4 @@
 package com.hms.flexyosisoftconnector;
-import java.util.Date;
 
 /**
  * DataPoint class
