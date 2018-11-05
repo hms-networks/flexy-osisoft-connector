@@ -7,7 +7,8 @@ package com.hms.flexyosisoftconnector.JSON;
  * @version 2
  */
 public class JSONException extends Exception {
-    private Throwable cause;
+   private static final long serialVersionUID = -7375858803424286230L;
+   private Throwable cause;
 
     /**
      * Constructs a JSONException with an explanatory message.
