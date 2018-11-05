@@ -40,6 +40,7 @@ public class OSIsoftServer {
 
    public static final int LINK_ERROR = 32601;
    public static final int SEND_ERROR = 32603;
+   public static final int JSON_ERROR = -100;
 
    static final int NO_ERROR = 0;
    static final int EWON_ERROR = 1;
@@ -237,6 +238,7 @@ public class OSIsoftServer {
       } catch (JSONException e) {
             Logger.LOG_ERR("Failed to post tags due to malformed JSON response");
             Logger.LOG_EXCEPTION(e);
+            res = JSON_ERROR;
       }
 
       if(res != NO_ERROR)
@@ -268,6 +270,7 @@ public class OSIsoftServer {
       } catch (JSONException e) {
          Logger.LOG_ERR("Failed to post tags due to malformed JSON response");
          Logger.LOG_EXCEPTION(e);
+         res = JSON_ERROR;
       }
    }
 
