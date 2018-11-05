@@ -11,8 +11,6 @@ package com.hms.flexyosisoftconnector;
  *
  */
 
-import java.util.Arrays;
-
 public class StringBuilderLite {
    private int size = 0;
    private int index = 0;
