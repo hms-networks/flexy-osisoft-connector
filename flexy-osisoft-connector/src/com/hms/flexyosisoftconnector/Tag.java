@@ -146,6 +146,10 @@ public class Tag {
 
    public void trimOldestEntries(int num)
    {
+      //Always keep at least one element in the datapoint set
+      //to make sure that the current value is always updated
+      if(dataPoints.size() <= num) num = dataPoints.size() - 1;
+
       for(int i = 0; i < num; i++)
       {
          try
