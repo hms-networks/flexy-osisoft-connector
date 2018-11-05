@@ -249,7 +249,7 @@ public class OSIsoftServer {
    }
 
 
-   public void postTagsLive(ArrayList tags)
+   public boolean  postTagsLive(ArrayList tags)
    {
       String body = "{\n";
       for(int tagIndex = 0; tagIndex < tags.size(); tagIndex++)
@@ -264,7 +264,7 @@ public class OSIsoftServer {
       }
       body += "}";
 
-      int res;
+      int res = NO_ERROR;
       try {
          res = RequestHTTPS(targetURL +"batch/", "Post", postHeaders, body, "", "");
       } catch (JSONException e) {
@@ -272,6 +272,12 @@ public class OSIsoftServer {
          Logger.LOG_EXCEPTION(e);
          res = JSON_ERROR;
       }
+
+      if(res != NO_ERROR)
+      {
+         return false;
+      }
+      return true;
    }
 
    public static boolean postDataPoint(Tag tag, DataPoint dataPoint)
