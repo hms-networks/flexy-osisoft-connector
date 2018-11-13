@@ -42,6 +42,10 @@ public class Main {
       long lastUpdateTimeMs = 0;
       long currentTimeMs;
 
+      //Start the webserver to accept json file
+      RestFileServer restServer = new RestFileServer();
+      restServer.start();
+
       // Indicate the version number and that the application is starting
       Logger.LOG_CRITICAL("OSIsoft Connector v" + MajorVersion + "." + MinorVersion + " starting");
 
