@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <title>Flexy OSIsoft</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="css/bootstrap.min.css">
+   <link rel="stylesheet" href="css/pagelayout.css">
+</head>
+
+<body>
+   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Flexy OSIsoft Config</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+         aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+         <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+               <a class="nav-link" href="#">View Configuration
+                  <span class="sr-only">(current)</span>
+               </a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="../ConnectorConfig.json" download>Download Configuration</a>
+            </li>
+
+            <button class="btn btn-outline-success my-2 my-sm-0 pull-right" type="submit" onclick="saveJSON()">Save Config</button>
+         </ul>
+      </div>
+   </nav>
+
+   <div class="container">
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
+         <h1>Connector Settings</h1>
+         <div class="table-responsive">
+            <table id="connectorSettingsTable" class="table table-striped table-sm">
+               <thead style="table-layout:fixed">
+                  <tr>
+                     <th>Parameter</th>
+                     <th>Value</th>
+                  </tr>
+               </thead>
+               <tbody>
+               </tbody>
+            </table>
+
+            <h1>Tags</h1>
+            <div class="table-responsive">
+               <table id="tagTable" class="table table-striped table-sm">
+                  <thead>
+                     <tr>
+                        <th>Tag Name</th>
+                        <th>Type</th>
+                        <th align="left">Enabled</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+
+         <div class="Config">
+            <p id="configbody"></p>
+         </div>
+      </main>
+   </div>
+
+
+   <script src="js/jquery-3.3.1.min.js"></script>
+   <script src="js/bluebird.min.js"></script>
+   <script src="js/FlexyConnector.js"></script>
+   <script src="js/popper.min.js"></script>
+   <script src="js/bootstrap.min.js"></script>
+</body>
+</html>
