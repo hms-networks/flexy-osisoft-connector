@@ -211,7 +211,65 @@ Promise.all([loadEwonTags, loadJsonTags]).then(function (result)
          row.cells[2].children[0].children[0].checked = true;
       }
    }
+
+   //Register change handler to validate input fields
+   $(":text").change(function ()
+   {
+      var element = $(this).closest(':text')[0];
+      var res = true;
+      switch (element.id)
+      {
+         case "IP":
+            res = validateIP(element.value);
+            break;
+         case "WebID":
+            res = validateWebID(element.value);
+            break;
+         case "Credentials":
+            break;
+         case "CertificatePath":
+            break;
+         case "CycleTimeMs":
+            res = validateCycleTime(element.value);
+            break;
+         default:
+            break;
+      }
+
+      if (res)
+      {
+         element.classList.remove("is-invalid");
+      }
+      else
+      {
+         element.classList.add("is-invalid");
+      }
+   });
 });
+
+//Validates a web ID
+//Must be 40 characters long
+function validateWebID(id)
+{
+   return (id.length === 40);
+}
+
+//Validates a CycleTime
+//Must be a positive whole number
+function validateCycleTime(time)
+{
+   return (/^([0-9]+)$/.test(time));
+}
+
+//Validates an IP Address
+//Must be in format xxx.xxx.xxx.xxx or xxx.xxx.xxx.xxx:pppp
+function validateIP(ip)
+{
+   var ip_pattern = '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)';
+   var port_pattern = '((:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?)$';
+   var validation_regex = new RegExp(ip_pattern + port_pattern);
+   return validation_regex.test(ip);
+}
 
 
 //Wait dialog box
