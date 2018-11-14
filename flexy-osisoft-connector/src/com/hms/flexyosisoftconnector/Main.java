@@ -108,11 +108,13 @@ public class Main {
    private static void setCertificatePath(String path) {
 
       SysControlBlock SCB;
-
       try {
          SCB = new SysControlBlock(SysControlBlock.SYS);
-         SCB.setItem("HttpCertDir", path);
-         SCB.saveBlock(true);
+         if(!SCB.getItem("HttpCertDir").equals(path))
+         {
+            SCB.setItem("HttpCertDir", path);
+            SCB.saveBlock(true);
+         }
       } catch (Exception e) {
          Logger.LOG_ERR("Setting certificate directory failed");
          System.exit(0);
@@ -124,12 +126,25 @@ public class Main {
    //       these values in NV memory.
    private static void setHttpTimeouts() {
       SysControlBlock SCB;
+      boolean needsSave = false;
       final String HTTPS_TIMEOUT_S = "2";
       try {
          SCB = new SysControlBlock(SysControlBlock.SYS);
-         SCB.setItem("HTTPC_SDTO", HTTPS_TIMEOUT_S);
-         SCB.setItem("HTTPC_RDTO", HTTPS_TIMEOUT_S);
-         SCB.saveBlock(true);
+
+         if (!SCB.getItem("HTTPC_SDTO").equals(HTTPS_TIMEOUT_S))
+         {
+            SCB.setItem("HTTPC_SDTO", HTTPS_TIMEOUT_S);
+            needsSave = true;
+         }
+
+         if (!SCB.getItem("HTTPC_RDTO").equals(HTTPS_TIMEOUT_S))
+         {
+            SCB.setItem("HTTPC_RDTO", HTTPS_TIMEOUT_S);
+            needsSave = true;
+         }
+
+         if (needsSave) SCB.saveBlock(true);
+
       } catch (Exception e) {
          Logger.LOG_ERR("Setting timeouts failed. Application ending");
          System.exit(0);
