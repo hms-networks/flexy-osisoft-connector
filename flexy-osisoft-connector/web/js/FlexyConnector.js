@@ -134,7 +134,7 @@ Promise.all([loadEwonTags, loadJsonTags]).then(function (result)
    var tableRef = document.getElementById('connectorSettingsTable').getElementsByTagName('tbody')[0];
 
    //Adds a input type entry into the connector settings table
-   function addCellsInput(name, val, id)
+   function addCellsInput(name, val, id, invalidText)
    {
       var row = tableRef.insertRow(tableRef.rows.length);
 
@@ -146,13 +146,21 @@ Promise.all([loadEwonTags, loadJsonTags]).then(function (result)
       //Value Cell
       var cell2 = row.insertCell(1);
       var form = document.createElement("form");
+      var div = document.createElement("div");
       form.classList.add("text-center");
       var input = document.createElement("input");
       input.setAttribute('type', 'text');
       input.id = id;
       input.classList.add("form-control");
       input.value = val;
-      form.appendChild(input);
+      div.appendChild(input);
+
+      var invalidFeedback = document.createElement("div");
+      invalidFeedback.classList.add("invalid-feedback");
+      invalidFeedback.innerHTML = invalidText;
+      div.appendChild(invalidFeedback);
+      form.appendChild(div);
+
       cell2.appendChild(form);
    }
 
@@ -190,11 +198,11 @@ Promise.all([loadEwonTags, loadJsonTags]).then(function (result)
    }
 
    //Add and set the Connector Settings fields
-   addCellsInput("Server IP Address:", obj.ServerConfig.IP, "IP");
-   addCellsInput("OSIsoft Web ID:", obj.ServerConfig.WebID, "WebID");
-   addCellsInput("OSIsoft Credentials:", obj.ServerConfig.Credentials, "Credentials");
-   addCellsInput("Flexy Certificate Path:", obj.eWONConfig.CertificatePath, "CertificatePath");
-   addCellsInput("Global Tag Posting Cycle Time (ms):", obj.AppConfig.CycleTimeMs, "CycleTimeMs");
+   addCellsInput("Server IP Address:", obj.ServerConfig.IP, "IP", "Invalid IP address format");
+   addCellsInput("OSIsoft Web ID:", obj.ServerConfig.WebID, "WebID", "Invalid WebID");
+   addCellsInput("OSIsoft Credentials:", obj.ServerConfig.Credentials, "Credentials", "");
+   addCellsInput("Flexy Certificate Path:", obj.eWONConfig.CertificatePath, "CertificatePath", "");
+   addCellsInput("Global Tag Posting Cycle Time (ms):", obj.AppConfig.CycleTimeMs, "CycleTimeMs", "Cycle time must be a positive whole number");
 
    var options = ["true", "false"];
    addCellsSelection("Post Duplicate Tag Values:", obj.AppConfig.PostDuplicateTagValues, "PostDuplicateTagValues", options);
