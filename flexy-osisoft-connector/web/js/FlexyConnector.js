@@ -238,6 +238,9 @@ function loadPage()
       $(":text").change(function ()
       {
          var element = $(this).closest(':text')[0];
+
+         //Trim the value to prevent accidental whitespace from user input
+         element.value = element.value.trim();
          var res = true;
          switch (element.id)
          {
