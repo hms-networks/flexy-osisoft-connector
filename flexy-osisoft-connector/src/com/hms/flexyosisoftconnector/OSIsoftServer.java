@@ -36,6 +36,9 @@ public class OSIsoftServer {
    // Post Headers
    private static String postHeaders;
 
+   // Unique name of this flexy
+   private static String flexyName; 
+
    private static boolean connected = true;
 
    public static final int LINK_ERROR = 32601;
@@ -57,10 +60,11 @@ public class OSIsoftServer {
 
    private static SimpleDateFormat dateFormat;
 
-   public OSIsoftServer(String ip, String login, String webID) {
+   public OSIsoftServer(String ip, String login, String webID, String name) {
       serverIP = ip;
       authCredentials = login;
       dbWebID = webID;
+      flexyName = name;
       targetURL = "https://" + serverIP + "/piwebapi/";
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
       batchBuffer = new StringBuilderLite(StringBuilderNumChars);
@@ -142,11 +146,13 @@ public class OSIsoftServer {
       //HTTPS responses are stored in this file
       String responseFilename = "/usr/response.txt";
 
+      String tagName = tag.getTagName() + "-" + flexyName;
+
       //url for the dataserver's pi points
       String url = "https://" + serverIP +"/piwebapi/dataservers/" + dbWebID + "/points";
 
       //Check if the tag already exists in the dataserver
-      res = RequestHTTPS(url + "?nameFilter=" + tag.getTagName(), "Get", postHeaders,"", "", responseFilename);
+      res = RequestHTTPS(url + "?nameFilter=" + tagName, "Get", postHeaders,"", "", responseFilename);
       if (res == NO_ERROR)
       {
          //Parse the JSON response and retrieve the JSON Array of items
@@ -160,14 +166,14 @@ public class OSIsoftServer {
             tag.setWebID(items.getJSONObject(0).getString("WebId"));
          } else {
             //tag does not exist and must be created
-            res = RequestHTTPS(url, "Post", postHeaders,buildNewPointBody(tag.getTagName(), tag.getDataType()), "", responseFilename);
+            res = RequestHTTPS(url, "Post", postHeaders,buildNewPointBody(tagName, tag.getDataType()), "", responseFilename);
 
             if (res == NO_ERROR)
             {
                //The WebID is sent back in the headers of the previous post
                //however, there is no mechanism currently to retrieve it so
                //another request must be issued.
-               res = RequestHTTPS(url + "?nameFilter=" + tag.getTagName(), "Get", postHeaders,"", "", responseFilename);
+               res = RequestHTTPS(url + "?nameFilter=" + tagName, "Get", postHeaders,"", "", responseFilename);
                if (res == NO_ERROR)
                {
                   //Parse the JSON response and retrieve the JSON Array of items
