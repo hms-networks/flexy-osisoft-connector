@@ -33,6 +33,8 @@ public class Main {
 
    static long AvailibleMemory;
 
+   static final String defaultName = "eWON";
+
    //Filename of connector config file
    static String connectorConfigFilename= "/usr/ConnectorConfig.json";
 
@@ -46,8 +48,20 @@ public class Main {
       RestFileServer restServer = new RestFileServer();
       restServer.start();
 
+      //Unique name of the flexy
+      String flexyName = getFlexyName();
+
       // Indicate the version number and that the application is starting
       Logger.LOG_CRITICAL("OSIsoft Connector v" + MajorVersion + "." + MinorVersion + " starting");
+
+      //Check that the flexy has a non-default name, stop the application if not
+      if (flexyName.equals(defaultName))
+      {
+         Logger.LOG_ERR("Device name is set to \"eWON\" which is the default name");
+         Logger.LOG_ERR("This device's name must be changed from default");
+         Logger.LOG_ERR("Application aborting due to default name use");
+         System.exit(0);
+      }
 
       try {
          piConfig = new OSIsoftConfig(connectorConfigFilename);
@@ -63,7 +77,7 @@ public class Main {
       setHttpTimeouts();
 
       int res = OSIsoftServer.NO_ERROR;
-      piServer = new OSIsoftServer(piConfig.getServerIP(), piConfig.getServerLogin(), piConfig.getServerWebID());
+      piServer = new OSIsoftServer(piConfig.getServerIP(), piConfig.getServerLogin(), piConfig.getServerWebID(), flexyName);
 
       do {
          try {
@@ -102,7 +116,19 @@ public class Main {
       }
    }
 
-
+   //Reads the unique name given to the flexy
+   private static String getFlexyName()
+   {
+      String res = "";
+      SysControlBlock SCB;
+      try {
+         SCB = new SysControlBlock(SysControlBlock.SYS);
+         res = SCB.getItem("Identification");
+      } catch (Exception e) {
+         Logger.LOG_ERR("Error reading eWON's name");
+      }
+      return res;
+   }
 
    // Sets the directory that the eWON uses to check for SSL Certificates
    private static void setCertificatePath(String path) {
