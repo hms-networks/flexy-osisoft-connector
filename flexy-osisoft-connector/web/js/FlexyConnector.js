@@ -324,3 +324,13 @@ var waitingDialog = waitingDialog || (function ($)
    };
 
 })(jQuery);
+
+//Set all tag checkboxes to true/false
+function setAllTagsEnabled(val)
+{
+   var tagTableRef = document.getElementById('tagTable').getElementsByTagName('tbody')[0]
+   for (var i = 0, row; row = tagTableRef.rows[i]; i++)
+   {
+      row.cells[2].children[0].children[0].checked = val;
+   }
+}
