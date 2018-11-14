@@ -183,6 +183,11 @@ public class OSIsoftServer {
                   if (items.length() > 0) {
                      //tag exists
                      tag.setWebID(items.getJSONObject(0).getString("WebId"));
+                     res = RequestHTTPS(targetURL +"points/" + tag.getWebID() + "/attributes/pointsource", "Put", postHeaders, "\"HMS\"", "", "");
+                     if (res != NO_ERROR)
+                     {
+                        Logger.LOG_ERR("Could not set point source of " + tag.getTagName());
+                     }
                   } else {
                      //tag does not exist, error
                      Logger.LOG_ERR("PI Point creation failed");
