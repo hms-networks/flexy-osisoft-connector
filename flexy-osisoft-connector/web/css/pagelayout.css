@@ -1,3 +1,6 @@
 body {
   padding-top: 5rem;
 }
+.btn-margin-left {
+  margin-left: 10px;
+}
