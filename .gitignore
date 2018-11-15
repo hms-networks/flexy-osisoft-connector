@@ -22,3 +22,7 @@ local.properties
 # Minified web files
 flexy-osisoft-connector/web/css/min/
 flexy-osisoft-connector/web/js/min/
+
+# Releases
+flexy-osisoft-connector/releases/
+
