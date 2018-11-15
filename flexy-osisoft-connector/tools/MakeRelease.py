@@ -11,6 +11,8 @@ PROJECT_NAME = "flexy-osisoft-connector"
 #Path that the release file gets saved to
 RELEASE_PATH = "../releases/"
 
+#Path in the release directory that functional files should be placed
+ZIP_CONNECTOR_PATH = "osisoft_connector/"
 #File names for release files
 README_FILENAME    = "README.md"
 CHANGELOG_FILENAME = "CHANGELOG.md"
@@ -39,9 +41,9 @@ def CreateRelease(version):
    #Add all "release" files to the zip
    zf.write(os.path.abspath(os.path.join(README_PATH,README_FILENAME)), README_FILENAME)
    zf.write(os.path.abspath(os.path.join(CHANGELOG_PATH,CHANGELOG_FILENAME)), CHANGELOG_FILENAME)
-   zf.write(os.path.abspath(os.path.join(JAR_PATH,JAR_FILENAME)), JAR_FILENAME)
-   zf.write(os.path.abspath(os.path.join(CONFIG_PATH,CONFIG_FILENAME)), CONFIG_FILENAME)
-   zf.write(os.path.abspath(os.path.join(JVMRUN_PATH,JVMRUN_FILENAME)), JVMRUN_FILENAME)
+   zf.write(os.path.abspath(os.path.join(JAR_PATH,JAR_FILENAME)), ZIP_CONNECTOR_PATH + JAR_FILENAME)
+   zf.write(os.path.abspath(os.path.join(CONFIG_PATH,CONFIG_FILENAME)), ZIP_CONNECTOR_PATH + CONFIG_FILENAME)
+   zf.write(os.path.abspath(os.path.join(JVMRUN_PATH,JVMRUN_FILENAME)), ZIP_CONNECTOR_PATH + JVMRUN_FILENAME)
 
    #Close the release zip folder
    zf.close()
