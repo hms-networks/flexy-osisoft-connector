@@ -26,3 +26,5 @@ flexy-osisoft-connector/web/js/min/
 # Releases
 flexy-osisoft-connector/releases/
 
+# Build
+flexy-osisoft-connector/build/
