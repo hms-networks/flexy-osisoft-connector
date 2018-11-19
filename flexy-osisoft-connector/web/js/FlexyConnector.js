@@ -1,6 +1,7 @@
 var tagNameColumn = 0;
 var tagTypeColumn = 1;
-var tagSelectedColumn = 2;
+var serverNameColumn = 2;
+var tagSelectedColumn = 3;
 
 var parameterNameColumn = 0;
 var parameterValueColumn = 1;
@@ -75,6 +76,7 @@ function loadPage()
 
          var typeIndex = 0;
          var tagNameIndex = 0;
+         var serverNameIndex = 0;
 
          for (var i = 0;  i < tableref.rows[0].cells.length; i++)
          {
@@ -85,6 +87,10 @@ function loadPage()
             else if (tableref.rows[0].cells[i].innerText.trim() === "Name")
             {
                tagNameIndex = i;
+            }
+            else if (tableref.rows[0].cells[i].innerText.trim() === "ServerName")
+            {
+               serverNameIndex = i;
             }
          }
 
@@ -123,6 +129,9 @@ function loadPage()
                   type = "Unknown";
             }
             cell.innerHTML = type;
+
+            cell = newrow.insertCell(serverNameColumn);
+            cell.innerHTML = row.cells[serverNameIndex].innerText.trim();
 
             //Enabled
             cell = newrow.insertCell(tagSelectedColumn);
