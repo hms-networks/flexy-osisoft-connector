@@ -1,3 +1,10 @@
+var tagNameColumn = 0;
+var tagTypeColumn = 1;
+var tagSelectedColumn = 2;
+
+var parameterNameColumn = 0;
+var parameterValueColumn = 1;
+
 function saveJSON()
 {
    waitingDialog.show("Sending configuration to the flexy");
@@ -25,7 +32,7 @@ function saveJSON()
    var tagTableRef = document.getElementById('tagTable').getElementsByTagName('tbody')[0];
    for (var i = 0, row; row = tagTableRef.rows[i]; i++)
    {
-      if (row.cells[2].children[0].children[0].checked)
+      if (row.cells[tagSelectedColumn].children[0].children[0].checked)
       {
          jsonObject.TagList.push(row.cells[0].innerText.trim());
       }
@@ -87,12 +94,12 @@ function loadPage()
             var newrow = tagTableRef.insertRow(tagTableRef.rows.length);
 
             //tag name
-            var cell1 = newrow.insertCell(0);
-            cell1.innerHTML = row.cells[tagNameIndex].innerText.trim();
-            newrow.id = cell1.innerHTML;
+            cell = newrow.insertCell(tagNameColumn);
+            cell.innerHTML = row.cells[tagNameIndex].innerText.trim();
+            newrow.id = cell.innerHTML;
 
             //variable data type
-            var cell2 = newrow.insertCell(1);
+            cell = newrow.insertCell(tagTypeColumn);
             var type = "";
             var typeval = row.cells[typeIndex].innerText.trim();
             switch (typeval)
@@ -115,11 +122,11 @@ function loadPage()
                default:
                   type = "Unknown";
             }
-            cell2.innerHTML = type;
+            cell.innerHTML = type;
 
             //Enabled
-            var cell3 = newrow.insertCell(2);
-            cell3.setAttribute("align", "left");
+            cell = newrow.insertCell(tagSelectedColumn);
+            cell.setAttribute("align", "left");
             var div1 = document.createElement("div");
             div1.classList.add("text-xs-center");
             var input1 = document.createElement("input");
@@ -127,7 +134,7 @@ function loadPage()
             input1.classList.add("form-check-input");
             input1.checked = false;
             div1.appendChild(input1);
-            cell3.appendChild(div1);
+            cell.appendChild(div1);
          }
          resolve();
       });
@@ -169,11 +176,11 @@ function loadPage()
 
          //Parameter Cell
          //Contains the parameter name
-         var cell1 = row.insertCell(0);
-         cell1.innerHTML = name;
+         cell = row.insertCell(parameterNameColumn);
+         cell.innerHTML = name;
 
          //Value Cell
-         var cell2 = row.insertCell(1);
+         cell = row.insertCell(parameterValueColumn);
          var form = document.createElement("form");
          var div = document.createElement("div");
          form.classList.add("text-center");
@@ -190,7 +197,7 @@ function loadPage()
          div.appendChild(invalidFeedback);
          form.appendChild(div);
 
-         cell2.appendChild(form);
+         cell.appendChild(form);
       }
 
       //Adds a select type entry into the connector settings table
@@ -200,11 +207,11 @@ function loadPage()
 
          //Parameter Cell
          //Contains the parameter name
-         var cell1 = row.insertCell(0);
-         cell1.innerHTML = name;
+         cell = row.insertCell(parameterNameColumn);
+         cell.innerHTML = name;
 
          //Value Cell
-         var cell2 = row.insertCell(1);
+         cell = row.insertCell(parameterValueColumn);
          var form = document.createElement("form");
          form.classList.add("text-center");
          var input = document.createElement("select");
@@ -223,7 +230,7 @@ function loadPage()
             if (val === options[i]) input.selectedIndex = i;
          }
          form.appendChild(input);
-         cell2.appendChild(form);
+         cell.appendChild(form);
       }
 
       //Add and set the Connector Settings fields
@@ -245,7 +252,7 @@ function loadPage()
          var row = document.getElementById(obj.TagList[$i].trim());
          if (row != null)
          {
-            row.cells[2].children[0].children[0].checked = true;
+            row.cells[tagSelectedColumn].children[0].children[0].checked = true;
          }
       }
 
@@ -364,6 +371,6 @@ function setAllTagsEnabled(val)
    var tagTableRef = document.getElementById('tagTable').getElementsByTagName('tbody')[0]
    for (var i = 0, row; row = tagTableRef.rows[i]; i++)
    {
-      row.cells[2].children[0].children[0].checked = val;
+      row.cells[tagSelectedColumn].children[0].children[0].checked = val;
    }
 }
