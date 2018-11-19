@@ -66,6 +66,21 @@ function loadPage()
             tagTableRef.removeChild(tagTableRef.firstChild);
          }
 
+         var typeIndex = 0;
+         var tagNameIndex = 0;
+
+         for (var i = 0;  i < tableref.rows[0].cells.length; i++)
+         {
+            if (tableref.rows[0].cells[i].innerText.trim() === "Type")
+            {
+               typeIndex = i;
+            }
+            else if (tableref.rows[0].cells[i].innerText.trim() === "Name")
+            {
+               tagNameIndex = i;
+            }
+         }
+
          //Populate tagTable with tag information from the export block descriptor
          for (var i = 1, row; row = tableref.rows[i]; i++)
          {
@@ -73,13 +88,13 @@ function loadPage()
 
             //tag name
             var cell1 = newrow.insertCell(0);
-            cell1.innerHTML = row.cells[1].innerText.trim();
-            newrow.id = row.cells[1].innerText.trim();
+            cell1.innerHTML = row.cells[tagNameIndex].innerText.trim();
+            newrow.id = cell1.innerHTML;
 
             //variable data type
             var cell2 = newrow.insertCell(1);
             var type = "";
-            var typeval = row.cells[10].innerText.trim();
+            var typeval = row.cells[typeIndex].innerText.trim();
             switch (typeval)
             {
                case "0":
