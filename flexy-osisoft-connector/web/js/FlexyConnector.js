@@ -256,6 +256,11 @@ function loadPage()
          }
       }
 
+      //Prevent form submits from reloading the page
+      $("form").submit(function( event ) {
+         event.preventDefault();
+      });
+
       //Register change handler to validate input fields
       $(":text").change(function ()
       {
