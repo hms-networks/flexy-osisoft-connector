@@ -4,6 +4,16 @@
 
 This application connects tags from a Flexy to an OSIsoft PI dataserver.
 
+## [Table of Contents](#table-of-contents)
+
+1. [Getting Started](#Getting-Started)
+   1. [Configuration](#Configuration)
+   2. [Clock Settings](#Flexy-Clock-Settings)
+   3. [Installation](#Installation)
+   4. [Running](#Running)
+2. [Certificates](#Certificates)
+3. [Customizing the Application](#Customizing-the-application)
+
 ## Getting Started
 
 ### Configuration
