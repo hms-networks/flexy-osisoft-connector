@@ -36,7 +36,7 @@ If using NTP time make sure the GMT Offset is set to zero hours
 
 ### Installation
 
-Using FTP transfer flexy-osisoft-connector.jar, jvmrun, and ServerConfig.json to the /usr/ directory of your eWON.  You must also follow all steps in the Certificates section below.
+Using FTP transfer the contents of the osisoft_connector directory to the /usr/ directory of your eWON via FTP.  If successful you should have a css directory, js directory, config.html, ConnectorConfig.json, flexy-osisoft-connector.jar, and jvmrun located in the /usr/ directory of the Flexy.  You must also follow all steps in the Certificates section below.
 
 ### Running
 
