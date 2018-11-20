@@ -32,7 +32,7 @@ CONFIG_FILENAME    = "ConnectorConfig.json"
 JVMRUN_FILENAME    = "jvmrun"
 
 #Paths for release files
-README_PATH    = "../../"
+README_PATH    = "../"
 CHANGELOG_PATH = "../docs/"
 JAR_PATH       = "../build/"
 CONFIG_PATH    = "../config/"
