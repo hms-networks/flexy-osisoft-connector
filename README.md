@@ -21,6 +21,13 @@ This application connects tags from a Flexy to an OSIsoft PI dataserver.
 
 User configuration of the application parameters is done through the ConnectorConfig.json file.  This file must be modified to match your configuration.
 
+#### Web Configuration
+
+The ConnectorConfig.json file can be edited through the configuration webpage.  The configuration webpage can be accessed after the [installation process](#Installation) has been completed.  The url for the configuration interface **Your_Flexy's_IP_Address**/usr/config.html
+
+#### FTP Configuration
+If you wish to manually edit your ConnectorConfig.json file or you have a saved ConnectorConfig.json file from another Flexy you can load your ConnectorConfig.json file on the flexy in the /usr/ directory via FTP.
+
 ### Flexy Clock Settings
 The Flexy's clock must be set to Coordinated Universal Time (UTC) in order to post accurate timestamps to OSIsoft.  This can be done manually on the Flexy's websever under Setup->System->Main->General->Date & Time or NTP can be used if there is an internet connection availible.  NTP is setup in Setup->System->Main->Net services->NTP (time).
 
