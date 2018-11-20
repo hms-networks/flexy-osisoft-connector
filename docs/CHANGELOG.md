@@ -1,4 +1,14 @@
 # Flexy OSIsoft Changelog
+
+## v0.3
+### Major Changes
+#### Configuration Webpage
+Connector configuration can now be done through a webpage hosted at **FLEXY-IP-ADDRESS**/usr/config.html
+
+### Minor Changes
++ eWON's unique name is appended to the osisoft tag name to designate the flexy the data is generated from
++ OSIsoft point source is now "HMS" instead of "l"
+
 ## v0.2
 ### Major Changes
 #### Offline Data Storage
