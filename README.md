@@ -12,59 +12,14 @@ This application connects tags from a Flexy to an OSIsoft PI dataserver.
    3. [Installation](#Installation)
    4. [Running](#Running)
 2. [Certificates](#Certificates)
-3. [Customizing the Application](#Customizing-the-application)
+3. [Configuration File](#Configuration-File)
+4. [Customizing the Application](#Customizing-the-application)
 
 ## Getting Started
 
 ### Configuration
 
 User configuration of the application parameters is done through the ConnectorConfig.json file.  This file must be modified to match your configuration.
-
-#### Example ConnectorConfig.json
-```
-{
-   "ServerConfig":{
-      "IP":"192.168.0.124",
-      "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
-      "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
-   },
-   "eWONConfig":{
-      "CertificatePath":"/usr/Certificates"
-   },
-   "AppConfig":{
-      "CycleTimeMs":1000,
-      "PostDuplicateTagValues": false
-   },
-   "TagList":["ExampleTag1", "ExampleTag2", "ExampleTag3", "ExampleTag4"]
-}
-```
-#### ServerConfig
-
-The OSIsoft PI Database Web API must be installed for this connector to work.  The connector requires three items to connect to the OSIsoft PI Web API they are the IP address of the server running the PI Web API, WebID of the PI Web API and a valid user name and password for the system running the PI Web API software.
-
-IP – IP address of the system running the Web API (in this example assume the IP address is 192.168.0.124)
-
-WebID – WebID of your OSIsoft Web API.  This value can be attained by pointing a browser to the IP address (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step.  (A security warning may occur when trying to access this page, this warning should be ignored)
-
-#### Credentials - Base64 encoded user credentials for basic authentication
-
-To generate your Base64 encoded user credentials visit https://www.base64encode.org/ and encode "username:password"
-
-Example: If your username is 'username' and your password is 'password' you would encode "username:password" and should get "dXNlcm5hbWU6cGFzc3dvcmQ="
-
-#### eWONConfig
-
-CertificatePath - Path to the directory containing your server's certificate.  For more information see the Certificates section
-
-#### AppConfig
-
-CycleTimeMs - Cycle time of the application.  All tags will be posted at this specified interval
-
-PostDuplicateTagValues - Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
-
-#### TagList
-
-TagList - List of eWON tags that should be connected to the OSIsoft PI server.  If PI Points with (non case sensitive) matching names do not exist on the PI server they will be created automatically.
 
 ### Flexy Clock Settings
 The Flexy's clock must be set to Coordinated Universal Time (UTC) in order to post accurate timestamps to OSIsoft.  This can be done manually on the Flexy's websever under Setup->System->Main->General->Date & Time or NTP can be used if there is an internet connection availible.  NTP is setup in Setup->System->Main->Net services->NTP (time).
@@ -117,6 +72,54 @@ The certificate must be placed somewhere in the /usr directory of the Flexy. The
 // Path to the directory containing your OSIsoft server's certificate
 static String eWONCertificatePath = "/usr/Certificates";
 ```
+
+## Configuration File
+
+### Example ConnectorConfig.json
+```
+{
+   "ServerConfig":{
+      "IP":"192.168.0.124",
+      "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
+      "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
+   },
+   "eWONConfig":{
+      "CertificatePath":"/usr/Certificates"
+   },
+   "AppConfig":{
+      "CycleTimeMs":1000,
+      "PostDuplicateTagValues": false
+   },
+   "TagList":["ExampleTag1", "ExampleTag2", "ExampleTag3", "ExampleTag4"]
+}
+```
+### ServerConfig
+
+The OSIsoft PI Database Web API must be installed for this connector to work.  The connector requires three items to connect to the OSIsoft PI Web API they are the IP address of the server running the PI Web API, WebID of the PI Web API and a valid user name and password for the system running the PI Web API software.
+
+IP – IP address of the system running the Web API (in this example assume the IP address is 192.168.0.124)
+
+WebID – WebID of your OSIsoft Web API.  This value can be attained by pointing a browser to the IP address (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step.  (A security warning may occur when trying to access this page, this warning should be ignored)
+
+### Credentials - Base64 encoded user credentials for basic authentication
+
+To generate your Base64 encoded user credentials visit https://www.base64encode.org/ and encode "username:password"
+
+Example: If your username is 'username' and your password is 'password' you would encode "username:password" and should get "dXNlcm5hbWU6cGFzc3dvcmQ="
+
+### eWONConfig
+
+CertificatePath - Path to the directory containing your server's certificate.  For more information see the Certificates section
+
+### AppConfig
+
+CycleTimeMs - Cycle time of the application.  All tags will be posted at this specified interval
+
+PostDuplicateTagValues - Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
+
+### TagList
+
+TagList - List of eWON tags that should be connected to the OSIsoft PI server.  If PI Points with (non case sensitive) matching names do not exist on the PI server they will be created automatically.
 
 ## Customizing the application
 
