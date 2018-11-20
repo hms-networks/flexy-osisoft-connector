@@ -31,10 +31,7 @@ The ConnectorConfig.json file can be edited through the configuration webpage.  
 If you wish to manually edit your ConnectorConfig.json file or you have a saved ConnectorConfig.json file from another Flexy you can load your ConnectorConfig.json file on the flexy in the /usr/ directory via FTP.
 
 ### Flexy Clock Settings
-The Flexy's clock must be set to Coordinated Universal Time (UTC) in order to post accurate timestamps to OSIsoft.  This can be done manually on the Flexy's websever under Setup->System->Main->General->Date & Time or NTP can be used if there is an internet connection availible.  NTP is setup in Setup->System->Main->Net services->NTP (time).
-
-#### NTP
-If using NTP time make sure the GMT Offset is set to zero hours
+The Flexy's clock must be set to Coordinated Universal Time (UTC) in order to post accurate timestamps to OSIsoft.  This can be done manually on the Flexy's websever under Setup->System->Main->General->Date & Time or NTP can be used if there is an internet connection availible.  NTP is setup in Setup->System->Main->Net services->NTP (time).  If using NTP time make sure the GMT Offset is set to zero hours
 
 ### Installation
 
