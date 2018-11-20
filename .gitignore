@@ -20,11 +20,11 @@ local.properties
 .externalToolBuilders/
 
 # Minified web files
-flexy-osisoft-connector/web/css/min/
-flexy-osisoft-connector/web/js/min/
+web/css/min/
+web/js/min/
 
 # Releases
-flexy-osisoft-connector/releases/
+releases/
 
 # Build
-flexy-osisoft-connector/build/
+build/
