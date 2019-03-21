@@ -25,7 +25,7 @@ User configuration of the application parameters is done through the ConnectorCo
 
 The ConnectorConfig.json file can be edited through the configuration webpage.  The configuration webpage can be accessed after the [installation process](#Installation) has been completed.  The url for the configuration interface **Your_Flexy's_IP_Address**/usr/config.html
 
-![osisoft web configuration interface](flexy-osisoft-connector/docs/images/configurationPage.png)
+![osisoft web configuration interface](docs/images/configurationPage.png)
 
 #### FTP Configuration
 If you wish to manually edit your ConnectorConfig.json file or you have a saved ConnectorConfig.json file from another Flexy you can load your ConnectorConfig.json file on the flexy in the /usr/ directory via FTP.
