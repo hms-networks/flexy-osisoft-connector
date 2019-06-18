@@ -364,7 +364,7 @@ public class OSIsoftServer {
 
       switch (tagType) {
             case DataPoint.TYPE_BOOLEAN:
-               type = "Int16";
+               type = "Digital";
                break;
             case DataPoint.TYPE_FLOAT:
                type = "Float64";

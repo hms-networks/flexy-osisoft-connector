@@ -60,6 +60,7 @@ public class DataPointBoolean extends DataPoint {
 
    //Returns the datapoint's value as a string
    public String getValueString() {
-      return (""+valueBoolean);
+      if (valueBoolean) return ("1");
+      return ("0");
    }
 }
