@@ -66,7 +66,7 @@ public class OSIsoftServer {
       dbWebID = webID;
       flexyName = name;
       targetURL = "https://" + serverIP + "/piwebapi/";
-      postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json";
+      postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json&X-Requested-With=JSONHttpRequest";
       batchBuffer = new StringBuilderLite(StringBuilderNumChars);
       dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
    }
