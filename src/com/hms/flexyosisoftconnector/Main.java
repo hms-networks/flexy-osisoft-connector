@@ -23,7 +23,7 @@ public class Main {
 
    //Application Version Numbers
    static final int MajorVersion = 0;
-   static final int MinorVersion = 3;
+   static final int MinorVersion = 4;
 
    //Minimum amount of free memory before data trimming occurs
    static final long MINIMUM_MEMORY = 5000000;
