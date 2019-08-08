@@ -22,8 +22,8 @@ public class Main {
    static OSIsoftServer piServer;
 
    //Application Version Numbers
-   static final int MajorVersion = 0;
-   static final int MinorVersion = 4;
+   static final int MAJOR_VERSION = 0;
+   static final int MINOR_VERSION = 4;
 
    //Minimum amount of free memory before data trimming occurs
    static final long MINIMUM_MEMORY = 5000000;
@@ -33,7 +33,7 @@ public class Main {
 
    static long AvailibleMemory;
 
-   static final String defaultName = "eWON";
+   static final String DEFAULT_EWON_NAME = "eWON";
 
    //Filename of connector config file
    static String connectorConfigFilename= "/usr/ConnectorConfig.json";
@@ -52,10 +52,10 @@ public class Main {
       String flexyName = getFlexyName();
 
       // Indicate the version number and that the application is starting
-      Logger.LOG_CRITICAL("OSIsoft Connector v" + MajorVersion + "." + MinorVersion + " starting");
+      Logger.LOG_CRITICAL("OSIsoft Connector v" + MAJOR_VERSION + "." + MINOR_VERSION + " starting");
 
       //Check that the flexy has a non-default name, stop the application if not
-      if (flexyName.equals(defaultName))
+      if (flexyName.equals(DEFAULT_EWON_NAME))
       {
          Logger.LOG_ERR("Device name is set to \"eWON\" which is the default name");
          Logger.LOG_ERR("This device's name must be changed from default");
