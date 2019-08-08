@@ -9,12 +9,18 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+.project
 
 # Visual Studio Code files
 .vscode/
 
 # Compiled Jars
 *.jar
+
+# Build Output
+*.class
+*.classpath
+*.log
 
 # External tool builders
 .externalToolBuilders/
