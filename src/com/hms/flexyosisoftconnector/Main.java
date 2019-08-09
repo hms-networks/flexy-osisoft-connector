@@ -39,7 +39,7 @@ public class Main {
    /**
     * Filename of connector config file
     */
-    static final String CONNECTOR_CONFIG_FILENAME= "/usr/ConnectorConfig.json";
+    static final String CONNECTOR_CONFIG_FILENAME = "/usr/ConnectorConfig.json";
 
    /**
     * Configuration of PI connector
