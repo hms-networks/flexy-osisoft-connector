@@ -5,7 +5,7 @@ package com.hms.flexyosisoftconnector;
  *
  * Abstract class object for a DataPoint.  This is a value and a time.
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 

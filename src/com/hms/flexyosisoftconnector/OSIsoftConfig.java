@@ -7,7 +7,7 @@ import com.hms.flexyosisoftconnector.JSON.*;
  * This class contains the configuration
  * for the Flexy <-> OSIsoft connection
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 public class OSIsoftConfig {

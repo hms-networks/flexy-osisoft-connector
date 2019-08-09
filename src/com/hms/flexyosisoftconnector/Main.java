@@ -10,7 +10,7 @@ import com.hms.flexyosisoftconnector.JSON.JSONException;
  * This demo reads multiple tag values from an eWON Flexy IO Server and POSTs
  * them to an OSIsoft PI Server.
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 public class Main {
