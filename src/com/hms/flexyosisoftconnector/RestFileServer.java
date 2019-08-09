@@ -22,8 +22,8 @@ import org.microemu.cldc.socket.*;
 
 public class RestFileServer extends Thread {
 
-   private static final int portNum = 22333;
-   private static final String filename = "usr/ConnectorConfig.json";
+   private static final int PORT_NUM = 22333;
+   private static final String FILENAME = "usr/ConnectorConfig.json";
 
    public void run() {
       listen();
@@ -33,7 +33,7 @@ public class RestFileServer extends Thread {
    public void writeFile(String data) {
       Logger.LOG_DEBUG(data);
       try {
-         BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+         BufferedWriter writer = new BufferedWriter(new FileWriter(FILENAME));
          writer.write(data);
          writer.close();
       } catch (IOException e) {
@@ -44,7 +44,7 @@ public class RestFileServer extends Thread {
    //Listen for a POST on the configured port, trigger saving, and respond
    public void listen() {
       try {
-         ServerSocketConnection svr = new ServerSocketConnection(portNum);
+         ServerSocketConnection svr = new ServerSocketConnection(PORT_NUM);
 
          //Server should always be listening for new files
          while (true) {
