@@ -49,7 +49,7 @@ public class Main {
    /**
     * Current available JVM memory
     */
-   static long AvailibleMemory;
+   static long AvailableMemory;
 
    /**
     * Filename of connector config file
@@ -112,7 +112,7 @@ public class Main {
       // Infinite loop
       while (true) {
 
-         AvailibleMemory = Runtime.getRuntime().freeMemory();
+         AvailableMemory = Runtime.getRuntime().freeMemory();
          currentTimeMs = System.currentTimeMillis();
 
          if ((currentTimeMs - lastUpdateTimeMs) >= piConfig.getCycleTimeMs()) {
@@ -122,7 +122,7 @@ public class Main {
 
             String time = piServer.convertTimeString(new Date());
             for (int i = 0; i < piConfig.getTags().size(); i++) {
-               if(AvailibleMemory < MINIMUM_MEMORY)
+               if(AvailableMemory < MINIMUM_MEMORY)
                {
                   ((Tag) piConfig.getTags().get(i)).trimOldestEntries(TAGS_TO_TRIM);
                }
