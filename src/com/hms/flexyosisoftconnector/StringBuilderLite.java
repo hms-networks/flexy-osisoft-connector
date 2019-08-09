@@ -5,7 +5,7 @@ package com.hms.flexyosisoftconnector;
  *
  * Class for building large preallocated strings
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 

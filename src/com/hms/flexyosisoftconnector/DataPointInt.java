@@ -5,7 +5,7 @@ package com.hms.flexyosisoftconnector;
  *
  * Class object for a DataPoint with a int value
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 

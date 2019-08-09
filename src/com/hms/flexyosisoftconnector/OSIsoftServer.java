@@ -13,7 +13,7 @@ import com.hms.flexyosisoftconnector.JSON.*;
  *
  * Class object for an OSIsoft PI Server.
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 

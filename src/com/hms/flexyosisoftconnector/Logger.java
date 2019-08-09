@@ -6,7 +6,7 @@ package com.hms.flexyosisoftconnector;
  *
  * Provides an interface to selectively log output
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 public class Logger {

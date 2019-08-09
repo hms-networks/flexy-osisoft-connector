@@ -16,7 +16,7 @@ import org.microemu.cldc.socket.*;
  * Class object for a RestFileServer. Listens on a socket for a file, if
  * received the file is saved.
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 

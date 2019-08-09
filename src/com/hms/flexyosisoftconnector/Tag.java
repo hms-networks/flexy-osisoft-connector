@@ -12,7 +12,7 @@ import com.ewon.ewonitf.TagControl;
  * Class object for a Tag. Stores the eWON tag name and the OSIsoft PI webId of
  * attribute.
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 

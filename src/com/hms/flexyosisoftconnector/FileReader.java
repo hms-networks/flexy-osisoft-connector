@@ -10,7 +10,7 @@ import javax.microedition.io.file.FileConnection;
  *
  * Converts file to String form
  *
- * HMS Industrial Networks Inc. Solution Center
+ * HMS Networks Inc. Solution Center
  *
  */
 
