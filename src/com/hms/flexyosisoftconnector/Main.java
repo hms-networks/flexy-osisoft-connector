@@ -134,7 +134,10 @@ public class Main {
       }
    }
 
-   //Reads the unique name given to the flexy
+   /**
+    * Reads the unique name given to the flexy
+    * @return Name of the Flexy
+    */
    private static String getFlexyName()
    {
       String res = "";
@@ -148,7 +151,10 @@ public class Main {
       return res;
    }
 
-   // Sets the directory that the eWON uses to check for SSL Certificates
+   /**
+    * Sets the directory that the eWON uses to check for SSL Certificates
+    * @param path directory path where certificate is stored
+    */
    private static void setCertificatePath(String path) {
 
       SysControlBlock SCB;
@@ -165,9 +171,12 @@ public class Main {
       }
    }
 
-   // Sets the http timeouts
-   // Note: This changes the eWON's global HTTP timeouts and stores
-   //       these values in NV memory.
+
+   /**
+    * Sets the http timeouts
+    * Note: This changes the eWON's global HTTP timeouts and stores
+    *       these values in NV memory.
+    */
    private static void setHttpTimeouts() {
       SysControlBlock SCB;
       boolean needsSave = false;
