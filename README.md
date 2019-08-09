@@ -1,4 +1,4 @@
-# flexy-osisoft
+# Ewon Flexy OSIsoft Connector
 
 ## About
 
