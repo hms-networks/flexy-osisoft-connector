@@ -15,25 +15,45 @@ import com.hms.flexyosisoftconnector.JSON.JSONException;
  */
 public class Main {
 
-   //Application Version Numbers
+   /**
+    * Application Version Numbers
+    */
    static final int MAJOR_VERSION = 0;
    static final int MINOR_VERSION = 4;
 
-   //Minimum amount of free memory before data trimming occurs
+   /**
+    * Minimum amount of free memory before data trimming occurs
+    */
    static final long MINIMUM_MEMORY = 5000000;
 
-   //Number of tags to trim when memory is low
+   /**
+    * Number of tags to trim when memory is low
+    */
    static final int TAGS_TO_TRIM = 2;
 
+   /**
+    * Default name of a new Ewon
+    */
    static final String DEFAULT_EWON_NAME = "eWON";
 
+   /**
+    * Configuration of PI connector
+    */
    static OSIsoftConfig piConfig;
 
+   /**
+    * PI Server management object
+    */
    static OSIsoftServer piServer;
 
+   /**
+    * Current available JVM memory
+    */
    static long AvailibleMemory;
 
-   //Filename of connector config file
+   /**
+    * Filename of connector config file
+    */
    static String connectorConfigFilename= "/usr/ConnectorConfig.json";
 
    public static void main(String[] args) {
