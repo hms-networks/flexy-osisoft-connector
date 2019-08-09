@@ -53,7 +53,7 @@ public class OSIsoftServer {
    static final String WEB_ID_ERROR_STRING = "Unknown or invalid WebID format:";
 
    private static StringBuilderLite batchBuffer;
-   private static final int StringBuilderNumChars = 500000;
+   private static final int STRING_BUILDER_NUM_CHARS = 500000;
    private static int batchCount;
 
    private static SimpleDateFormat dateFormat;
@@ -65,7 +65,7 @@ public class OSIsoftServer {
       flexyName = name;
       targetURL = "https://" + serverIP + "/piwebapi/";
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json&X-Requested-With=JSONHttpRequest";
-      batchBuffer = new StringBuilderLite(StringBuilderNumChars);
+      batchBuffer = new StringBuilderLite(STRING_BUILDER_NUM_CHARS);
       dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
    }
 
