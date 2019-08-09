@@ -50,13 +50,13 @@ The Flexy by default only allows HTTPS connections with servers that have certif
 Here is an example of generating a certificate using openssl.
 
 Generate a certificate and a private key good for 5 years.
-```
+```console
 openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 1825 -out certificate.crt
 ```
 Answer the prompts, making sure that your set the "Common Name" to the IP Address of your server.
 
 Combine the certificate and private key into a .p12 file
-```
+```console
 openssl pkcs12 -inkey key.pem -in certificate.crt -export -out certificate.p12
 ```
 
