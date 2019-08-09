@@ -12,8 +12,6 @@ import javax.microedition.io.file.FileConnection;
  *
  * HMS Industrial Networks Inc. Solution Center
  *
- * @author thk
- *
  */
 
 public class FileReader {

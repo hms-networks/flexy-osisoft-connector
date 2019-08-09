@@ -12,8 +12,6 @@ import com.hms.flexyosisoftconnector.JSON.JSONException;
  *
  * HMS Industrial Networks Inc. Solution Center
  *
- * @author thk
- *
  */
 public class Main {
 

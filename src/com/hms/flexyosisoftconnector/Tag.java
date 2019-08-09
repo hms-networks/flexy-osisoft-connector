@@ -14,8 +14,6 @@ import com.ewon.ewonitf.TagControl;
  *
  * HMS Industrial Networks Inc. Solution Center
  *
- * @author thk
- *
  */
 
 public class Tag {

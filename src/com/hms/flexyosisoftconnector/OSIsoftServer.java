@@ -15,8 +15,6 @@ import com.hms.flexyosisoftconnector.JSON.*;
  *
  * HMS Industrial Networks Inc. Solution Center
  *
- * @author thk
- *
  */
 
 public class OSIsoftServer {

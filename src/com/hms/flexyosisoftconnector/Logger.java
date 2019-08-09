@@ -8,8 +8,6 @@ package com.hms.flexyosisoftconnector;
  *
  * HMS Industrial Networks Inc. Solution Center
  *
- * @author thk
- *
  */
 public class Logger {
 
