@@ -15,10 +15,6 @@ import com.hms.flexyosisoftconnector.JSON.JSONException;
  */
 public class Main {
 
-   static OSIsoftConfig piConfig;
-
-   static OSIsoftServer piServer;
-
    //Application Version Numbers
    static final int MAJOR_VERSION = 0;
    static final int MINOR_VERSION = 4;
@@ -29,9 +25,13 @@ public class Main {
    //Number of tags to trim when memory is low
    static final int TAGS_TO_TRIM = 2;
 
-   static long AvailibleMemory;
-
    static final String DEFAULT_EWON_NAME = "eWON";
+
+   static OSIsoftConfig piConfig;
+
+   static OSIsoftServer piServer;
+
+   static long AvailibleMemory;
 
    //Filename of connector config file
    static String connectorConfigFilename= "/usr/ConnectorConfig.json";
