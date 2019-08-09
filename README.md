@@ -4,6 +4,16 @@
 
 This application connects tags from a Flexy to an OSIsoft PI dataserver.
 
+## Support
+
+This application is supported by HMS' North American offices.
+
+| Phone                                        | Forum                                      | Email                                           |
+|:--------------------------------------------:|:------------------------------------------:|:-----------------------------------------------:|
+| [+1 312 829 0601](tel:13128290601), Option 2 | [hms.how](https://forum.hms-networks.com/) | [us-services@hms.se](mailto:us-services@hms.se) |
+
+
+
 ## [Table of Contents](#table-of-contents)
 
 1. [Getting Started](#Getting-Started)
