@@ -37,6 +37,11 @@ public class Main {
    static final String DEFAULT_EWON_NAME = "eWON";
 
    /**
+    * Filename of connector config file
+    */
+    static final String CONNECTOR_CONFIG_FILENAME= "/usr/ConnectorConfig.json";
+
+   /**
     * Configuration of PI connector
     */
    static OSIsoftConfig piConfig;
@@ -51,10 +56,6 @@ public class Main {
     */
    static long AvailableMemory;
 
-   /**
-    * Filename of connector config file
-    */
-   static String connectorConfigFilename= "/usr/ConnectorConfig.json";
 
    public static void main(String[] args) {
 
@@ -82,9 +83,9 @@ public class Main {
       }
 
       try {
-         piConfig = new OSIsoftConfig(connectorConfigFilename);
+         piConfig = new OSIsoftConfig(CONNECTOR_CONFIG_FILENAME);
       } catch (JSONException e) {
-         Logger.LOG_ERR(connectorConfigFilename + " is malformed");
+         Logger.LOG_ERR(CONNECTOR_CONFIG_FILENAME + " is malformed");
          Logger.LOG_EXCEPTION(e);
          System.exit(0);
       }
