@@ -18,8 +18,6 @@ import org.microemu.cldc.socket.*;
  *
  * HMS Industrial Networks Inc. Solution Center
  *
- * @author thk
- *
  */
 
 public class RestFileServer extends Thread {
