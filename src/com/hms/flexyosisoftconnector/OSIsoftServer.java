@@ -35,7 +35,7 @@ public class OSIsoftServer {
    private static String postHeaders;
 
    // Unique name of this flexy
-   private static String flexyName; 
+   private static String flexyName;
 
    private static boolean connected = true;
 

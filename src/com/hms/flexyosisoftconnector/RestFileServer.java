@@ -52,23 +52,23 @@ public class RestFileServer extends Thread {
             Logger.LOG_DEBUG("Received new JSON file via webpage");
             InputStream inputStream = client.openInputStream();
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            
+
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
             //Read the post payload data
             String headers = "";
             String payload = "";
             boolean headerReceived = false;
-            
+
             //Read in the received file
             while (bufferedReader.ready()) {
-               
+
                //Read the header information
                //Header has been fully received when an empty line is read
                if(!headerReceived)
                {
                   String readLine = bufferedReader.readLine();
-                  
+
                   //New empty line received, end of header information
                   if (readLine.length() == 0)
                   {
@@ -88,10 +88,10 @@ public class RestFileServer extends Thread {
                   payload += (char)bufferedReader.read();
                }
             }
-            
+
             //Save the payload to the file
             writeFile(payload);
-            
+
             //create a PrintWriter to post the http response
             PrintWriter outWriter = new PrintWriter(client.openOutputStream());
 

@@ -29,7 +29,7 @@ public class Tag {
    //true  - Always log datapoint
    //false - Only log on value change
    private boolean logDuplicateValues = true;
-   
+
    //Previous posted datapoint
    private DataPoint lastDataPoint;
 
