@@ -29,7 +29,23 @@ public class OSIsoftConfig {
     // Update rate for all tags in milliseconds
     int cycleTimeMs;
 
+    // String converted to int for use in switch statement
+    // Either (0) pre2019 for piwebapi or (1) post2019 for OMF
+    int communicationType;
+
+    // Strings you can get off of the json file
+    String pre2019 = "piwebapi";
+    String post2019 = "omf";
+    // Strings set by web page config tool
+    String secondPre2019 = "PI Web API 2018 and older";
+    String secondPost2019 = "PI Web API 2019+";
+
+    // Expose these for switch statement conditionals
+    public static final int piwebapi = 0;
+    public static final int omf = 1;
+
     // List of tags
+
     public static ArrayList tags = new ArrayList();
 
 
@@ -57,6 +73,19 @@ public class OSIsoftConfig {
        //Build a JSON Object containing the "AppConfig"
        JSONObject appConfig = configJSON.getJSONObject("AppConfig");
        cycleTimeMs = appConfig.getInt("CycleTimeMs");
+
+       String tmpCommunicationType = appConfig.getString("CommunicationType");
+       if(tmpCommunicationType.equalsIgnoreCase(pre2019) || tmpCommunicationType.equalsIgnoreCase(secondPre2019)) {
+           communicationType = piwebapi;
+       } else if (tmpCommunicationType.equalsIgnoreCase(post2019) || tmpCommunicationType.equalsIgnoreCase(secondPost2019)) {
+           communicationType = omf;
+       } else {
+           // can't do anything without a valid communication type..
+           Logger.LOG_ERR("Invalid communication type in config json");
+           Logger.LOG_ERR("Change the communication Type in config json to one of the valid options in the readme and restart the connector.");
+           Logger.LOG_ERR("OSIsoft connector Shutting down.");
+           System.exit(1);
+       }
 
        boolean shouldLogDuplicateValues = appConfig.getBoolean("PostDuplicateTagValues");
 
@@ -114,6 +143,10 @@ public class OSIsoftConfig {
     // Returns the cycle time in milliseconds
     public int getCycleTimeMs() {
        return cycleTimeMs;
+    }
+
+    public int getCommunicationType() {
+       return communicationType;
     }
 
 }

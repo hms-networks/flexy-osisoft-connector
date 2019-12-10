@@ -33,9 +33,15 @@ public class OSIsoftServer {
 
    // Post Headers
    private static String postHeaders;
+   private static String omfPostHeaders;
+
+   private static String omfUrl;
 
    // Unique name of this flexy
    private static String flexyName;
+
+   // Unique type for OMF messages from this flexy
+   private static String typeID;
 
    private static boolean connected = true;
 
@@ -52,11 +58,20 @@ public class OSIsoftServer {
    static final String AUTH_ERROR_STRING = "Authorization has been denied for this request.";
    static final String WEB_ID_ERROR_STRING = "Unknown or invalid WebID format:";
 
+   // to be used in switch statements on which comms type to use
+   static final String communicationTypePre2019 = "piwebapi";
+   static final String communicationTypePost2019 = "omf";
+
+   // Error message to be displayed for internal comminication errors in this file
+   private static final String comsErrMsg = "Internal Error OSIsoftServer.java: communication type is not valid";
+
    private static StringBuilderLite batchBuffer;
    private static final int STRING_BUILDER_NUM_CHARS = 500000;
    private static int batchCount;
 
    private static SimpleDateFormat dateFormat;
+
+   private String omfTypeJson;
 
    public OSIsoftServer(String ip, String login, String webID, String name) {
       serverIP = ip;
@@ -65,8 +80,14 @@ public class OSIsoftServer {
       flexyName = name;
       targetURL = "https://" + serverIP + "/piwebapi/";
       postHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json&X-Requested-With=JSONHttpRequest";
+      omfPostHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json"
+          +"&X-Requested-With=JSONHttpRequest"
+          +"&messageformat=json&omfversion=1.1";
+      omfUrl = targetURL + "omf";
       batchBuffer = new StringBuilderLite(STRING_BUILDER_NUM_CHARS);
       dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
+      typeID = "HMS-type-"+flexyName;
+
    }
 
    public static int RequestHTTPS(String CnxParam, String Method, String Headers, String TextFields, String FileFields, String FileName) throws JSONException
@@ -82,7 +103,14 @@ public class OSIsoftServer {
 
       if(!FileName.equals("") && res == NO_ERROR)
       {
-         JSONTokener JsonT = new JSONTokener(FileReader.readFile("file://" +FileName));
+         String fileStr = FileReader.readFile("file://" +FileName);
+
+         if (fileStr.charAt(0) != '[' && fileStr.charAt(0) != '{' ) {
+             // json has odd characters at the front, trim them to make valid json
+             int i = fileStr.indexOf("{");
+             fileStr = fileStr.substring(i);
+         }
+         JSONTokener JsonT = new JSONTokener(fileStr);
          JSONObject response = new JSONObject(JsonT);
          if(response.has("Message"))
          {
@@ -210,13 +238,42 @@ public class OSIsoftServer {
    }
 
    // Initializes a list of tags
-   public int initTags(ArrayList tagList) throws JSONException{
-      int retval = NO_ERROR;
-      for (int i = 0; i < tagList.size(); i++) {
-         int res = setTagWebId((Tag) tagList.get(i));
-         if (res != NO_ERROR) return retval = res;
-      }
-      return retval;
+    public int initTags(String serverIp, ArrayList tagList, int communicationType) throws JSONException{
+        int retval = NO_ERROR;
+        int res;
+
+        switch(communicationType) {
+           case OSIsoftConfig.omf:
+              //OMF setup
+
+              // setup type
+              String responseFilename = "/usr/response.txt";
+              String messageTypeHeader = "&messagetype=type";
+              setTypeBody();
+              res = RequestHTTPS(omfUrl, "Post", omfPostHeaders + messageTypeHeader, batchBuffer.toString(), "", responseFilename);
+
+              // setup containers
+              messageTypeHeader = "&messagetype=container";
+
+              // set batch buffer with list of tag containers to initialize for if they have not been already
+              setContainerJson(tagList);
+              res = RequestHTTPS(omfUrl, "Post", omfPostHeaders + messageTypeHeader, batchBuffer.toString(), "", responseFilename);
+              if (res != NO_ERROR)
+                 retval = res;
+              break;
+           case OSIsoftConfig.piwebapi:
+              // old PIWEBAPI setup
+              for (int i = 0; i < tagList.size(); i++) {
+                 res = setTagWebId((Tag) tagList.get(i));
+                 if (res != NO_ERROR) return retval = res;
+              }
+              break;
+           default:
+              Logger.LOG_ERR(comsErrMsg);
+              break;
+        }
+
+        return retval;
    }
 
    public static void startBatch()
@@ -242,6 +299,145 @@ public class OSIsoftServer {
    {
       batchBuffer.append("}");
    }
+
+   // omf versions of above functions
+
+   private static void setTypeBody() {
+      batchCount = 0;
+      batchBuffer.clearString();
+      batchBuffer.append("[{");
+      batchBuffer.append("\"id\": \""+typeID+"\",");
+      batchBuffer.append("\"classification\": \"dynamic\",");
+      batchBuffer.append("\"type\": \"object\",");
+      batchBuffer.append("\"properties\": {");
+      batchBuffer.append("\"timestamp\": {");
+      batchBuffer.append("\"type\": \"string\",");
+      batchBuffer.append("\"format\": \"date-time\",");
+      batchBuffer.append("\"isindex\": true");
+      batchBuffer.append("},");
+      batchBuffer.append("\"tagValue\": {");
+      batchBuffer.append("\"type\": \"string\",");
+      batchBuffer.append("\"description\": \"Ewon Flexy's tag value stored as a string\"");
+      batchBuffer.append("}");
+      batchBuffer.append("}");
+      batchBuffer.append("}]");
+   }
+
+   /**
+    * call this first when constructing OMF message
+    */
+   public static void startOMFDataMessage()
+   {
+      batchCount = 0;
+      batchBuffer.clearString();
+      batchBuffer.append("[");
+   }
+
+
+   /**
+    * call this for each new data point to omf message
+    */
+   public static void addPointToOMFDataMessage(String tagValue, String timestamp)
+   {
+      batchCount++;
+
+
+      batchBuffer.append("{");
+      batchBuffer.append(" \"timestamp\": \""+timestamp+".000Z\","); // should move the timezone part into the timestamp string
+      batchBuffer.append(" \"tagValue\": \""+ tagValue+"\"");
+      batchBuffer.append("}");
+
+   }
+
+   /**
+    * call when adding new tag to omf message to reference container id
+    * @param tagName
+    */
+    public static void addContainerStartToOMFDataMessage(String tagName)
+    {
+        batchBuffer.append("{");
+        // each tag has a container id that is set to the tag name
+        batchBuffer.append("\"containerid\": \""+tagName+"\"");
+        batchBuffer.append(",");
+        batchBuffer.append("\"values\": [");
+
+   }
+
+   /**
+    * call after finished adding all data points to close values array in json
+    */
+   public static void addContainerEndToOMFDataMessage()
+   {
+       batchBuffer.append("]");
+       batchBuffer.append("}"); // closes off the end of the container specific portion of the data message
+   }
+
+   /**
+    *  call this before each call to addPointToOMFDataMessage but not before the first one
+    */
+   public static void separateDataMessage()
+   {
+      batchBuffer.append(",");
+   }
+
+   /**
+    * call this first when finished building up the OMF message
+    */
+   public static void endOMFDataMessage()
+   {
+      batchBuffer.append("]");
+   }
+
+    /**
+     * should be called for every tag in config list at constructor
+     */
+    private static void setContainerJson(ArrayList tagList) {
+       startOMFDataMessage();
+
+       for (int i = 0; i < tagList.size(); i++) {
+
+          String tagName = ((Tag) tagList.get(i)).getTagName();
+
+          // after first tag, separate by comma
+          if(i > 0 ) {
+             separateDataMessage();
+          }
+
+          batchBuffer.append("{");
+          batchBuffer.append("\"id\": \""+tagName+"\",");
+          batchBuffer.append("\"typeid\": \""+typeID+"\"");
+          batchBuffer.append("}");
+       }
+
+       endOMFDataMessage();
+    }
+
+   public static boolean postOMFBatch()
+   {
+
+      String postHeaderType = "&messagetype=type";
+
+      int res = NO_ERROR;
+
+      try {
+
+         postHeaderType = "&messagetype=data";
+         String responseFilename = "/usr/response.txt";
+
+         // posting OMF batch
+         res = RequestHTTPS(omfUrl, "Post", omfPostHeaders + postHeaderType, batchBuffer.toString(), "", responseFilename); // data
+
+      } catch (JSONException e) {
+         Logger.LOG_ERR("Exception caught on posting omf data points");
+         e.printStackTrace();
+      }
+      if(res != NO_ERROR)
+      {
+         return false;
+      }
+      return true;
+   }
+   // end of omf batch buffer functions
 
    public static boolean postBatch()
    {
