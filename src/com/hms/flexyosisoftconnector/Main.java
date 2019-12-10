@@ -100,14 +100,14 @@ public class Main {
 
       do {
          try {
-            res = piServer.initTags(piConfig.getTags());
+            res = piServer.initTags(piConfig.getServerIP(), piConfig.getTags(), piConfig.getCommunicationType());
          } catch (JSONException e) {
             Logger.LOG_ERR("Linking eWON tags to OSIsoft PI server failed");
             Logger.LOG_EXCEPTION(e);
          }
       } while (res != OSIsoftServer.NO_ERROR);
 
-      DataPoster datathread = new DataPoster();
+      DataPoster datathread = new DataPoster(piConfig.getCommunicationType());
       datathread.start();
 
       // Infinite loop

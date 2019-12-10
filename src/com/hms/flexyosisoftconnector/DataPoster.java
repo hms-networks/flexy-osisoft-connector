@@ -6,6 +6,23 @@ public class DataPoster extends Thread{
 
    private static final int maxDataPointsPerPost = 200;
    private boolean shouldRun;
+   private static final String comsErrMsg = "Internal Error DataPoster.java: communication type is not valid";
+   private int communicationType;
+
+   public DataPoster (int com) {
+      communicationType = com;
+      switch(communicationType) {
+         case OSIsoftConfig.omf:
+            Logger.LOG_INFO("Using connection settings for piwebapi 2019 and later");
+            break;
+         case OSIsoftConfig.piwebapi:
+            Logger.LOG_INFO("Using connection settings for piwebapi 2018 and earlier");
+            break;
+         default:
+            Logger.LOG_ERR(comsErrMsg);
+            break;
+       }
+   }
 
    public void run()
    {
@@ -14,7 +31,19 @@ public class DataPoster extends Thread{
       while(shouldRun)
       {
 
-         OSIsoftServer.startBatch();
+          switch(communicationType) {
+             case OSIsoftConfig.omf:
+                 // start building OMF data message body
+                 OSIsoftServer.startOMFDataMessage();
+                 break;
+             case OSIsoftConfig.piwebapi:
+                 OSIsoftServer.startBatch();
+                 break;
+             default:
+                 Logger.LOG_ERR(comsErrMsg);
+                 break;
+          }
+
          ArrayList dataPoints = new ArrayList();
 
          int pointsPerTag = (maxDataPointsPerPost/OSIsoftConfig.tags.size());
@@ -23,25 +52,97 @@ public class DataPoster extends Thread{
          for (int tagIndex = 0; tagIndex < OSIsoftConfig.tags.size(); tagIndex++) {
             dataPoints.add(((Tag) OSIsoftConfig.tags.get(tagIndex)).getNewestDataPoints(pointsPerTag));
 
+            String tagName = ((Tag) OSIsoftConfig.tags.get(tagIndex)).getTagName();
+
+            switch(communicationType) {
+               case OSIsoftConfig.omf:
+                   if (tagIndex > 0) {
+                      OSIsoftServer.separateDataMessage();
+                   }
+
+                   OSIsoftServer.addContainerStartToOMFDataMessage(tagName);
+                   break;
+               case OSIsoftConfig.piwebapi:
+                   // do nothing
+                   break;
+               default:
+                   Logger.LOG_ERR(comsErrMsg);
+                   break;
+            }
+
             for(int dataPointIndex = 0; dataPointIndex<((ArrayList) dataPoints.get(tagIndex)).size(); dataPointIndex++)
             {
                if(((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex) != null)
                {
-                  OSIsoftServer.addPointToBatch(((Tag) OSIsoftConfig.tags.get(tagIndex)),(DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex));
+                  switch(communicationType) {
+                     case OSIsoftConfig.omf:
+                         String tagValue = ((DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex)).getValueString();
+                         String timeStamp = ((DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex)).timestamp;
+
+                         // if there is more than one data point we need to comma separate them
+                         if (dataPointIndex > 0) {
+                             OSIsoftServer.separateDataMessage();
+                         }
+
+                          // add a data point to the OMF message body
+                          OSIsoftServer.addPointToOMFdataMessage(tagValue, timeStamp);
+                          break;
+                      case OSIsoftConfig.piwebapi:
+                          OSIsoftServer.addPointToBatch(((Tag) OSIsoftConfig.tags.get(tagIndex)),(DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex));
+
+                          break;
+                      default:
+                          Logger.LOG_ERR(comsErrMsg);
+                          break;
+                   }
+
                   pointsAdded++;
                }
                else Logger.LOG_ERR("Null data point encountered");
             }
-
+            switch(communicationType) {
+               case OSIsoftConfig.omf:
+                   OSIsoftServer.addContainerEndToOMFDataMessage();
+                   break;
+               case OSIsoftConfig.piwebapi:
+                   OSIsoftServer.startBatch();
+                   break;
+               default:
+                   Logger.LOG_ERR(comsErrMsg);
+                   break;
+            }
          }
 
-         OSIsoftServer.endBatch();
+         switch(communicationType) {
+            case OSIsoftConfig.omf:
+                OSIsoftServer.endOMFDataMessage();
+                break;
+            case OSIsoftConfig.piwebapi:
+                OSIsoftServer.endBatch();
+                break;
+            default:
+                Logger.LOG_ERR(comsErrMsg);
+                break;
+         }
+
 
          if(pointsAdded>0)
          {
             Logger.LOG_DEBUG("Sending " + pointsAdded + " points to server");
             //Post the tags to the server
-            boolean retval = OSIsoftServer.postBatch();
+            boolean retval = false;
+
+            switch(communicationType) {
+               case OSIsoftConfig.omf:
+                   retval = OSIsoftServer.postOMFBatch();
+                   break;
+               case OSIsoftConfig.piwebapi:
+                   retval = OSIsoftServer.postBatch();
+                   break;
+               default:
+                   Logger.LOG_ERR(comsErrMsg);
+                   break;
+            }
 
             if(retval)
             {
