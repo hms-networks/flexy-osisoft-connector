@@ -26,7 +26,8 @@ function saveJSON()
    //Fetch the AppConfig
    var CycleTimeMs = document.getElementById("CycleTimeMs").value;
    var PostDuplicateTagValues = document.getElementById("PostDuplicateTagValues").value;
-   jsonObject.AppConfig = { CycleTimeMs: CycleTimeMs, PostDuplicateTagValues: PostDuplicateTagValues };
+   var CommunicationType = document.getElementById("CommunicationType").value;
+   jsonObject.AppConfig = { CycleTimeMs: CycleTimeMs, PostDuplicateTagValues: PostDuplicateTagValues, CommunicationType: CommunicationType };
 
    //Fetch the TagList
    jsonObject.TagList = [];
@@ -251,6 +252,8 @@ function loadPage()
 
       var options = ["true", "false"];
       addCellsSelection("Post Duplicate Tag Values:", obj.AppConfig.PostDuplicateTagValues, "PostDuplicateTagValues", options);
+      options = ["PI Web API 2018 and older", "PI Web API 2019+"];
+      addCellsSelection("Select your version of PI Web API to enable or disable OMF:", obj.AppConfig.communicationType, "CommunicationType", options);
 
       //Populate checkboxes for Tag list
       //For every tag configured in the json file set the checkbox state to checked
