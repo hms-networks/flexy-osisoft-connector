@@ -104,7 +104,8 @@ static String eWONCertificatePath = "/usr/Certificates";
    },
    "AppConfig":{
       "CycleTimeMs":1000,
-      "PostDuplicateTagValues": false
+      "PostDuplicateTagValues": false,
+      "CommunicationType":"omf"
    },
    "TagList":["ExampleTag1", "ExampleTag2", "ExampleTag3", "ExampleTag4"]
 }
@@ -133,6 +134,8 @@ CycleTimeMs - Cycle time of the application.  All tags will be posted at this sp
 
 PostDuplicateTagValues - Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
 
+CommunicationType - This refers to if you are using OMF (OSIsoft message format). If you have PIWEBAPI 2019 or later, and you have OMF enabled, set this string to "omf". If you are using an older version of PIWEBAPI set the string to "piwebapi". Any other values will result in an error. For more information on OMF read the section here:  [OMF](#OMF-Support)
+
 ### TagList
 
 TagList - List of eWON tags that should be connected to the OSIsoft PI server.  If PI Points with (non case sensitive) matching names do not exist on the PI server they will be created automatically.
@@ -140,3 +143,29 @@ TagList - List of eWON tags that should be connected to the OSIsoft PI server.  
 ## Customizing the application
 
 If you wish to modify, debug, or rebuild the application the toolkit and documentation is available here https://developer.ewon.biz/content/java-0. The instructions for setting up your development environment are here  https://developer.ewon.biz/system/files_force/AUG-072-0-EN-%28JAVA%20J2SE%20Toolkit%20for%20eWON%20Flexy%29.pdf?download=1
+
+## OMF Support
+
+The OSIsoft connector now has the ability to support OMF. To enable OMF follow the following steps:
+1. Download the latest version of PIWEBAPI - PIWEBAPI 2019 or later is required.
+   1. Install the new software.
+1. Enable CSRFDefence.
+   1. Open Pi System Explorer.
+   1. Expand elements -> osisoft -> PI Web API -> 'computer name' -> System Configuration
+   1. Click on attributes and find the field for EnableCSRFDefence.
+   1. Change the value to true and click the 'check in' button at the top.
+1. Run the PI Web API Admin Utility.
+   1. In the OMF services section of the configuration tool, click edit.
+   1. Make sure there is a green checkmark next to every field.
+   1. IMPORTANT: The PI Data Archive Server can disconnect for various reasons. Make sure this is connected if you have a connection issue.
+   1. Click confirm and finish running the utility.
+
+## Troubleshooting common issues
+
+Commonly encountered issues:
+
+* Certificates
+    * You will not be able to connect to the server if the certificate is incorrect.
+    * The first thing to check is the 'common name' of the certificate. This needs to match the ip address or domain name of your OSIsoft server's machine.
+* Not connecting when OMF support is enabled.
+    * We have found that you may need to rerun the PI Web API Admin Utility to ensure that PI data archive is connected. This is especially true if the connector was working properly and then stopped working after restarting the OSIsoft server machine.
