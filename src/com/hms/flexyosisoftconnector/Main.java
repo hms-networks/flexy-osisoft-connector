@@ -18,8 +18,8 @@ public class Main {
    /**
     * Application Version Numbers
     */
-   static final int MAJOR_VERSION = 0;
-   static final int MINOR_VERSION = 4;
+   static final int MAJOR_VERSION = 1;
+   static final int MINOR_VERSION = 0;
 
    /**
     * Minimum amount of free memory before data trimming occurs
