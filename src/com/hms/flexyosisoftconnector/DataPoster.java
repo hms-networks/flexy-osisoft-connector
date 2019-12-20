@@ -86,7 +86,7 @@ public class DataPoster extends Thread{
                          }
 
                           // add a data point to the OMF message body
-                          OSIsoftServer.addPointToOMFdataMessage(tagValue, timeStamp);
+                          OSIsoftServer.addPointToOMFDataMessage(tagValue, timeStamp);
                           break;
                       case OSIsoftConfig.piwebapi:
                           OSIsoftServer.addPointToBatch(((Tag) OSIsoftConfig.tags.get(tagIndex)),(DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex));
