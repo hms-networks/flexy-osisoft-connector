@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 public class DataPoster extends Thread{
 
-   private static final int maxDataPointsPerPost = 200;
+   private int maxDataPointsPerPost;
+   private static final int MAX_DATA_POINTS_PER_POST_API = 200;
+   private static final int MAX_DATA_POINTS_PER_POST_OMF = 5000;
    private boolean shouldRun;
    private static final String comsErrMsg = "Internal Error DataPoster.java: communication type is not valid";
    private int communicationType;
@@ -14,9 +16,11 @@ public class DataPoster extends Thread{
       switch(communicationType) {
          case OSIsoftConfig.omf:
             Logger.LOG_INFO("Using connection settings for piwebapi 2019 and later");
+            maxDataPointsPerPost = MAX_DATA_POINTS_PER_POST_OMF;
             break;
          case OSIsoftConfig.piwebapi:
             Logger.LOG_INFO("Using connection settings for piwebapi 2018 and earlier");
+            maxDataPointsPerPost = MAX_DATA_POINTS_PER_POST_API;
             break;
          default:
             Logger.LOG_ERR(comsErrMsg);
