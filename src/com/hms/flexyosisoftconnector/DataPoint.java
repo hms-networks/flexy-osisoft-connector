@@ -16,7 +16,18 @@ public abstract class DataPoint {
    public static final byte TYPE_INT     = 2;
    public static final byte TYPE_DWORD   = 3;
 
+   protected long epochTime;
    protected String timestamp;
+
+   public long getEpochTime()
+   {
+      return epochTime;
+   }
+
+   public void setEpochTime(long time)
+   {
+      epochTime = time;
+   }
 
    public String getTimeStamp()
    {

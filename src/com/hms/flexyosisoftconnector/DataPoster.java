@@ -32,9 +32,24 @@ public class DataPoster extends Thread{
    {
       shouldRun = true;
 
+      long lastUpdateTimeMs = 0;
+
       while(shouldRun)
       {
+          long currentTimeMs = System.currentTimeMillis();
 
+          /*
+           *  The queue is more efficient if it send out after a large amount of data has been added
+           *  With this logic of waiting 6 seconds per check, the internal queues of each tag has time
+           *  to build up before we look at those internal to send out all the data in them.
+           */
+          final int dataSendRateSeconds = 6;
+          final int convertToMilliseconds = 1000;
+          int waitTime = dataSendRateSeconds * convertToMilliseconds;
+          // If the elapsed time since the last check is greater than waitTime seconds, run all of the data poster logic
+          if ((currentTimeMs - lastUpdateTimeMs) >= waitTime) {
+          // Update the last update time
+          lastUpdateTimeMs = currentTimeMs;
           switch(communicationType) {
              case OSIsoftConfig.omf:
                  // start building OMF data message body
@@ -153,13 +168,15 @@ public class DataPoster extends Thread{
                //Remove all the points that were posted
                for (int tagIndex = 0; tagIndex < OSIsoftConfig.tags.size(); tagIndex++)
                {
-                  ((Tag) OSIsoftConfig.tags.get(tagIndex)).removeDataPoints((ArrayList)dataPoints.get(tagIndex));
+                   // For every tag, even if there are 0 points to remove, go into removal function
+                   ((Tag) OSIsoftConfig.tags.get(tagIndex)).removeDataPoints((ArrayList)dataPoints.get(tagIndex));
                }
             }
          }
 
          //Tell the JVM that it should garbage collect soon
          System.gc();
+         }
       }
    }
 }
