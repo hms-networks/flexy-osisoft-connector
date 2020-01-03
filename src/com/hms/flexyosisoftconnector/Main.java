@@ -19,7 +19,7 @@ public class Main {
     * Application Version Numbers
     */
    static final int MAJOR_VERSION = 1;
-   static final int MINOR_VERSION = 0;
+   static final int MINOR_VERSION = 1;
 
    /**
     * Minimum amount of free memory before data trimming occurs
@@ -127,7 +127,7 @@ public class Main {
                {
                   ((Tag) piConfig.getTags().get(i)).trimOldestEntries(TAGS_TO_TRIM);
                }
-               ((Tag) piConfig.getTags().get(i)).recordTagValue(time);
+               ((Tag) piConfig.getTags().get(i)).readFromHistoricalLogQueue();
             }
 
             Thread.yield();

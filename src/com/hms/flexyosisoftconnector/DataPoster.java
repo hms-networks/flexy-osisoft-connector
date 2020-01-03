@@ -153,7 +153,13 @@ public class DataPoster extends Thread{
                //Remove all the points that were posted
                for (int tagIndex = 0; tagIndex < OSIsoftConfig.tags.size(); tagIndex++)
                {
-                  ((Tag) OSIsoftConfig.tags.get(tagIndex)).removeDataPoints((ArrayList)dataPoints.get(tagIndex));
+                   // if there are tags to remove
+                   int numTags =  ((ArrayList)dataPoints.get(tagIndex)).size();
+                   if (numTags > 0) {
+                       ((Tag) OSIsoftConfig.tags.get(tagIndex)).setAddToQueue(false);
+                       ((Tag) OSIsoftConfig.tags.get(tagIndex)).removeDataPoints((ArrayList)dataPoints.get(tagIndex));
+                       ((Tag) OSIsoftConfig.tags.get(tagIndex)).setAddToQueue(true);
+                   }
                }
             }
          }
