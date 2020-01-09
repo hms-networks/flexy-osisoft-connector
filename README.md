@@ -20,7 +20,8 @@ This application is supported by HMS' North American offices.
    1. [Configuration](#Configuration)
    2. [Clock Settings](#Flexy-Clock-Settings)
    3. [Installation](#Installation)
-   4. [Running](#Running)
+   4. [Tag's Configuration](#Tags-Configuration)
+   5. [Running](#Running)
 2. [Certificates](#Certificates)
 3. [Configuration File](#Configuration-File)
 4. [Customizing the Application](#Customizing-the-application)
@@ -46,6 +47,23 @@ The Flexy's clock must be set to Coordinated Universal Time (UTC) in order to po
 ### Installation
 
 Using FTP transfer the contents of the osisoft_connector directory to the /usr/ directory of your eWON via FTP.  If successful you should have a css directory, js directory, config.html, ConnectorConfig.json, flexy-osisoft-connector.jar, and jvmrun located in the /usr/ directory of the Flexy.  You must also follow all steps in the Certificates section below.
+
+### Tag's Configuration
+
+The tag's historical logs are the source for the data pushed to OSIsoft, so settings for your historical logging will affect what data can get sent to OSIsoft. Make sure you enable historical logging in your tag settings. 
+1. On the flexy web page, navigate to Tags -> values
+![Tag configuration step 1](docs/images/step1.PNG)
+2. Via the button on the top left section of the web page, switch the mode from view to setup
+![Tag configuration step 2](docs/images/step2.PNG)
+3. Click on the tag that you wish to configure, and click on edit
+4. On the tag configuration panel, scroll down and enable Historical Logging
+![Tag configuration step 3](docs/images/step3.PNG)
+
+It is suggested you make use of both the available historical logging settings: Logging Deadband and Logging Interval. More information on Logging Deadband is listed below.
+
+#### Logging Deadband
+
+Logging Deadband refers to the amount of change needed before values are logged to the historical logs. If the Logging Deadband is set to 1, the value needs to change by 1 or more before being logged. If you have logging deadband disabled (set to -1), it is recommended you set the historical log's logging interval setting to something high if possible. Set the deadband to whatever your lowest unit of interest is.
 
 ### Running
 
