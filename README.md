@@ -47,6 +47,20 @@ The Flexy's clock must be set to Coordinated Universal Time (UTC) in order to po
 
 Using FTP transfer the contents of the osisoft_connector directory to the /usr/ directory of your eWON via FTP.  If successful you should have a css directory, js directory, config.html, ConnectorConfig.json, flexy-osisoft-connector.jar, and jvmrun located in the /usr/ directory of the Flexy.  You must also follow all steps in the Certificates section below.
 
+### Tag's Configuration
+
+The tag's historical logs are the source for the data pushed to OSIsoft, so settings for your historical logging will effect what data can get sent to OSIsoft. Make sure you enable historical logging in your tag settings. 
++ On the flexy web page, navigate to Tags -> values
++ On the web top left section of the page, switch the mode from view to setup
++ Click on your tag that you wish to configure, and click on edit
++ On the tag configuration panel scroll down and enable Historical Logging
+
+We suggest you make use of both the available historical logging settings: Logging Deadband and Logging Interval. More information on Logging DeadBand is listed below.
+
+#### Logging Deadband
+
+If you set a deadband of 1, then the tag value will need to change by a value of 1 or more before being logged. If Deadband is set to 2, the value needs to change by 2 or more before being logged. If you have logging deadband disabled (set to -1) we recommend you set the historical log's logging interval setting to something high if possible. Set the deadband to whatever your lowest unit of interest is.
+
 ### Running
 
 The application will start automatically on startup
