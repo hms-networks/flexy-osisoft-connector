@@ -54,11 +54,6 @@ public class Tag {
     */
    private static final int MAX_DATA_POINTS_PER_TAG = 200;
 
-   //Flag to indicate if duplicate values should be logged
-   //true  - Always log datapoint
-   //false - Only log on value change
-   private boolean logDuplicateValues = true;
-
    //Previous posted datapoint
    private DataPoint lastDataPoint;
 
@@ -66,12 +61,11 @@ public class Tag {
    private boolean addToQueue = true;
 
 
-   public Tag(String tagName, boolean logDuplicates) {
+   public Tag(String tagName) {
       eWONTagName = tagName;
       tagDataFileName = tagQueueDirectory + tagName + "TagQueue.txt";
       tagTimeIntFileName = tagQueueDirectory + tagName + "TimeInt.txt";
       OSISoftDateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
-      logDuplicateValues = logDuplicates;
       dataPoints = Collections.synchronizedList(new ArrayList());
       try {
          tagControl = new TagControl(tagName);
@@ -162,7 +156,7 @@ public class Tag {
          // Store the time in epoch time format as well so we don't need to convert it back later when popping off queue
          point.setEpochTime(epochTimeMilliseconds);
 
-         if(logDuplicateValues || !point.valueEquals(lastDataPoint))
+         if(!point.equals(lastDataPoint))
          {
             synchronized (dataPoints)
             {
