@@ -25,9 +25,8 @@ function saveJSON()
 
    //Fetch the AppConfig
    var CycleTimeMs = document.getElementById("CycleTimeMs").value;
-   var PostDuplicateTagValues = document.getElementById("PostDuplicateTagValues").value;
    var CommunicationType = document.getElementById("CommunicationType").value;
-   jsonObject.AppConfig = { CycleTimeMs: CycleTimeMs, PostDuplicateTagValues: PostDuplicateTagValues, CommunicationType: CommunicationType };
+   jsonObject.AppConfig = { CycleTimeMs: CycleTimeMs, CommunicationType: CommunicationType };
 
    //Fetch the TagList
    jsonObject.TagList = [];
@@ -250,8 +249,6 @@ function loadPage()
       addCellsInput("Flexy Certificate Path:", obj.eWONConfig.CertificatePath, "CertificatePath", "");
       addCellsInput("Global Tag Posting Cycle Time (ms):", obj.AppConfig.CycleTimeMs, "CycleTimeMs", "Cycle time must be a positive whole number");
 
-      var options = ["true", "false"];
-      addCellsSelection("Post Duplicate Tag Values:", obj.AppConfig.PostDuplicateTagValues, "PostDuplicateTagValues", options);
       options = ["PI Web API 2018 and older", "PI Web API 2019+"];
       addCellsSelection("Select your version of PI Web API to enable or disable OMF:", obj.AppConfig.communicationType, "CommunicationType", options);
 

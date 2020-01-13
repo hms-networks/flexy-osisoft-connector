@@ -87,8 +87,6 @@ public class OSIsoftConfig {
            System.exit(1);
        }
 
-       boolean shouldLogDuplicateValues = appConfig.getBoolean("PostDuplicateTagValues");
-
        if(appConfig.has("LoggingLevel"))
        {
           boolean res = Logger.SET_LOG_LEVEL(appConfig.getInt("LoggingLevel"));
@@ -104,7 +102,7 @@ public class OSIsoftConfig {
        //For each tagname in the config file create a tag and add it to
        //the arraylist of tags
        for(int i = 0; i < tagNames.length(); i++) {
-          Tag tag = new Tag(tagNames.getString(i), shouldLogDuplicateValues);
+          Tag tag = new Tag(tagNames.getString(i));
           if (tag.isValidTag())
           {
              tags.add(tag);

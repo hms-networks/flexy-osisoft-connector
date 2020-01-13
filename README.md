@@ -150,8 +150,6 @@ CertificatePath - Path to the directory containing your server's certificate.  F
 
 CycleTimeMs - Cycle time of the application.  All tags will be posted at this specified interval
 
-PostDuplicateTagValues - Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
-
 CommunicationType - This refers to if you are using OMF (OSIsoft message format). If you have PIWEBAPI 2019 or later, and you have OMF enabled, set this string to "omf". If you are using an older version of PIWEBAPI set the string to "piwebapi". Any other values will result in an error. For more information on OMF read the section here:  [OMF](#OMF-Support)
 
 ### TagList
