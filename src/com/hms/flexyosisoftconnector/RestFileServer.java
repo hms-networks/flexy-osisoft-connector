@@ -88,6 +88,9 @@ public class RestFileServer extends Thread {
                   payload += (char)bufferedReader.read();
                }
             }
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
 
             //Save the payload to the file
             writeFile(payload);
