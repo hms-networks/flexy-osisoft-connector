@@ -48,134 +48,134 @@ public class DataPoster extends Thread{
           int waitTime = dataSendRateSeconds * convertToMilliseconds;
           // If the elapsed time since the last check is greater than waitTime seconds, run all of the data poster logic
           if ((currentTimeMs - lastUpdateTimeMs) >= waitTime) {
-          // Update the last update time
-          lastUpdateTimeMs = currentTimeMs;
-          switch(communicationType) {
-             case OSIsoftConfig.omf:
-                 // start building OMF data message body
-                 OSIsoftServer.startOMFDataMessage();
-                 break;
-             case OSIsoftConfig.piwebapi:
-                 OSIsoftServer.startBatch();
-                 break;
-             default:
-                 Logger.LOG_ERR(comsErrMsg);
-                 break;
-          }
+             // Update the last update time
+             lastUpdateTimeMs = currentTimeMs;
+             switch(communicationType) {
+                case OSIsoftConfig.omf:
+                    // start building OMF data message body
+                    OSIsoftServer.startOMFDataMessage();
+                    break;
+                case OSIsoftConfig.piwebapi:
+                    OSIsoftServer.startBatch();
+                    break;
+                default:
+                    Logger.LOG_ERR(comsErrMsg);
+                    break;
+             }
 
-         ArrayList dataPoints = new ArrayList();
+            ArrayList dataPoints = new ArrayList();
 
-         int pointsPerTag = (maxDataPointsPerPost/OSIsoftConfig.tags.size());
-         int pointsAdded = 0;
-         //Build the JSON payload containing the most recent data points
-         for (int tagIndex = 0; tagIndex < OSIsoftConfig.tags.size(); tagIndex++) {
-            dataPoints.add(((Tag) OSIsoftConfig.tags.get(tagIndex)).getNewestDataPoints(pointsPerTag));
+            int pointsPerTag = (maxDataPointsPerPost/OSIsoftConfig.tags.size());
+            int pointsAdded = 0;
+            //Build the JSON payload containing the most recent data points
+            for (int tagIndex = 0; tagIndex < OSIsoftConfig.tags.size(); tagIndex++) {
+               dataPoints.add(((Tag) OSIsoftConfig.tags.get(tagIndex)).getNewestDataPoints(pointsPerTag));
 
-            String tagName = ((Tag) OSIsoftConfig.tags.get(tagIndex)).getTagName();
+               String tagName = ((Tag) OSIsoftConfig.tags.get(tagIndex)).getTagName();
 
-            switch(communicationType) {
-               case OSIsoftConfig.omf:
-                   if (tagIndex > 0) {
-                      OSIsoftServer.separateDataMessage();
-                   }
+               switch(communicationType) {
+                  case OSIsoftConfig.omf:
+                      if (tagIndex > 0) {
+                         OSIsoftServer.separateDataMessage();
+                      }
 
-                   OSIsoftServer.addContainerStartToOMFDataMessage(tagName);
-                   break;
-               case OSIsoftConfig.piwebapi:
-                   // do nothing
-                   break;
-               default:
-                   Logger.LOG_ERR(comsErrMsg);
-                   break;
-            }
-
-            for(int dataPointIndex = 0; dataPointIndex<((ArrayList) dataPoints.get(tagIndex)).size(); dataPointIndex++)
-            {
-               if(((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex) != null)
-               {
-                  switch(communicationType) {
-                     case OSIsoftConfig.omf:
-                         String tagValue = ((DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex)).getValueString();
-                         String timeStamp = ((DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex)).timestamp;
-
-                         // if there is more than one data point we need to comma separate them
-                         if (dataPointIndex > 0) {
-                             OSIsoftServer.separateDataMessage();
-                         }
-
-                          // add a data point to the OMF message body
-                          OSIsoftServer.addPointToOMFDataMessage(tagValue, timeStamp);
-                          break;
-                      case OSIsoftConfig.piwebapi:
-                          OSIsoftServer.addPointToBatch(((Tag) OSIsoftConfig.tags.get(tagIndex)),(DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex));
-
-                          break;
-                      default:
-                          Logger.LOG_ERR(comsErrMsg);
-                          break;
-                   }
-
-                  pointsAdded++;
+                      OSIsoftServer.addContainerStartToOMFDataMessage(tagName);
+                      break;
+                  case OSIsoftConfig.piwebapi:
+                      // do nothing
+                      break;
+                  default:
+                      Logger.LOG_ERR(comsErrMsg);
+                      break;
                }
-               else Logger.LOG_ERR("Null data point encountered");
-            }
-            switch(communicationType) {
-               case OSIsoftConfig.omf:
-                   OSIsoftServer.addContainerEndToOMFDataMessage();
-                   break;
-               case OSIsoftConfig.piwebapi:
-                   OSIsoftServer.startBatch();
-                   break;
-               default:
-                   Logger.LOG_ERR(comsErrMsg);
-                   break;
-            }
-         }
 
-         switch(communicationType) {
-            case OSIsoftConfig.omf:
-                OSIsoftServer.endOMFDataMessage();
-                break;
-            case OSIsoftConfig.piwebapi:
-                OSIsoftServer.endBatch();
-                break;
-            default:
-                Logger.LOG_ERR(comsErrMsg);
-                break;
-         }
-
-
-         if(pointsAdded>0)
-         {
-            Logger.LOG_DEBUG("Sending " + pointsAdded + " points to server");
-            //Post the tags to the server
-            boolean retval = false;
-
-            switch(communicationType) {
-               case OSIsoftConfig.omf:
-                   retval = OSIsoftServer.postOMFBatch();
-                   break;
-               case OSIsoftConfig.piwebapi:
-                   retval = OSIsoftServer.postBatch();
-                   break;
-               default:
-                   Logger.LOG_ERR(comsErrMsg);
-                   break;
-            }
-
-            if(retval)
-            {
-               //Remove all the points that were posted
-               for (int tagIndex = 0; tagIndex < OSIsoftConfig.tags.size(); tagIndex++)
+               for(int dataPointIndex = 0; dataPointIndex<((ArrayList) dataPoints.get(tagIndex)).size(); dataPointIndex++)
                {
-                   // For every tag, even if there are 0 points to remove, go into removal function
-                   ((Tag) OSIsoftConfig.tags.get(tagIndex)).removeDataPoints((ArrayList)dataPoints.get(tagIndex));
+                  if(((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex) != null)
+                  {
+                     switch(communicationType) {
+                        case OSIsoftConfig.omf:
+                            String tagValue = ((DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex)).getValueString();
+                            String timeStamp = ((DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex)).timestamp;
+
+                            // if there is more than one data point we need to comma separate them
+                            if (dataPointIndex > 0) {
+                                OSIsoftServer.separateDataMessage();
+                            }
+
+                             // add a data point to the OMF message body
+                             OSIsoftServer.addPointToOMFDataMessage(tagValue, timeStamp);
+                             break;
+                         case OSIsoftConfig.piwebapi:
+                             OSIsoftServer.addPointToBatch(((Tag) OSIsoftConfig.tags.get(tagIndex)),(DataPoint)((ArrayList)dataPoints.get(tagIndex)).get(dataPointIndex));
+
+                             break;
+                         default:
+                             Logger.LOG_ERR(comsErrMsg);
+                             break;
+                      }
+
+                     pointsAdded++;
+                  }
+                  else Logger.LOG_ERR("Null data point encountered");
+               }
+               switch(communicationType) {
+                  case OSIsoftConfig.omf:
+                      OSIsoftServer.addContainerEndToOMFDataMessage();
+                      break;
+                  case OSIsoftConfig.piwebapi:
+                      OSIsoftServer.startBatch();
+                      break;
+                  default:
+                      Logger.LOG_ERR(comsErrMsg);
+                      break;
                }
             }
-         }
 
-         //Tell the JVM that it should garbage collect soon
-         System.gc();
+            switch(communicationType) {
+               case OSIsoftConfig.omf:
+                   OSIsoftServer.endOMFDataMessage();
+                   break;
+               case OSIsoftConfig.piwebapi:
+                   OSIsoftServer.endBatch();
+                   break;
+               default:
+                   Logger.LOG_ERR(comsErrMsg);
+                   break;
+            }
+
+
+            if(pointsAdded>0)
+            {
+               Logger.LOG_DEBUG("Sending " + pointsAdded + " points to server");
+               //Post the tags to the server
+               boolean retval = false;
+
+               switch(communicationType) {
+                  case OSIsoftConfig.omf:
+                      retval = OSIsoftServer.postOMFBatch();
+                      break;
+                  case OSIsoftConfig.piwebapi:
+                      retval = OSIsoftServer.postBatch();
+                      break;
+                  default:
+                      Logger.LOG_ERR(comsErrMsg);
+                      break;
+                  }
+
+               if(retval)
+               {
+                  //Remove all the points that were posted
+                  for (int tagIndex = 0; tagIndex < OSIsoftConfig.tags.size(); tagIndex++)
+                  {
+                      // For every tag, even if there are 0 points to remove, go into removal function
+                      ((Tag) OSIsoftConfig.tags.get(tagIndex)).removeDataPoints((ArrayList)dataPoints.get(tagIndex));
+                  }
+               }
+            }
+
+            //Tell the JVM that it should garbage collect soon
+            System.gc();
          }
       }
    }
