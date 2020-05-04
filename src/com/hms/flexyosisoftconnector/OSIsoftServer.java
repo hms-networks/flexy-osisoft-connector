@@ -12,10 +12,9 @@ import com.hms.flexyosisoftconnector.JSON.*;
 
 /**
  * Class object for an OSIsoft PI Server.
- * <p>
- * HMS Networks Inc. Solution Center
+ *
+ * <p>HMS Networks Inc. Solution Center
  */
-
 public class OSIsoftServer {
 
   // IP address of OSIsoft Server
@@ -62,7 +61,8 @@ public class OSIsoftServer {
   static final String communicationTypePost2019 = "omf";
 
   // Error message to be displayed for internal comminication errors in this file
-  private static final String comsErrMsg = "Internal Error OSIsoftServer.java: communication type is not valid";
+  private static final String comsErrMsg =
+      "Internal Error OSIsoftServer.java: communication type is not valid";
 
   private static StringBuilderLite batchBuffer;
   private static final int STRING_BUILDER_NUM_CHARS = 500000;
@@ -78,25 +78,36 @@ public class OSIsoftServer {
     dbWebID = webID;
     flexyName = name;
     targetURL = "https://" + serverIP + "/piwebapi/";
-    postHeaders = "Authorization=Basic " + authCredentials
-        + "&Content-Type=application/json&X-Requested-With=JSONHttpRequest";
-    omfPostHeaders = "Authorization=Basic " + authCredentials + "&Content-Type=application/json"
-        + "&X-Requested-With=JSONHttpRequest"
-        + "&messageformat=json&omfversion=1.1";
+    postHeaders =
+        "Authorization=Basic "
+            + authCredentials
+            + "&Content-Type=application/json&X-Requested-With=JSONHttpRequest";
+    omfPostHeaders =
+        "Authorization=Basic "
+            + authCredentials
+            + "&Content-Type=application/json"
+            + "&X-Requested-With=JSONHttpRequest"
+            + "&messageformat=json&omfversion=1.1";
     omfUrl = targetURL + "omf";
     batchBuffer = new StringBuilderLite(STRING_BUILDER_NUM_CHARS);
     dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
     typeID = "HMS-type-" + flexyName;
-
   }
 
-  public static int RequestHTTPS(String CnxParam, String Method, String Headers, String TextFields,
-      String FileFields, String FileName) throws JSONException {
+  public static int RequestHTTPS(
+      String CnxParam,
+      String Method,
+      String Headers,
+      String TextFields,
+      String FileFields,
+      String FileName)
+      throws JSONException {
     int res = NO_ERROR;
 
     try {
-      res = ScheduledActionManager
-          .RequestHttpX(CnxParam, Method, Headers, TextFields, FileFields, FileName);
+      res =
+          ScheduledActionManager.RequestHttpX(
+              CnxParam, Method, Headers, TextFields, FileFields, FileName);
     } catch (EWException e) {
       Logger.LOG_EXCEPTION(e);
       res = EWON_ERROR;
@@ -158,58 +169,71 @@ public class OSIsoftServer {
 
     int res = NO_ERROR;
 
-    //HTTPS responses are stored in this file
+    // HTTPS responses are stored in this file
     String responseFilename = "/usr/response.txt";
 
     String tagName = tag.getTagName() + "-" + flexyName;
 
-    //url for the dataserver's pi points
+    // url for the dataserver's pi points
     String url = "https://" + serverIP + "/piwebapi/dataservers/" + dbWebID + "/points";
 
-    //Check if the tag already exists in the dataserver
-    res = RequestHTTPS(url + "?nameFilter=" + tagName, "Get", postHeaders, "", "",
-        responseFilename);
+    // Check if the tag already exists in the dataserver
+    res =
+        RequestHTTPS(url + "?nameFilter=" + tagName, "Get", postHeaders, "", "", responseFilename);
     if (res == NO_ERROR) {
-      //Parse the JSON response and retrieve the JSON Array of items
+      // Parse the JSON response and retrieve the JSON Array of items
       JSONTokener JsonT = new JSONTokener(FileReader.readFile("file://" + responseFilename));
       JSONObject requestResponse = new JSONObject(JsonT);
       JSONArray items = new JSONArray();
-       if (requestResponse.has("Items")) {
-          items = requestResponse.getJSONArray("Items");
-       }
+      if (requestResponse.has("Items")) {
+        items = requestResponse.getJSONArray("Items");
+      }
 
       if (items.length() > 0) {
-        //tag exists
+        // tag exists
         tag.setWebID(items.getJSONObject(0).getString("WebId"));
       } else {
-        //tag does not exist and must be created
-        res = RequestHTTPS(url, "Post", postHeaders, buildNewPointBody(tagName, tag.getDataType()),
-            "", responseFilename);
+        // tag does not exist and must be created
+        res =
+            RequestHTTPS(
+                url,
+                "Post",
+                postHeaders,
+                buildNewPointBody(tagName, tag.getDataType()),
+                "",
+                responseFilename);
 
         if (res == NO_ERROR) {
-          //The WebID is sent back in the headers of the previous post
-          //however, there is no mechanism currently to retrieve it so
-          //another request must be issued.
-          res = RequestHTTPS(url + "?nameFilter=" + tagName, "Get", postHeaders, "", "",
-              responseFilename);
+          // The WebID is sent back in the headers of the previous post
+          // however, there is no mechanism currently to retrieve it so
+          // another request must be issued.
+          res =
+              RequestHTTPS(
+                  url + "?nameFilter=" + tagName, "Get", postHeaders, "", "", responseFilename);
           if (res == NO_ERROR) {
-            //Parse the JSON response and retrieve the JSON Array of items
+            // Parse the JSON response and retrieve the JSON Array of items
             JsonT = new JSONTokener(FileReader.readFile("file://" + responseFilename));
             requestResponse = new JSONObject(JsonT);
-             if (requestResponse.has("Items")) {
-                items = requestResponse.getJSONArray("Items");
-             }
+            if (requestResponse.has("Items")) {
+              items = requestResponse.getJSONArray("Items");
+            }
             if (items.length() > 0) {
-              //tag exists
+              // tag exists
               tag.setWebID(items.getJSONObject(0).getString("WebId"));
-              res = RequestHTTPS(targetURL + "points/" + tag.getWebID() + "/attributes/pointsource",
-                  "Put", postHeaders, "\"HMS\"", "", "");
+              res =
+                  RequestHTTPS(
+                      targetURL + "points/" + tag.getWebID() + "/attributes/pointsource",
+                      "Put",
+                      postHeaders,
+                      "\"HMS\"",
+                      "",
+                      "");
               if (res != NO_ERROR) {
                 Logger.LOG_ERR(
                     "Could not set point source of " + tag.getTagName() + ". Error: " + res);
               }
             } else {
-              //tag does not exist, error
+              // tag does not exist, error
               Logger.LOG_ERR("PI Point creation failed.  Error: " + res);
             }
           }
@@ -218,7 +242,7 @@ public class OSIsoftServer {
         }
       }
 
-      //Delete the https response file
+      // Delete the https response file
       File file = new File(responseFilename);
       if (!file.delete()) {
         Logger.LOG_ERR("Failed to delete the HTTPS response file");
@@ -236,33 +260,46 @@ public class OSIsoftServer {
 
     switch (communicationType) {
       case OSIsoftConfig.omf:
-        //OMF setup
+        // OMF setup
 
         // setup type
         String responseFilename = "/usr/response.txt";
         String messageTypeHeader = "&messagetype=type";
         setTypeBody();
-        res = RequestHTTPS(omfUrl, "Post", omfPostHeaders + messageTypeHeader,
-            batchBuffer.toString(), "", responseFilename);
+        res =
+            RequestHTTPS(
+                omfUrl,
+                "Post",
+                omfPostHeaders + messageTypeHeader,
+                batchBuffer.toString(),
+                "",
+                responseFilename);
 
         // setup containers
         messageTypeHeader = "&messagetype=container";
 
-        // set batch buffer with list of tag containers to initialize for if they have not been already
+        // set batch buffer with list of tag containers to initialize for if they have not been
+        // already
         setContainerJson(tagList);
-        res = RequestHTTPS(omfUrl, "Post", omfPostHeaders + messageTypeHeader,
-            batchBuffer.toString(), "", responseFilename);
-         if (res != NO_ERROR) {
-            retval = res;
-         }
+        res =
+            RequestHTTPS(
+                omfUrl,
+                "Post",
+                omfPostHeaders + messageTypeHeader,
+                batchBuffer.toString(),
+                "",
+                responseFilename);
+        if (res != NO_ERROR) {
+          retval = res;
+        }
         break;
       case OSIsoftConfig.piwebapi:
         // old PIWEBAPI setup
         for (int i = 0; i < tagList.size(); i++) {
           res = setTagWebId((Tag) tagList.get(i));
-           if (res != NO_ERROR) {
-              return retval = res;
-           }
+          if (res != NO_ERROR) {
+            return retval = res;
+          }
         }
         break;
       default:
@@ -284,12 +321,12 @@ public class OSIsoftServer {
 
     batchBuffer.append("  \"" + Integer.toString(batchCount) + "\": {\n");
     batchBuffer.append("    \"Method\": \"POST\",\n");
-    batchBuffer
-        .append("    \"Resource\": \"" + targetURL + "streams/" + t.getWebID() + "/Value\",\n");
+    batchBuffer.append(
+        "    \"Resource\": \"" + targetURL + "streams/" + t.getWebID() + "/Value\",\n");
     batchBuffer.append(
         "    \"Content\": \"" + buildBody(d.getValueString(), d.getTimeStamp(), true) + "\",\n");
-    batchBuffer
-        .append("    \"Headers\": {\"Authorization\": \"Basic " + authCredentials + "\"" + "}\n");
+    batchBuffer.append(
+        "    \"Headers\": {\"Authorization\": \"Basic " + authCredentials + "\"" + "}\n");
     batchBuffer.append("  },\n");
   }
 
@@ -320,28 +357,24 @@ public class OSIsoftServer {
     batchBuffer.append("}]");
   }
 
-  /**
-   * call this first when constructing OMF message
-   */
+  /** call this first when constructing OMF message */
   public static void startOMFDataMessage() {
     batchCount = 0;
     batchBuffer.clearString();
     batchBuffer.append("[");
   }
 
-
-  /**
-   * call this for each new data point to omf message
-   */
+  /** call this for each new data point to omf message */
   public static void addPointToOMFDataMessage(String tagValue, String timestamp) {
     batchCount++;
 
     batchBuffer.append("{");
-    batchBuffer.append(" \"timestamp\": \"" + timestamp
-        + ".000Z\","); // should move the timezone part into the timestamp string
+    batchBuffer.append(
+        " \"timestamp\": \""
+            + timestamp
+            + ".000Z\","); // should move the timezone part into the timestamp string
     batchBuffer.append(" \"tagValue\": \"" + tagValue + "\"");
     batchBuffer.append("}");
-
   }
 
   /**
@@ -355,35 +388,26 @@ public class OSIsoftServer {
     batchBuffer.append("\"containerid\": \"" + tagName + "\"");
     batchBuffer.append(",");
     batchBuffer.append("\"values\": [");
-
   }
 
-  /**
-   * call after finished adding all data points to close values array in json
-   */
+  /** call after finished adding all data points to close values array in json */
   public static void addContainerEndToOMFDataMessage() {
     batchBuffer.append("]");
-    batchBuffer
-        .append("}"); // closes off the end of the container specific portion of the data message
+    batchBuffer.append(
+        "}"); // closes off the end of the container specific portion of the data message
   }
 
-  /**
-   * call this before each call to addPointToOMFDataMessage but not before the first one
-   */
+  /** call this before each call to addPointToOMFDataMessage but not before the first one */
   public static void separateDataMessage() {
     batchBuffer.append(",");
   }
 
-  /**
-   * call this first when finished building up the OMF message
-   */
+  /** call this first when finished building up the OMF message */
   public static void endOMFDataMessage() {
     batchBuffer.append("]");
   }
 
-  /**
-   * should be called for every tag in config list at constructor
-   */
+  /** should be called for every tag in config list at constructor */
   private static void setContainerJson(ArrayList tagList) {
     startOMFDataMessage();
 
@@ -417,8 +441,14 @@ public class OSIsoftServer {
       String responseFilename = "/usr/response.txt";
 
       // posting OMF batch
-      res = RequestHTTPS(omfUrl, "Post", omfPostHeaders + postHeaderType, batchBuffer.toString(),
-          "", responseFilename); // data
+      res =
+          RequestHTTPS(
+              omfUrl,
+              "Post",
+              omfPostHeaders + postHeaderType,
+              batchBuffer.toString(),
+              "",
+              responseFilename); // data
 
     } catch (JSONException e) {
       Logger.LOG_ERR("Exception caught on posting omf data points");
@@ -447,23 +477,27 @@ public class OSIsoftServer {
     return true;
   }
 
-
   public boolean postTagsLive(ArrayList tags) {
     String body = "{\n";
     for (int tagIndex = 0; tagIndex < tags.size(); tagIndex++) {
       body += "  \"" + Integer.toString(tagIndex - 1) + "\": {\n";
       body += "    \"Method\": \"POST\",\n";
       body +=
-          "    \"Resource\": \"" + targetURL + "streams/" + ((Tag) tags.get(tagIndex)).getWebID()
+          "    \"Resource\": \""
+              + targetURL
+              + "streams/"
+              + ((Tag) tags.get(tagIndex)).getWebID()
               + "/Value\",\n";
-      body += "    \"Content\": \"" + buildBody(((Tag) tags.get(tagIndex)).getTagValue(),
-          getCurrentTimeString(), true) + "\",\n";
+      body +=
+          "    \"Content\": \""
+              + buildBody(((Tag) tags.get(tagIndex)).getTagValue(), getCurrentTimeString(), true)
+              + "\",\n";
       body += "    \"Headers\": {\"Authorization\": \"Basic " + authCredentials + "\"" + "}\n";
-       if (tagIndex < tags.size()) {
-          body += "  },\n";
-       } else {
-          body += "  }\n";
-       }
+      if (tagIndex < tags.size()) {
+        body += "  },\n";
+      } else {
+        body += "  }\n";
+      }
     }
     body += "}";
 
@@ -485,8 +519,14 @@ public class OSIsoftServer {
   public static boolean postDataPoint(Tag tag, DataPoint dataPoint) {
     int res = NO_ERROR;
     try {
-      res = RequestHTTPS(targetURL + "streams/" + tag.getWebID() + "/Value", "Post", postHeaders,
-          buildBody(dataPoint.getValueString(), dataPoint.getTimeStamp(), false), "", "");
+      res =
+          RequestHTTPS(
+              targetURL + "streams/" + tag.getWebID() + "/Value",
+              "Post",
+              postHeaders,
+              buildBody(dataPoint.getValueString(), dataPoint.getTimeStamp(), false),
+              "",
+              "");
     } catch (JSONException e) {
       Logger.LOG_ERR(
           "Failed to post value of " + tag.getTagName() + "due to malformed JSON response");
@@ -504,8 +544,14 @@ public class OSIsoftServer {
   public void postTag(Tag tag) {
     int res = NO_ERROR;
     try {
-      res = RequestHTTPS(targetURL + "streams/" + tag.getWebID() + "/Value", "Post", postHeaders,
-          buildBody(tag.getTagValue(), getCurrentTimeString(), false), "", "");
+      res =
+          RequestHTTPS(
+              targetURL + "streams/" + tag.getWebID() + "/Value",
+              "Post",
+              postHeaders,
+              buildBody(tag.getTagValue(), getCurrentTimeString(), false),
+              "",
+              "");
     } catch (JSONException e) {
       Logger.LOG_ERR(
           "Failed to post value of " + tag.getTagName() + "due to malformed JSON response");
@@ -528,11 +574,37 @@ public class OSIsoftServer {
     }
 
     String jsonBody =
-        "{" + quote + "Timestamp" + quote + ": " + quote + timestamp + quote + "," + quote + "Value"
-            + quote + ": " + value
-            + "," + quote + "UnitsAbbreviation" + quote + ": " + quote + quote + "," + quote
-            + "Good" + quote + ": true,"
-            + quote + "Questionable" + quote + ": false" + "}";
+        "{"
+            + quote
+            + "Timestamp"
+            + quote
+            + ": "
+            + quote
+            + timestamp
+            + quote
+            + ","
+            + quote
+            + "Value"
+            + quote
+            + ": "
+            + value
+            + ","
+            + quote
+            + "UnitsAbbreviation"
+            + quote
+            + ": "
+            + quote
+            + quote
+            + ","
+            + quote
+            + "Good"
+            + quote
+            + ": true,"
+            + quote
+            + "Questionable"
+            + quote
+            + ": false"
+            + "}";
     return jsonBody;
   }
 
@@ -571,15 +643,22 @@ public class OSIsoftServer {
         return "";
     }
 
-    String jsonBody = "{\r\n" +
-        "  \"Name\": \"" + tagName + "\",\r\n" +
-        "  \"Descriptor\": \"" + tagName + "\",\r\n" +
-        "  \"PointClass\": \"classic\",\r\n" +
-        "  \"PointType\": \"" + type + "\",\r\n" +
-        "  \"EngineeringUnits\": \"\",\r\n" +
-        "  \"Step\": false,\r\n" +
-        "  \"Future\": false\r\n" +
-        "}";
+    String jsonBody =
+        "{\r\n"
+            + "  \"Name\": \""
+            + tagName
+            + "\",\r\n"
+            + "  \"Descriptor\": \""
+            + tagName
+            + "\",\r\n"
+            + "  \"PointClass\": \"classic\",\r\n"
+            + "  \"PointType\": \""
+            + type
+            + "\",\r\n"
+            + "  \"EngineeringUnits\": \"\",\r\n"
+            + "  \"Step\": false,\r\n"
+            + "  \"Future\": false\r\n"
+            + "}";
     return jsonBody;
   }
 }

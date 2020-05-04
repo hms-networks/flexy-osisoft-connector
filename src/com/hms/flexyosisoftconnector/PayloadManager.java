@@ -16,14 +16,10 @@ import java.util.List;
  */
 public class PayloadManager {
 
-  /**
-   * List containing completed payloads
-   */
+  /** List containing completed payloads */
   private final List payloads;
 
-  /**
-   * Maximum number of payloads
-   */
+  /** Maximum number of payloads */
   static final int MAX_PAYLOADS = 8;
 
   /**
@@ -32,31 +28,23 @@ public class PayloadManager {
    */
   static final int WAIT_FOR_PAYLOAD_SEND_MILLISECONDS = 1000;
 
-  /**
-   * Holds the not fully constructed payload information as it gets built.
-   */
+  /** Holds the not fully constructed payload information as it gets built. */
   OsisoftJsonPayload osisoftPayload;
 
-  /**
-   * Constant for status okay
-   */
+  /** Constant for status okay */
   static final int STATUS_OKAY = 4;
 
-  /**
-   * Constant for status stop
-   */
+  /** Constant for status stop */
   static final int STATUS_STOP = 5;
 
-  /**
-   * Current payload manager status
-   */
+  /** Current payload manager status */
   private int status = STATUS_OKAY;
 
   /**
    * Constructor for the Payload Manager.
    *
    * @param communicationType The communication type can be OMF or PIWebApi format.
-   **/
+   */
   PayloadManager(int communicationType) {
 
     // The unfinished payload information is stored in this.
@@ -127,9 +115,7 @@ public class PayloadManager {
     return payload;
   }
 
-  /**
-   * Clear the contents of the payload queue.
-   */
+  /** Clear the contents of the payload queue. */
   public void clearQueue() {
     synchronized (payloads) {
       payloads.clear();

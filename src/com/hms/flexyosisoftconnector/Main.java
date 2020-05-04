@@ -7,55 +7,39 @@ import com.hms.flexyosisoftconnector.JSON.JSONException;
 
 /**
  * eWON Flexy java demo for OSIsoft Server
- * <p>
- * This demo reads multiple tag values from an eWON Flexy IO Server and POSTs them to an OSIsoft PI
- * Server.
- * <p>
- * HMS Networks Inc. Solution Center
+ *
+ * <p>This demo reads multiple tag values from an eWON Flexy IO Server and POSTs them to an OSIsoft
+ * PI Server.
+ *
+ * <p>HMS Networks Inc. Solution Center
  */
 public class Main {
 
-  /**
-   * Application Version Numbers
-   */
+  /** Application Version Numbers */
   static final int MAJOR_VERSION = 1;
+
   static final int MINOR_VERSION = 0;
 
-  /**
-   * Minimum amount of free memory before data trimming occurs
-   */
+  /** Minimum amount of free memory before data trimming occurs */
   static final long MINIMUM_MEMORY = 5000000;
 
-  /**
-   * Number of tags to trim when memory is low
-   */
+  /** Number of tags to trim when memory is low */
   static final int TAGS_TO_TRIM = 2;
 
-  /**
-   * Default name of a new Ewon
-   */
+  /** Default name of a new Ewon */
   static final String DEFAULT_EWON_NAME = "eWON";
 
-  /**
-   * Filename of connector config file
-   */
+  /** Filename of connector config file */
   static final String CONNECTOR_CONFIG_FILENAME = "/usr/ConnectorConfig.json";
 
-  /**
-   * Configuration of PI connector
-   */
+  /** Configuration of PI connector */
   static OSIsoftConfig piConfig;
 
-  /**
-   * PI Server management object
-   */
+  /** PI Server management object */
   static OSIsoftServer piServer;
 
-  /**
-   * Current available JVM memory
-   */
+  /** Current available JVM memory */
   static long AvailableMemory;
-
 
   public static void main(String[] args) {
 
@@ -63,17 +47,17 @@ public class Main {
     long lastUpdateTimeMs = 0;
     long currentTimeMs;
 
-    //Start the webserver to accept json file
+    // Start the webserver to accept json file
     RestFileServer restServer = new RestFileServer();
     restServer.start();
 
-    //Unique name of the flexy
+    // Unique name of the flexy
     String flexyName = getFlexyName();
 
     // Indicate the version number and that the application is starting
     Logger.LOG_CRITICAL("OSIsoft Connector v" + MAJOR_VERSION + "." + MINOR_VERSION + " starting");
 
-    //Check that the flexy has a non-default name, stop the application if not
+    // Check that the flexy has a non-default name, stop the application if not
     if (flexyName.equals(DEFAULT_EWON_NAME)) {
       Logger.LOG_ERR("Device name is set to \"eWON\" which is the default name");
       Logger.LOG_ERR("This device's name must be changed from default");
@@ -95,13 +79,18 @@ public class Main {
     setHttpTimeouts();
 
     int res = OSIsoftServer.NO_ERROR;
-    piServer = new OSIsoftServer(piConfig.getServerIP(), piConfig.getServerLogin(),
-        piConfig.getServerWebID(), flexyName);
+    piServer =
+        new OSIsoftServer(
+            piConfig.getServerIP(),
+            piConfig.getServerLogin(),
+            piConfig.getServerWebID(),
+            flexyName);
 
     do {
       try {
-        res = piServer
-            .initTags(piConfig.getServerIP(), piConfig.getTags(), piConfig.getCommunicationType());
+        res =
+            piServer.initTags(
+                piConfig.getServerIP(), piConfig.getTags(), piConfig.getCommunicationType());
       } catch (JSONException e) {
         Logger.LOG_ERR("Linking eWON tags to OSIsoft PI server failed");
         Logger.LOG_EXCEPTION(e);
@@ -172,7 +161,6 @@ public class Main {
     }
   }
 
-
   /**
    * Sets the http timeouts Note: This changes the eWON's global HTTP timeouts and stores these
    * values in NV memory.
@@ -194,9 +182,9 @@ public class Main {
         needsSave = true;
       }
 
-       if (needsSave) {
-          SCB.saveBlock(true);
-       }
+      if (needsSave) {
+        SCB.saveBlock(true);
+      }
 
     } catch (Exception e) {
       Logger.LOG_ERR("Setting timeouts failed. Application ending");
