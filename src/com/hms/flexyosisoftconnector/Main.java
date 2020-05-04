@@ -1,9 +1,14 @@
 package com.hms.flexyosisoftconnector;
 
-import java.util.Date;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import com.ewon.ewonitf.SysControlBlock;
-import com.hms.flexyosisoftconnector.JSON.JSONException;
+import com.hms_networks.americas.sc.datapoint.DataPoint;
+import com.hms_networks.americas.sc.historicaldata.HistoricalDataQueueManager;
+import com.hms_networks.americas.sc.json.JSONException;
+import com.hms_networks.americas.sc.logging.Logger;
+import com.hms_networks.americas.sc.taginfo.TagInfoManager;
 
 /**
  * Ewon Flexy java demo for OSIsoft Server
@@ -30,7 +35,10 @@ public class Main {
   /** PI Server management object */
   static OSIsoftServer piServer;
 
-  public static void main(String[] args) {
+  /** Constructs payloads out of data points and holds them for sending. */
+  static PayloadManager payloadMngr;
+
+  public static void main(String[] args) throws IOException, JSONException {
     // Indicate the version number and that the application is starting
     Logger.LOG_CRITICAL("OSIsoft Connector v" + MAJOR_VERSION + "." + MINOR_VERSION + " starting");
 
@@ -53,24 +61,65 @@ public class Main {
     setCertificatePath(OSIsoftConfig.getCertificatePath());
     setHttpTimeouts();
 
-    int res = OSIsoftServer.NO_ERROR;
+    // update tag info to use later
+    TagInfoManager.refreshTagList();
+
+    payloadMngr = new PayloadManager(OSIsoftConfig.getCommunicationType());
+    
     piServer = new OSIsoftServer();
 
+    int res;
     do {
-      try {
-        Logger.LOG_INFO("Initializing tags");
-        res = piServer.initTags();
-      } catch (JSONException e) {
-        Logger.LOG_SERIOUS("Linking Ewon tags to OSIsoft PI server failed");
-        Logger.LOG_EXCEPTION(e);
-      }
+      Logger.LOG_INFO("Initializing tags");
+      res = piServer.initTags();
+
     } while (res != OSIsoftServer.NO_ERROR);
 
     Logger.LOG_INFO("Finished initializing tags");
 
-    DataPoster datathread = new DataPoster(piConfig.getCommunicationType());
-    datathread.start();
+    DataPoster dataThread = new DataPoster(payloadMngr);
+    dataThread.start();
 
+    while (true) {
+      getNewPayloadToSend();
+
+      // pause to help the flexy with the infinite loop
+      Thread.yield();
+      try {
+        final int threadWaitMS = 500;
+        Thread.sleep(threadWaitMS);
+      } catch (InterruptedException e) {
+        Logger.LOG_EXCEPTION(e);
+      }
+    }
+  }
+
+  /**
+   * Grabs a new set of data points from the top of the queue and feeds each on to payload manager.
+   */
+  private static void getNewPayloadToSend() {
+    ArrayList queuePoints = new ArrayList();
+    try {
+      if (!HistoricalDataQueueManager.doesTimeTrackerExist()) {
+        // Start a new time tracker file at current time
+        HistoricalDataQueueManager.getFifoNextSpanDataAllGroups(true);
+      } else {
+        // Get the data points for current time period in time tracker
+        queuePoints = HistoricalDataQueueManager.getFifoNextSpanDataAllGroups(false);
+      }
+    } catch (IOException e) {
+      Logger.LOG_EXCEPTION(e);
+    }
+
+    // if there are data points to send
+    if (queuePoints.size() != 0) {
+      for (int i = 0; i < queuePoints.size(); i++) {
+        DataPoint data = ((DataPoint) queuePoints.get(i));
+
+        // build a payload out of data points
+        payloadMngr.appendDataPointToPayLoad(data);
+      }
+    }
   }
 
   /**
