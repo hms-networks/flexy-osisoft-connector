@@ -5,8 +5,8 @@ import com.hms.flexyosisoftconnector.JSON.*;
 
 /**
  * This class contains the configuration for the Flexy <-> OSIsoft connection
- * <p>
- * HMS Networks Inc. Solution Center
+ *
+ * <p>HMS Networks Inc. Solution Center
  */
 public class OSIsoftConfig {
 
@@ -46,38 +46,37 @@ public class OSIsoftConfig {
 
   public static ArrayList tags = new ArrayList();
 
-
   // Build the OSIsoft config from a configuration json file
   public OSIsoftConfig(String configFile) throws JSONException {
 
-    //Read in the JSON file to a string
+    // Read in the JSON file to a string
     JSONTokener JsonT = new JSONTokener(FileReader.readFile("file://" + configFile));
 
-    //Build a JSON Object containing the whole file
+    // Build a JSON Object containing the whole file
     JSONObject configJSON = new JSONObject(JsonT);
 
-    //Build a JSON Object containing the "ServerConfig"
+    // Build a JSON Object containing the "ServerConfig"
     JSONObject serverConfig = configJSON.getJSONObject("ServerConfig");
 
-    //Set the server config parameters
+    // Set the server config parameters
     piServerIP = serverConfig.getString("IP");
     dataServerWebID = serverConfig.getString("WebID");
     piServerLogin = serverConfig.getString("Credentials");
 
-    //Build a JSON Object containing the "eWONConfig"
+    // Build a JSON Object containing the "eWONConfig"
     JSONObject eWONConfig = configJSON.getJSONObject("eWONConfig");
     eWONCertificatePath = eWONConfig.getString("CertificatePath");
 
-    //Build a JSON Object containing the "AppConfig"
+    // Build a JSON Object containing the "AppConfig"
     JSONObject appConfig = configJSON.getJSONObject("AppConfig");
     cycleTimeMs = appConfig.getInt("CycleTimeMs");
 
     String tmpCommunicationType = appConfig.getString("CommunicationType");
-    if (tmpCommunicationType.equalsIgnoreCase(pre2019) || tmpCommunicationType
-        .equalsIgnoreCase(secondPre2019)) {
+    if (tmpCommunicationType.equalsIgnoreCase(pre2019)
+        || tmpCommunicationType.equalsIgnoreCase(secondPre2019)) {
       communicationType = piwebapi;
-    } else if (tmpCommunicationType.equalsIgnoreCase(post2019) || tmpCommunicationType
-        .equalsIgnoreCase(secondPost2019)) {
+    } else if (tmpCommunicationType.equalsIgnoreCase(post2019)
+        || tmpCommunicationType.equalsIgnoreCase(secondPost2019)) {
       communicationType = omf;
     } else {
       // can't do anything without a valid communication type..
@@ -97,11 +96,11 @@ public class OSIsoftConfig {
       }
     }
 
-    //Build a JSON Array containing the tag names
+    // Build a JSON Array containing the tag names
     JSONArray tagNames = configJSON.getJSONArray("TagList");
 
-    //For each tagname in the config file create a tag and add it to
-    //the arraylist of tags
+    // For each tagname in the config file create a tag and add it to
+    // the arraylist of tags
     for (int i = 0; i < tagNames.length(); i++) {
       Tag tag = new Tag(tagNames.getString(i), shouldLogDuplicateValues);
       if (tag.isValidTag()) {
@@ -127,7 +126,7 @@ public class OSIsoftConfig {
     return dataServerWebID;
   }
 
-  //Returns the list of tags
+  // Returns the list of tags
   public ArrayList getTags() {
     return tags;
   }
@@ -145,5 +144,4 @@ public class OSIsoftConfig {
   public int getCommunicationType() {
     return communicationType;
   }
-
 }

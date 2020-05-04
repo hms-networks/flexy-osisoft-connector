@@ -21,44 +21,28 @@ import com.hms_networks.americas.sc.taginfo.TagInfoManager;
  */
 public class OsisoftJsonPayload {
 
-  /**
-   * Current payload status
-   */
+  /** Current payload status */
   int status;
 
-  /**
-   * String builder for payload
-   */
+  /** String builder for payload */
   final PreAllocatedStringBuilder payload;
 
-  /**
-   * Constant representing payload not started
-   */
+  /** Constant representing payload not started */
   static final int PAYLOAD_NOT_STARTED = 0;
 
-  /**
-   * Constant representing payload header complete
-   */
+  /** Constant representing payload header complete */
   static final int PAYLOAD_HEADER_COMPLETE = 1;
 
-  /**
-   * Constant representing payload values in progress
-   */
+  /** Constant representing payload values in progress */
   static final int PAYLOAD_VALUES_IN_PROGRESS = 2;
 
-  /**
-   * Constant representing payload values complete
-   */
+  /** Constant representing payload values complete */
   static final int PAYLOAD_VALUES_COMPLETE = 3;
 
-  /**
-   * Constant representing payload completion
-   */
+  /** Constant representing payload completion */
   static final int PAYLOAD_COMPLETE = 4;
 
-  /**
-   * Constant representing how many datapoints can be added to a payload
-   */
+  /** Constant representing how many datapoints can be added to a payload */
   static final int MAX_DATA_POINTS = 200;
 
   /**
@@ -67,14 +51,10 @@ public class OsisoftJsonPayload {
    */
   TagPayload[] tagPayloadArr;
 
-  /**
-   * Array of boolean flags for tags encountered (by ID)
-   */
+  /** Array of boolean flags for tags encountered (by ID) */
   boolean[] tagNamesEncountered;
 
-  /**
-   * Count of tags encountered
-   */
+  /** Count of tags encountered */
   int dataPointsEncounteredCount = 0;
 
   /**
@@ -84,45 +64,39 @@ public class OsisoftJsonPayload {
    */
   int tagIndexOffset;
 
-  /**
-   * Size of encountered tags array
-   */
+  /** Size of encountered tags array */
   int tagsEncounteredArraySize;
 
   /**
    * Timestamp for the start of payload
    *
-   * <p>This timestamp means that payload datapoint can come from any time from the timestamp
-   * listed up to an additional {@link #PAY_LOAD_TIME_PERIOD_SECONDS} seconds. Payloads are from a
-   * time period, not a single time stamp.
+   * <p>This timestamp means that payload datapoint can come from any time from the timestamp listed
+   * up to an additional {@link #PAY_LOAD_TIME_PERIOD_SECONDS} seconds. Payloads are from a time
+   * period, not a single time stamp.
    */
   long payloadStartTimestamp = 0;
 
-  /**
-   * This is the number of seconds to wait before cutting off the payload and completing it.
-   */
+  /** This is the number of seconds to wait before cutting off the payload and completing it. */
   static final long PAY_LOAD_TIME_PERIOD_SECONDS = 10;
 
   /**
-   * represents either OMF or the legacy data format.
-   * The valid values are piwebapi which is 1, or omf which is 0
+   * represents either OMF or the legacy data format. The valid values are piwebapi which is 1, or
+   * omf which is 0
    */
   int communicationType;
 
-  /**
-   * Error message to display on unknown communication type.
-   */
+  /** Error message to display on unknown communication type. */
   String comsErrMsg = "Unknown communication type given. Unable to build payload.";
 
   /**
    * Constructor for the OsisoftJsonPayload.
    *
    * @param comType The payload will be constructed based on either the OMF format or the legacy
-   *                format.
+   *     format.
    */
   public OsisoftJsonPayload(int comType) {
 
-    if(comType != OSIsoftConfig.piwebapi && comType != OSIsoftConfig.omf){
+    if (comType != OSIsoftConfig.piwebapi && comType != OSIsoftConfig.omf) {
       comType = OSIsoftConfig.omf;
       Logger.LOG_SERIOUS("Invalid communication type set. Please check the config file settings.");
     }
@@ -312,9 +286,7 @@ public class OsisoftJsonPayload {
     dataPointsEncounteredCount++;
   }
 
-  /**
-   * Checks to see if the payload has added up to the max number of points.
-   */
+  /** Checks to see if the payload has added up to the max number of points. */
   private void didReachMaxDataPoints() {
 
     if (dataPointsEncounteredCount >= MAX_DATA_POINTS) {
@@ -348,9 +320,7 @@ public class OsisoftJsonPayload {
     return index;
   }
 
-  /**
-   * Completes the payload if it has values
-   */
+  /** Completes the payload if it has values */
   public void completePayloadAttempt() {
     if (status == PAYLOAD_VALUES_COMPLETE) {
       // Payload has values, end the payload

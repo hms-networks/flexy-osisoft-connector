@@ -18,19 +18,13 @@ import java.util.ArrayList;
  */
 public class PayloadBuilder {
 
-  /**
-   * array of tag web id's
-   */
+  /** array of tag web id's */
   private static String tagWebIdList[];
 
-  /**
-   * Index offset used to find the tagWebIDList index from the tag ID.
-   */
+  /** Index offset used to find the tagWebIDList index from the tag ID. */
   private static int tagWebIdListIndexOffset;
 
-  /**
-   * Initialize an array of tag web ID's for legacy function web ID lookup.
-   */
+  /** Initialize an array of tag web ID's for legacy function web ID lookup. */
   public static void initWebIdList() {
     // setup an indicted array of web Id's
     int lowestSeen = TagInfoManager.getLowestTagIdSeen();
@@ -81,8 +75,8 @@ public class PayloadBuilder {
    * <p>The payload needs a comma before adding the next point, which is added when {@link
    * #isFirstPoint} is set to false;
    *
-   * @param tagName      the name of the tag
-   * @param tagValue     the value of the tag
+   * @param tagName the name of the tag
+   * @param tagValue the value of the tag
    * @param isFirstPoint is this the first datapoint in the payload
    * @return the payload segment as a string
    */
@@ -108,22 +102,32 @@ public class PayloadBuilder {
     String targetURL = "https://" + OSIsoftConfig.getServerIP() + "/piwebapi/";
     String authCredentials = OSIsoftConfig.getServerLogin();
 
-    String payload = "  \"" + Integer.toString(batchCount) + "\": {\n"
-        + "    \"Method\": \"POST\",\n"
-        + "    \"Resource\": \"" + targetURL + "streams/" + webId + "/Value\",\n"
-        + "    \"Content\": \""
-        + buildBody(dataPoint.getValueString(), dataPoint.getTimeStamp(), true)
-        + "\",\n"
-        + "    \"Headers\": {\"Authorization\": \"Basic " + authCredentials + "\"" + "}\n"
-        + "  },\n";
+    String payload =
+        "  \""
+            + Integer.toString(batchCount)
+            + "\": {\n"
+            + "    \"Method\": \"POST\",\n"
+            + "    \"Resource\": \""
+            + targetURL
+            + "streams/"
+            + webId
+            + "/Value\",\n"
+            + "    \"Content\": \""
+            + buildBody(dataPoint.getValueString(), dataPoint.getTimeStamp(), true)
+            + "\",\n"
+            + "    \"Headers\": {\"Authorization\": \"Basic "
+            + authCredentials
+            + "\""
+            + "}\n"
+            + "  },\n";
     return payload;
   }
 
   /**
    * BuildBody is used to add a data point to the legacy format of PIWebApi.
    *
-   * @param value        Data point value
-   * @param timestamp    Data point time stamp
+   * @param value Data point value
+   * @param timestamp Data point time stamp
    * @param escapeQuotes Indicator to include escape characters before quotes
    * @return the payload segment as a string
    */
@@ -199,10 +203,7 @@ public class PayloadBuilder {
    */
   public static String addContainerStartToOMFDataMessage(String tagName) {
     // each tag's container id is set to the tag's name
-    String payload = "{"
-        + "\"containerid\": \"" + tagName + "\""
-        + ","
-        + "\"values\": [";
+    String payload = "{" + "\"containerid\": \"" + tagName + "\"" + "," + "\"values\": [";
 
     return payload;
   }
@@ -210,8 +211,8 @@ public class PayloadBuilder {
   /**
    * This constructs a new data point omf message.
    *
-   * @param tagValue     data point's value
-   * @param timestamp    data point's time stamp
+   * @param tagValue data point's value
+   * @param timestamp data point's time stamp
    * @param isFirstPoint marks if this is the first data point in the message
    * @return return the JSON payload for a new OMF data point
    */
@@ -223,12 +224,15 @@ public class PayloadBuilder {
       payload += ",";
     }
 
-    payload += "{"
-        + " \"timestamp\": \""
-        + timestamp
-        + ".000Z\","
-        + " \"tagValue\": \"" + tagValue + "\""
-        + "}";
+    payload +=
+        "{"
+            + " \"timestamp\": \""
+            + timestamp
+            + ".000Z\","
+            + " \"tagValue\": \""
+            + tagValue
+            + "\""
+            + "}";
 
     return payload;
   }
@@ -261,22 +265,25 @@ public class PayloadBuilder {
    * @return returns the JSON payload to construct a new Type message.
    */
   public static String getTypeBody() {
-    String payload = "[{"
-        + "\"id\": \"HMS-type-" + getFlexyName() + "\","
-        + "\"classification\": \"dynamic\","
-        + "\"type\": \"object\","
-        + "\"properties\": {"
-        + "\"timestamp\": {"
-        + "\"type\": \"string\","
-        + "\"format\": \"date-time\","
-        + "\"isindex\": true"
-        + "},"
-        + "\"tagValue\": {"
-        + "\"type\": \"string\","
-        + "\"description\": \"Ewon Flexy's tag value stored as a string\""
-        + "}"
-        + "}"
-        + "}]";
+    String payload =
+        "[{"
+            + "\"id\": \"HMS-type-"
+            + getFlexyName()
+            + "\","
+            + "\"classification\": \"dynamic\","
+            + "\"type\": \"object\","
+            + "\"properties\": {"
+            + "\"timestamp\": {"
+            + "\"type\": \"string\","
+            + "\"format\": \"date-time\","
+            + "\"isindex\": true"
+            + "},"
+            + "\"tagValue\": {"
+            + "\"type\": \"string\","
+            + "\"description\": \"Ewon Flexy's tag value stored as a string\""
+            + "}"
+            + "}"
+            + "}]";
 
     return payload;
   }
@@ -300,10 +307,7 @@ public class PayloadBuilder {
         payload += ",";
       }
 
-      payload += "{"
-          + "\"id\": \"" + tagName + "\","
-          + "\"typeid\": \"" + typeID + "\""
-          + "}";
+      payload += "{" + "\"id\": \"" + tagName + "\"," + "\"typeid\": \"" + typeID + "\"" + "}";
     }
 
     payload += endOMFDataMessage();
