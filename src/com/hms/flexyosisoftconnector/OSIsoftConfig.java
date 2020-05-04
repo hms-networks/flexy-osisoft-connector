@@ -1,7 +1,12 @@
 package com.hms.flexyosisoftconnector;
 
-import java.util.ArrayList;
-import com.hms.flexyosisoftconnector.JSON.*;
+import com.ewon.ewonitf.SysControlBlock;
+import com.hms_networks.americas.sc.fileutils.FileAccessManager;
+import com.hms_networks.americas.sc.json.JSONException;
+import com.hms_networks.americas.sc.json.JSONObject;
+import com.hms_networks.americas.sc.json.JSONTokener;
+import com.hms_networks.americas.sc.logging.Logger;
+import java.io.IOException;
 
 /**
  * This class contains the configuration for the Flexy <-> OSIsoft connection
@@ -51,10 +56,35 @@ public class OSIsoftConfig {
   /** OMF communication type */
   public static final int omf = 1;
 
-  public static ArrayList tags = new ArrayList();
+  /** Error message to be displayed on invalid communication type */
+  public static final String COM_ERR_MSG = "Error: Communication type is not valid.";
 
-  // Build the OSIsoft config from a configuration json file
-  public OSIsoftConfig(String configFile) throws JSONException {
+  /** URL for the OSIsoft Server */
+  private static String targetURL;
+
+  /** URL for the OMF endpoint */
+  private static String omfUrl;
+
+  /** Unique name of this flexy */
+  private static String flexyName;
+
+  /** Post headers for PIWebAPI */
+  private static String postHeaders;
+
+  /** Post headers for OMF */
+  private static String omfPostHeaders;
+
+  /** Unique type for OMF messages from this flexy */
+  private static String typeID;
+
+  /**
+   * Initializes the configuration class and all required information.
+   *
+   * @param configFile The path to where the configuration file is stored on the device.
+   * @throws JSONException Throws when JSON is malformed
+   * @throws IOException Throws when unable to read the configuration file
+   */
+  public static void initConfig(String configFile) throws JSONException, IOException {
 
     // Read in the JSON file to a string
     JSONTokener JsonT = new JSONTokener(FileAccessManager.readFileToString(configFile));
@@ -103,19 +133,20 @@ public class OSIsoftConfig {
       }
     }
 
-    // Build a JSON Array containing the tag names
-    JSONArray tagNames = configJSON.getJSONArray("TagList");
-
-    // For each tagname in the config file create a tag and add it to
-    // the arraylist of tags
-    for (int i = 0; i < tagNames.length(); i++) {
-      Tag tag = new Tag(tagNames.getString(i), shouldLogDuplicateValues);
-      if (tag.isValidTag()) {
-        tags.add(tag);
-      } else {
-        Logger.LOG_ERR("Tag \"" + tag.getTagName() + "\" does not exist on this eWON");
-      }
-    }
+    targetURL = "https://" + piServerIP + "/piwebapi/";
+    omfUrl = targetURL + "omf";
+    typeID = "HMS-type-" + flexyName;
+    postHeaders =
+        "Authorization=Basic "
+            + OSIsoftConfig.getServerLogin()
+            + "&Content-Type=application/json&X-Requested-With=JSONHttpRequest";
+    omfPostHeaders =
+        "Authorization=Basic "
+            + OSIsoftConfig.getServerLogin()
+            + "&Content-Type=application/json"
+            + "&X-Requested-With=JSONHttpRequest"
+            + "&messageformat=json&omfversion=1.1";
+    setFlexyName();
   }
 
   /**
@@ -145,11 +176,6 @@ public class OSIsoftConfig {
     return dataServerWebID;
   }
 
-  // Returns the list of tags
-  public static ArrayList getTags() {
-    return tags;
-  }
-
   /**
    * Get the certificate path
    *
@@ -168,6 +194,81 @@ public class OSIsoftConfig {
     return cycleTimeMs;
   }
 
+  /**
+   * Get the target URL
+   *
+   * @return the target URL
+   */
+  public static String getTargetURL() {
+    return targetURL;
+  }
+
+  /**
+   * Get the type ID
+   *
+   * @return the type ID
+   */
+  public static String getTypeID() {
+    return typeID;
+  }
+
+  /**
+   * Get the flexy name
+   *
+   * @return the flexy name
+   */
+  public static String getFlexyName() {
+    return flexyName;
+  }
+
+  /**
+   * Set the flexy device name
+   */
+  public static void setFlexyName() {
+    String res = "";
+    SysControlBlock SCB;
+    try {
+      SCB = new SysControlBlock(SysControlBlock.SYS);
+      res = SCB.getItem("Identification");
+    } catch (Exception e) {
+      Logger.LOG_SERIOUS("Error reading eWON's name");
+    }
+    flexyName = res;
+  }
+
+
+  /**
+   * Get the OMF post Headers
+   *
+   * @return the OMF post Headers
+   */
+  public static String getOmfPostHeaders() {
+    return omfPostHeaders;
+  }
+
+  /**
+   * Get the legacy PIWebAPI post headers
+   *
+   * @return the legacy PIWebAPI post headers
+   */
+  public static String getPostHeaders() {
+    return postHeaders;
+  }
+
+  /**
+   * Get the OMF URL
+   *
+   * @return the OMF URL
+   */
+  public static String getOmfUrl() {
+    return omfUrl;
+  }
+
+  /**
+   * Get the comminucation type.
+   *
+   * @return the communication type
+   */
   public static int getCommunicationType() {
     return communicationType;
   }
