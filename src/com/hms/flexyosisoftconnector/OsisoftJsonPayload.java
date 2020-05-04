@@ -173,10 +173,10 @@ public class OsisoftJsonPayload {
     String startOfPayload;
 
     switch (communicationType) {
-      case OsisoftConfig.omf:
+      case OSIsoftConfig.omf:
         startOfPayload = PayloadBuilder.startOMFDataMessage();
         break;
-      case OsisoftConfig.piwebapi:
+      case OSIsoftConfig.piwebapi:
         startOfPayload = PayloadBuilder.startBatchOldFormat();
         break;
       default:
@@ -258,12 +258,12 @@ public class OsisoftJsonPayload {
     }
 
     switch (communicationType) {
-      case OsisoftConfig.omf:
+      case OSIsoftConfig.omf:
         newPayloadPart =
             PayloadBuilder.addPointToOMFDataMessage(
                 dataPoint.getValueString(), timestamp, isFirstPoint);
         break;
-      case OsisoftConfig.piwebapi:
+      case OSIsoftConfig.piwebapi:
         newPayloadPart = PayloadBuilder.addPointOldFormat(dataPoint, dataPointsEncounteredCount);
         break;
       default:
