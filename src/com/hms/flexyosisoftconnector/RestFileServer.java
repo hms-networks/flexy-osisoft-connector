@@ -1,5 +1,6 @@
 package com.hms.flexyosisoftconnector;
 
+import com.hms_networks.americas.sc.logging.Logger;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
