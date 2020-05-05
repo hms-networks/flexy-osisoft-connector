@@ -6,9 +6,9 @@ import com.ewon.ewonitf.SysControlBlock;
 import com.hms.flexyosisoftconnector.JSON.JSONException;
 
 /**
- * eWON Flexy java demo for OSIsoft Server
+ * Ewon Flexy java demo for OSIsoft Server
  *
- * <p>This demo reads multiple tag values from an eWON Flexy IO Server and POSTs them to an OSIsoft
+ * <p>This demo reads multiple tag values from an Ewon Flexy IO Server and POSTs them to an OSIsoft
  * PI Server.
  *
  * <p>HMS Networks Inc. Solution Center
@@ -92,7 +92,7 @@ public class Main {
             piServer.initTags(
                 piConfig.getServerIP(), piConfig.getTags(), piConfig.getCommunicationType());
       } catch (JSONException e) {
-        Logger.LOG_SERIOUS("Linking eWON tags to OSIsoft PI server failed");
+        Logger.LOG_SERIOUS("Linking Ewon tags to OSIsoft PI server failed");
         Logger.LOG_EXCEPTION(e);
       }
     } while (res != OSIsoftServer.NO_ERROR);
@@ -136,13 +136,13 @@ public class Main {
       SCB = new SysControlBlock(SysControlBlock.SYS);
       res = SCB.getItem("Identification");
     } catch (Exception e) {
-      Logger.LOG_SERIOUS("Error reading eWON's name");
+      Logger.LOG_SERIOUS("Error reading Ewon's name");
     }
     return res;
   }
 
   /**
-   * Sets the directory that the eWON uses to check for SSL Certificates
+   * Sets the directory that the Ewon uses to check for SSL Certificates
    *
    * @param path directory path where certificate is stored
    */
@@ -162,7 +162,7 @@ public class Main {
   }
 
   /**
-   * Sets the http timeouts Note: This changes the eWON's global HTTP timeouts and stores these
+   * Sets the http timeouts Note: This changes the Ewon's global HTTP timeouts and stores these
    * values in NV memory.
    */
   private static void setHttpTimeouts() {

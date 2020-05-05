@@ -22,7 +22,7 @@ public class OSIsoftConfig {
   String piServerLogin;
 
   // Path to the directory containing your OSIsoft server's certificate
-  String eWONCertificatePath;
+  String ewonCertificatePath;
 
   // Update rate for all tags in milliseconds
   int cycleTimeMs;
@@ -64,8 +64,8 @@ public class OSIsoftConfig {
     piServerLogin = serverConfig.getString("Credentials");
 
     // Build a JSON Object containing the "eWONConfig"
-    JSONObject eWONConfig = configJSON.getJSONObject("eWONConfig");
-    eWONCertificatePath = eWONConfig.getString("CertificatePath");
+    JSONObject ewonConfig = configJSON.getJSONObject("eWONConfig");
+    ewonCertificatePath = ewonConfig.getString("CertificatePath");
 
     // Build a JSON Object containing the "AppConfig"
     JSONObject appConfig = configJSON.getJSONObject("AppConfig");
@@ -133,7 +133,7 @@ public class OSIsoftConfig {
 
   // Returns the path to the OSIsoft server's certificate
   public String getCertificatePath() {
-    return eWONCertificatePath;
+    return ewonCertificatePath;
   }
 
   // Returns the cycle time in milliseconds
