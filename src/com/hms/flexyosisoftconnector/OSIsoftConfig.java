@@ -11,40 +11,40 @@ import com.hms.flexyosisoftconnector.JSON.*;
 public class OSIsoftConfig {
 
   /** IP address of OSIsoft PI Server */
-  String piServerIP;
+  private static String piServerIP;
 
   /** WebID of the OSIsoft PI Dataserver */
-  String dataServerWebID;
+  private static String dataServerWebID;
 
   /**
    * Your BASE64 encoded BASIC authentication credentials. Visit https://www.base64encode.org/
    * Encode: "username:password"
    */
-  String piServerLogin;
+  private static String piServerLogin;
 
   /** Path to the directory containing your OSIsoft server's certificate */
-  String ewonCertificatePath;
+  private static String ewonCertificatePath;
 
   /** Update rate for all tags in milliseconds */
-  int cycleTimeMs;
+  private static int cycleTimeMs;
 
   /**
    * String converted to int for use in switch statement. Either (0) pre2019 for piwebapi or (1)
    * post2019 for OMF
    */
-  int communicationType;
+  private static int communicationType;
 
   /** The string stored in the config file when a user sets it to PIWebAPI */
-  String pre2019 = "piwebapi";
+  private static String pre2019 = "piwebapi";
 
   /** The string stored in the config file when a user sets it to OMF */
-  String post2019 = "omf";
+  private static String post2019 = "omf";
 
   /** The string stored in the config file when chosing OMF in the web config page */
-  String secondPre2019 = "PI Web API 2018 and older";
+  private static String secondPre2019 = "PI Web API 2018 and older";
 
   /** The string stored in the config file when chosing PIWebAPI in the web config page */
-  String secondPost2019 = "PI Web API 2019+";
+  private static String secondPost2019 = "PI Web API 2019+";
 
   /** PIWebAPI comminucation type */
   public static final int piwebapi = 0;
@@ -123,7 +123,7 @@ public class OSIsoftConfig {
    *
    * @return the IP Address of the OSIsoft Server
    */
-  public String getServerIP() {
+  public static String getServerIP() {
     return piServerIP;
   }
 
@@ -132,7 +132,7 @@ public class OSIsoftConfig {
    *
    * @return the BASE64 encoded authentication credentials
    */
-  public String getServerLogin() {
+  public static String getServerLogin() {
     return piServerLogin;
   }
 
@@ -141,12 +141,12 @@ public class OSIsoftConfig {
    *
    * @return the Web ID of the dataserver
    */
-  public String getServerWebID() {
+  public static String getServerWebID() {
     return dataServerWebID;
   }
 
   // Returns the list of tags
-  public ArrayList getTags() {
+  public static ArrayList getTags() {
     return tags;
   }
 
@@ -155,7 +155,7 @@ public class OSIsoftConfig {
    *
    * @return the path to the OSIsoft server's certificate
    */
-  public String getCertificatePath() {
+  public static String getCertificatePath() {
     return ewonCertificatePath;
   }
 
@@ -164,11 +164,11 @@ public class OSIsoftConfig {
    *
    * @return the cycle time in milliseconds
    */
-  public int getCycleTimeMs() {
+  public static int getCycleTimeMs() {
     return cycleTimeMs;
   }
 
-  public int getCommunicationType() {
+  public static int getCommunicationType() {
     return communicationType;
   }
 }
