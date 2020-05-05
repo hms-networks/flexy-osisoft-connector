@@ -50,7 +50,7 @@ public class OSIsoftConfig {
   public OSIsoftConfig(String configFile) throws JSONException {
 
     // Read in the JSON file to a string
-    JSONTokener JsonT = new JSONTokener(FileReader.readFile("file://" + configFile));
+    JSONTokener JsonT = new JSONTokener(FileAccessManager.readFileToString(configFile));
 
     // Build a JSON Object containing the whole file
     JSONObject configJSON = new JSONObject(JsonT);
