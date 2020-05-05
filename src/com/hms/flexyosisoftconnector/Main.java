@@ -16,7 +16,7 @@ import com.hms.flexyosisoftconnector.JSON.JSONException;
 public class Main {
 
   /** Application Major Version Number */
-  static final int MAJOR_VERSION = 1;
+  static final int MAJOR_VERSION = 2;
 
   /** Application Minor Version Number */
   static final int MINOR_VERSION = 0;
