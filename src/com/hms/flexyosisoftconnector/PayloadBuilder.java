@@ -340,7 +340,7 @@ public class PayloadBuilder {
    * @return Returns a string representation of the constructed json body.
    */
   public static String buildNewPointBody(TagInfo tag) {
-    String type;
+    String type = "null";
     String jsonBody;
 
     if (tag.getType().equals(TagType.BOOLEAN)) {
