@@ -114,7 +114,13 @@ public class OSIsoftServer {
     }
 
     if (!FileName.equals("") && res == NO_ERROR) {
-      String fileStr = FileReader.readFile("file://" + FileName);
+      String fileStr = null;
+      try {
+        fileStr = FileAccessManager.readFileToString(FileName);
+      } catch (IOException e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_SERIOUS("Unable to read HTTPS response file from previous request.");
+      }
 
       if (fileStr.charAt(0) != '[' && fileStr.charAt(0) != '{') {
         // json has odd characters at the front, trim them to make valid json
@@ -182,7 +188,13 @@ public class OSIsoftServer {
         RequestHTTPS(url + "?nameFilter=" + tagName, "Get", postHeaders, "", "", responseFilename);
     if (res == NO_ERROR) {
       // Parse the JSON response and retrieve the JSON Array of items
-      JSONTokener JsonT = new JSONTokener(FileReader.readFile("file://" + responseFilename));
+      JSONTokener JsonT = null;
+      try {
+        JsonT = new JSONTokener(FileAccessManager.readFileToString(responseFilename));
+      } catch (IOException e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_SERIOUS("Unable to read malformed HTTPS response JSON from previous request.");
+      }
       JSONObject requestResponse = new JSONObject(JsonT);
       JSONArray items = new JSONArray();
       if (requestResponse.has("Items")) {
@@ -212,7 +224,12 @@ public class OSIsoftServer {
                   url + "?nameFilter=" + tagName, "Get", postHeaders, "", "", responseFilename);
           if (res == NO_ERROR) {
             // Parse the JSON response and retrieve the JSON Array of items
-            JsonT = new JSONTokener(FileReader.readFile("file://" + responseFilename));
+            try {
+              JsonT = new JSONTokener(FileAccessManager.readFileToString(responseFilename));
+            } catch (IOException e) {
+              Logger.LOG_EXCEPTION(e);
+              Logger.LOG_SERIOUS("Unable to read response file from previous request.");
+            }
             requestResponse = new JSONObject(JsonT);
             if (requestResponse.has("Items")) {
               items = requestResponse.getJSONArray("Items");
