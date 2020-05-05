@@ -125,7 +125,7 @@ public class OSIsoftServer {
       JSONObject response = new JSONObject(JsonT);
       if (response.has("Message")) {
         res = AUTH_ERROR;
-        Logger.LOG_ERR("User Credentials are incorrect");
+        Logger.LOG_SERIOUS("User Credentials are incorrect");
       }
       if (response.has("Errors")) {
         JSONArray errors = response.getJSONArray("Errors");
@@ -133,31 +133,31 @@ public class OSIsoftServer {
           String error = errors.getString(i);
           if (error.substring(0, WEB_ID_ERROR_STRING.length()).equals(WEB_ID_ERROR_STRING)) {
             res = WEB_ID_ERROR;
-            Logger.LOG_ERR("WEB ID: \"" + dbWebID + "\"");
-            Logger.LOG_ERR("WEB ID Error: Supplied Web ID does not exist on this server");
+            Logger.LOG_SERIOUS("WEB ID: \"" + dbWebID + "\"");
+            Logger.LOG_SERIOUS("WEB ID Error: Supplied Web ID does not exist on this server");
           } else {
             res = GENERIC_ERROR;
-            Logger.LOG_ERR(error);
+            Logger.LOG_SERIOUS(error);
           }
         }
       }
     } else if (res == LINK_ERROR) {
       if (connected == true) {
-        Logger.LOG_ERR("Could not connect to OSIsoft Server, link is down");
+        Logger.LOG_SERIOUS("Could not connect to OSIsoft Server, link is down");
         connected = false;
       }
     } else if (res == SEND_ERROR) {
       if (connected == true) {
-        Logger.LOG_ERR("Could not connect to OSIsoft Server, server is offine or unreachable");
+        Logger.LOG_SERIOUS("Could not connect to OSIsoft Server, server is offine or unreachable");
         connected = false;
       }
     } else if (res != NO_ERROR) {
-      Logger.LOG_ERR("Sending Failed. Error #" + res);
+      Logger.LOG_SERIOUS("Sending Failed. Error #" + res);
     }
 
     if (res == NO_ERROR && connected == false) {
       connected = true;
-      Logger.LOG_ERR("Connection restored");
+      Logger.LOG_SERIOUS("Connection restored");
     }
 
     return res;
@@ -229,23 +229,23 @@ public class OSIsoftServer {
                       "",
                       "");
               if (res != NO_ERROR) {
-                Logger.LOG_ERR(
+                Logger.LOG_SERIOUS(
                     "Could not set point source of " + tag.getTagName() + ". Error: " + res);
               }
             } else {
               // tag does not exist, error
-              Logger.LOG_ERR("PI Point creation failed.  Error: " + res);
+              Logger.LOG_SERIOUS("PI Point creation failed.  Error: " + res);
             }
           }
         } else {
-          Logger.LOG_ERR("Error in creating tag.  Error: " + res);
+          Logger.LOG_SERIOUS("Error in creating tag.  Error: " + res);
         }
       }
 
       // Delete the https response file
       File file = new File(responseFilename);
       if (!file.delete()) {
-        Logger.LOG_ERR("Failed to delete the HTTPS response file");
+        Logger.LOG_SERIOUS("Failed to delete the HTTPS response file");
       }
     }
 
@@ -303,7 +303,7 @@ public class OSIsoftServer {
         }
         break;
       default:
-        Logger.LOG_ERR(comsErrMsg);
+        Logger.LOG_SERIOUS(comsErrMsg);
         break;
     }
 
@@ -451,7 +451,7 @@ public class OSIsoftServer {
               responseFilename); // data
 
     } catch (JSONException e) {
-      Logger.LOG_ERR("Exception caught on posting omf data points");
+      Logger.LOG_SERIOUS("Exception caught on posting omf data points");
       e.printStackTrace();
     }
     if (res != NO_ERROR) {
@@ -466,7 +466,7 @@ public class OSIsoftServer {
     try {
       res = RequestHTTPS(targetURL + "batch/", "Post", postHeaders, batchBuffer.toString(), "", "");
     } catch (JSONException e) {
-      Logger.LOG_ERR("Failed to post tags due to malformed JSON response");
+      Logger.LOG_SERIOUS("Failed to post tags due to malformed JSON response");
       Logger.LOG_EXCEPTION(e);
       res = JSON_ERROR;
     }
@@ -505,7 +505,7 @@ public class OSIsoftServer {
     try {
       res = RequestHTTPS(targetURL + "batch/", "Post", postHeaders, body, "", "");
     } catch (JSONException e) {
-      Logger.LOG_ERR("Failed to post tags due to malformed JSON response");
+      Logger.LOG_SERIOUS("Failed to post tags due to malformed JSON response");
       Logger.LOG_EXCEPTION(e);
       res = JSON_ERROR;
     }
@@ -528,13 +528,13 @@ public class OSIsoftServer {
               "",
               "");
     } catch (JSONException e) {
-      Logger.LOG_ERR(
+      Logger.LOG_SERIOUS(
           "Failed to post value of " + tag.getTagName() + "due to malformed JSON response");
       Logger.LOG_EXCEPTION(e);
     }
 
     if (res != NO_ERROR) {
-      Logger.LOG_ERR("Failed to post value of " + tag.getTagName());
+      Logger.LOG_SERIOUS("Failed to post value of " + tag.getTagName());
       return false;
     }
     return true;
@@ -553,13 +553,13 @@ public class OSIsoftServer {
               "",
               "");
     } catch (JSONException e) {
-      Logger.LOG_ERR(
+      Logger.LOG_SERIOUS(
           "Failed to post value of " + tag.getTagName() + "due to malformed JSON response");
       Logger.LOG_EXCEPTION(e);
     }
 
     if (res != NO_ERROR) {
-      Logger.LOG_ERR("Failed to post value of " + tag.getTagName());
+      Logger.LOG_SERIOUS("Failed to post value of " + tag.getTagName());
     }
   }
 
@@ -639,7 +639,7 @@ public class OSIsoftServer {
         type = "Float64";
         break;
       default:
-        Logger.LOG_ERR("Invalid datatype of " + tagType + " for new PI Point");
+        Logger.LOG_SERIOUS("Invalid datatype of " + tagType + " for new PI Point");
         return "";
     }
 

@@ -59,16 +59,16 @@ public class Main {
 
     // Check that the flexy has a non-default name, stop the application if not
     if (flexyName.equals(DEFAULT_EWON_NAME)) {
-      Logger.LOG_ERR("Device name is set to \"eWON\" which is the default name");
-      Logger.LOG_ERR("This device's name must be changed from default");
-      Logger.LOG_ERR("Application aborting due to default name use");
+      Logger.LOG_SERIOUS("Device name is set to \"eWON\" which is the default name");
+      Logger.LOG_SERIOUS("This device's name must be changed from default");
+      Logger.LOG_SERIOUS("Application aborting due to default name use");
       System.exit(0);
     }
 
     try {
       piConfig = new OSIsoftConfig(CONNECTOR_CONFIG_FILENAME);
     } catch (JSONException e) {
-      Logger.LOG_ERR(CONNECTOR_CONFIG_FILENAME + " is malformed");
+      Logger.LOG_SERIOUS(CONNECTOR_CONFIG_FILENAME + " is malformed");
       Logger.LOG_EXCEPTION(e);
       System.exit(0);
     }
@@ -92,7 +92,7 @@ public class Main {
             piServer.initTags(
                 piConfig.getServerIP(), piConfig.getTags(), piConfig.getCommunicationType());
       } catch (JSONException e) {
-        Logger.LOG_ERR("Linking eWON tags to OSIsoft PI server failed");
+        Logger.LOG_SERIOUS("Linking eWON tags to OSIsoft PI server failed");
         Logger.LOG_EXCEPTION(e);
       }
     } while (res != OSIsoftServer.NO_ERROR);
@@ -136,7 +136,7 @@ public class Main {
       SCB = new SysControlBlock(SysControlBlock.SYS);
       res = SCB.getItem("Identification");
     } catch (Exception e) {
-      Logger.LOG_ERR("Error reading eWON's name");
+      Logger.LOG_SERIOUS("Error reading eWON's name");
     }
     return res;
   }
@@ -156,7 +156,7 @@ public class Main {
         SCB.saveBlock(true);
       }
     } catch (Exception e) {
-      Logger.LOG_ERR("Setting certificate directory failed");
+      Logger.LOG_SERIOUS("Setting certificate directory failed");
       System.exit(0);
     }
   }
@@ -187,7 +187,7 @@ public class Main {
       }
 
     } catch (Exception e) {
-      Logger.LOG_ERR("Setting timeouts failed. Application ending");
+      Logger.LOG_SERIOUS("Setting timeouts failed. Application ending");
       System.exit(0);
     }
   }
