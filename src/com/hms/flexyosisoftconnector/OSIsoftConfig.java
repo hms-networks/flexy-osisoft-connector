@@ -80,10 +80,10 @@ public class OSIsoftConfig {
       communicationType = omf;
     } else {
       // can't do anything without a valid communication type..
-      Logger.LOG_ERR("Invalid communication type in config json");
-      Logger.LOG_ERR(
+      Logger.LOG_SERIOUS("Invalid communication type in config json");
+      Logger.LOG_SERIOUS(
           "Change the communication Type in config json to one of the valid options in the readme and restart the connector.");
-      Logger.LOG_ERR("OSIsoft connector Shutting down.");
+      Logger.LOG_SERIOUS("OSIsoft connector Shutting down.");
       System.exit(1);
     }
 
@@ -92,7 +92,7 @@ public class OSIsoftConfig {
     if (appConfig.has("LoggingLevel")) {
       boolean res = Logger.SET_LOG_LEVEL(appConfig.getInt("LoggingLevel"));
       if (!res) {
-        Logger.LOG_ERR("Invalid logging level specified");
+        Logger.LOG_SERIOUS("Invalid logging level specified");
       }
     }
 
