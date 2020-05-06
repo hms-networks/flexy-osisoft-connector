@@ -79,14 +79,15 @@ public class Main {
 
     do {
       try {
-        res =
-            piServer.initTags(
-                piConfig.getServerIP(), piConfig.getTags(), piConfig.getCommunicationType());
+        Logger.LOG_INFO("Initializing tags");
+        res = piServer.initTags();
       } catch (JSONException e) {
         Logger.LOG_SERIOUS("Linking Ewon tags to OSIsoft PI server failed");
         Logger.LOG_EXCEPTION(e);
       }
     } while (res != OSIsoftServer.NO_ERROR);
+
+    Logger.LOG_INFO("Finished initializing tags");
 
     DataPoster datathread = new DataPoster(piConfig.getCommunicationType());
     datathread.start();
