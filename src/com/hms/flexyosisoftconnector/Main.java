@@ -70,12 +70,7 @@ public class Main {
     setHttpTimeouts();
 
     int res = OSIsoftServer.NO_ERROR;
-    piServer =
-        new OSIsoftServer(
-            piConfig.getServerIP(),
-            piConfig.getServerLogin(),
-            piConfig.getServerWebID(),
-            flexyName);
+    piServer = new OSIsoftServer();
 
     do {
       try {
