@@ -239,7 +239,7 @@ public class OsisoftJsonPayload {
    * @param dataPoint The data point to add
    */
   private void addDataPoint(DataPoint dataPoint) {
-    String newPayloadPart;
+    String newPayloadPart = "";
     int index = tagIdToIndex(dataPoint.getTagId());
 
     String timestamp = getFormattedStartTime(Long.parseLong(dataPoint.getTimeStamp()));
