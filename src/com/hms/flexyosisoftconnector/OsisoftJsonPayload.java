@@ -252,7 +252,7 @@ public class OsisoftJsonPayload {
       // the tag has not been seen it yet
       addToTagsEncounteredArray(dataPoint.getTagId());
       tagPayloadArr[index] = new TagPayload();
-      ((TagPayload) tagPayloadArr[index]).dataPoint = dataPoint;
+      ((TagPayload) tagPayloadArr[index]).setDataPoint(dataPoint);
 
       isFirstPoint = true;
     }
@@ -335,7 +335,7 @@ public class OsisoftJsonPayload {
 
           TagPayload tagPayload = (TagPayload) tagPayloadArr[i];
 
-          String tagName = tagPayload.dataPoint.getTagName();
+          String tagName = tagPayload.getDataPoint().getTagName();
 
           if (!firstPayload) {
             payload.append(",");
