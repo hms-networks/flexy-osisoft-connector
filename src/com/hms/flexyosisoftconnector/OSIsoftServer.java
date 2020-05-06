@@ -72,6 +72,7 @@ public class OSIsoftServer {
 
   private String omfTypeJson;
 
+  /** Constructs the OSIsoftServer object. */
   public OSIsoftServer(String ip, String login, String webID, String name) {
     serverIP = ip;
     authCredentials = login;
@@ -94,6 +95,18 @@ public class OSIsoftServer {
     typeID = "HMS-type-" + flexyName;
   }
 
+  /**
+   * Makes an HTTPS request against the OSIsoft server and validates the response code.
+   *
+   * @param CnxParam Request parameters
+   * @param Method Request method
+   * @param Headers Request headers
+   * @param TextFields Request Payload
+   * @param FileFields File location for response
+   * @param FileName File name for response
+   * @return The HTTP response code
+   * @throws JSONException Throws when JSON is malformed
+   */
   public static int RequestHTTPS(
       String CnxParam,
       String Method,
@@ -169,8 +182,13 @@ public class OSIsoftServer {
     return res;
   }
 
-  // Looks up and sets a tags PI Point web id.  If the tag does not exist
-  // in the data server a PI Point is created for that tag.
+  /**
+   * Attempts to initialize a new tag into OSIsoft and retrieve the relevant information.
+   *
+   * @param tag the tag to attempt to initialize in OSIsoft
+   * @return returns the HTTP response code
+   * @throws JSONException Throws when JSON is malformed
+   */
   public int setTagWebId(Tag tag) throws JSONException {
 
     int res = NO_ERROR;
@@ -446,6 +464,12 @@ public class OSIsoftServer {
     endOMFDataMessage();
   }
 
+  /**
+   * Posts the OMF batch to OSIsoft.
+   *
+   * @param payload the payload to post
+   * @return returns the http response code
+   */
   public static boolean postOMFBatch() {
 
     String postHeaderType = "&messagetype=type";
@@ -476,8 +500,13 @@ public class OSIsoftServer {
     }
     return true;
   }
-  // end of omf batch buffer functions
 
+  /**
+   * Posts the PIWebAPI batch to OSIsoft.
+   *
+   * @param payload the payload to post
+   * @return returns the http response code
+   */
   public static boolean postBatch() {
     int res = NO_ERROR;
     try {

@@ -15,9 +15,10 @@ import com.hms.flexyosisoftconnector.JSON.JSONException;
  */
 public class Main {
 
-  /** Application Version Numbers */
+  /** Application Major Version Number */
   static final int MAJOR_VERSION = 1;
 
+  /** Application Minor Version Number */
   static final int MINOR_VERSION = 0;
 
   /** Minimum amount of free memory before data trimming occurs */
