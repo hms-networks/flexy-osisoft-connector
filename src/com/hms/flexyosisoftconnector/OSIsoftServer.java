@@ -65,6 +65,7 @@ public class OSIsoftServer {
     int res = NO_ERROR;
 
     try {
+      Logger.LOG_DEBUG("HTTPS request is: " + CnxParam);
       res =
           ScheduledActionManager.RequestHttpX(
               CnxParam, Method, Headers, TextFields, FileFields, FileName);
@@ -99,7 +100,7 @@ public class OSIsoftServer {
           String error = errors.getString(i);
           if (error.substring(0, WEB_ID_ERROR_STRING.length()).equals(WEB_ID_ERROR_STRING)) {
             res = WEB_ID_ERROR;
-            Logger.LOG_SERIOUS("WEB ID: \"" + dbWebID + "\"");
+            Logger.LOG_SERIOUS("WEB ID: \"" + OSIsoftConfig.getServerWebID() + "\"");
             Logger.LOG_SERIOUS("WEB ID Error: Supplied Web ID does not exist on this server");
           } else {
             res = GENERIC_ERROR;
@@ -136,21 +137,34 @@ public class OSIsoftServer {
    * @return returns the HTTP response code
    * @throws JSONException Throws when JSON is malformed
    */
-  public int setTagWebId(Tag tag) throws JSONException {
+  public int setTagWebId(TagInfo tag) throws JSONException {
+
+    String tagWebID = "not found";
 
     int res = NO_ERROR;
 
     // HTTPS responses are stored in this file
     String responseFilename = "/usr/response.txt";
 
-    String tagName = tag.getTagName() + "-" + flexyName;
+    String tagName = tag.getName();
 
     // url for the dataserver's pi points
-    String url = "https://" + serverIP + "/piwebapi/dataservers/" + dbWebID + "/points";
+    String url =
+        "https://"
+            + OSIsoftConfig.getServerIP()
+            + "/piwebapi/dataservers/"
+            + OSIsoftConfig.getServerWebID()
+            + "/points";
 
     // Check if the tag already exists in the dataserver
     res =
-        RequestHTTPS(url + "?nameFilter=" + tagName, "Get", postHeaders, "", "", responseFilename);
+        RequestHTTPS(
+            url + "?nameFilter=" + tagName,
+            "Get",
+            OSIsoftConfig.getPostHeaders(),
+            "",
+            "",
+            responseFilename);
     if (res == NO_ERROR) {
       // Parse the JSON response and retrieve the JSON Array of items
       JSONTokener JsonT = null;
@@ -162,31 +176,30 @@ public class OSIsoftServer {
       }
       JSONObject requestResponse = new JSONObject(JsonT);
       JSONArray items = new JSONArray();
-      if (requestResponse.has("Items")) {
-        items = requestResponse.getJSONArray("Items");
-      }
+      if (requestResponse.has("Items")) items = requestResponse.getJSONArray("Items");
 
       if (items.length() > 0) {
         // tag exists
-        tag.setWebID(items.getJSONObject(0).getString("WebId"));
+        tagWebID = items.getJSONObject(0).getString("WebId");
       } else {
         // tag does not exist and must be created
+        String payload = PayloadBuilder.buildNewPointBody(tag);
         res =
             RequestHTTPS(
-                url,
-                "Post",
-                postHeaders,
-                buildNewPointBody(tagName, tag.getDataType()),
-                "",
-                responseFilename);
+                url, "Post", OSIsoftConfig.getPostHeaders(), payload, "", responseFilename);
 
         if (res == NO_ERROR) {
-          // The WebID is sent back in the headers of the previous post
-          // however, there is no mechanism currently to retrieve it so
-          // another request must be issued.
+          /* The WebID is sent back in the headers of the previous post
+          however, there is no mechanism currently to retrieve it so
+          another request must be issued.*/
           res =
               RequestHTTPS(
-                  url + "?nameFilter=" + tagName, "Get", postHeaders, "", "", responseFilename);
+                  url + "?nameFilter=" + tagName,
+                  "Get",
+                  OSIsoftConfig.getPostHeaders(),
+                  "",
+                  "",
+                  responseFilename);
           if (res == NO_ERROR) {
             // Parse the JSON response and retrieve the JSON Array of items
             try {
@@ -196,23 +209,24 @@ public class OSIsoftServer {
               Logger.LOG_SERIOUS("Unable to read response file from previous request.");
             }
             requestResponse = new JSONObject(JsonT);
-            if (requestResponse.has("Items")) {
-              items = requestResponse.getJSONArray("Items");
-            }
+            if (requestResponse.has("Items")) items = requestResponse.getJSONArray("Items");
             if (items.length() > 0) {
               // tag exists
-              tag.setWebID(items.getJSONObject(0).getString("WebId"));
+              tagWebID = items.getJSONObject(0).getString("WebId");
               res =
                   RequestHTTPS(
-                      targetURL + "points/" + tag.getWebID() + "/attributes/pointsource",
+                      OSIsoftConfig.getTargetURL()
+                          + "points/"
+                          + tagWebID
+                          + "/attributes/pointsource",
                       "Put",
-                      postHeaders,
+                      OSIsoftConfig.getPostHeaders(),
                       "\"HMS\"",
                       "",
                       "");
               if (res != NO_ERROR) {
                 Logger.LOG_SERIOUS(
-                    "Could not set point source of " + tag.getTagName() + ". Error: " + res);
+                    "Could not set point source of " + tag.getName() + ". Error: " + res);
               }
             } else {
               // tag does not exist, error
@@ -231,29 +245,36 @@ public class OSIsoftServer {
       }
     }
 
+    // set tag web id to list for later lookup
+    PayloadBuilder.setTagWebId(tag.getId(), tagWebID);
+
     return res;
   }
 
-  // Initializes a list of tags
-  public int initTags(String serverIp, ArrayList tagList, int communicationType)
-      throws JSONException {
+  /**
+   * Initializes all of the tags into OSIsoft for future storage on the server.
+   *
+   * @return returns the HTTP response code
+   * @throws JSONException Throws when JSON is malformed
+   */
+  public int initTags() throws JSONException {
     int retval = NO_ERROR;
     int res;
 
-    switch (communicationType) {
-      case OSIsoftConfig.omf:
+    switch (OSIsoftConfig.getCommunicationType()) {
         // OMF setup
-
+      case OSIsoftConfig.omf:
         // setup type
         String responseFilename = "/usr/response.txt";
         String messageTypeHeader = "&messagetype=type";
-        setTypeBody();
+
+        String payload = PayloadBuilder.getTypeBody();
         res =
             RequestHTTPS(
-                omfUrl,
+                OSIsoftConfig.getOmfUrl(),
                 "Post",
-                omfPostHeaders + messageTypeHeader,
-                batchBuffer.toString(),
+                OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+                payload,
                 "",
                 responseFilename);
 
@@ -262,30 +283,30 @@ public class OSIsoftServer {
 
         // set batch buffer with list of tag containers to initialize for if they have not been
         // already
-        setContainerJson(tagList);
+        payload = PayloadBuilder.getContainerSettingJson();
         res =
             RequestHTTPS(
-                omfUrl,
+                OSIsoftConfig.getOmfUrl(),
                 "Post",
-                omfPostHeaders + messageTypeHeader,
-                batchBuffer.toString(),
+                OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+                payload,
                 "",
                 responseFilename);
-        if (res != NO_ERROR) {
-          retval = res;
-        }
+        if (res != NO_ERROR) retval = res;
         break;
+        // legacy PIWEBAPI setup
       case OSIsoftConfig.piwebapi:
-        // old PIWEBAPI setup
-        for (int i = 0; i < tagList.size(); i++) {
-          res = setTagWebId((Tag) tagList.get(i));
-          if (res != NO_ERROR) {
-            return retval = res;
-          }
+        // web id's are stored in the payload builder
+        PayloadBuilder.initWebIdList();
+
+        for (int i = 0; i < TagInfoManager.getTagInfoList().size(); i++) {
+          res = setTagWebId((TagInfo) TagInfoManager.getTagInfoList().get(i));
+          if (res != NO_ERROR) return retval = res;
         }
+
         break;
       default:
-        Logger.LOG_SERIOUS(comsErrMsg);
+        Logger.LOG_SERIOUS(OSIsoftConfig.COM_ERR_MSG);
         break;
     }
 
@@ -298,30 +319,29 @@ public class OSIsoftServer {
    * @param payload the payload to post
    * @return returns the http response code
    */
-  public static boolean postOMFBatch() {
+  public static boolean postOMFBatch(String payload) {
 
     String postHeaderType = "&messagetype=type";
 
     int res = NO_ERROR;
 
     try {
-
       postHeaderType = "&messagetype=data";
       String responseFilename = "/usr/response.txt";
 
       // posting OMF batch
       res =
           RequestHTTPS(
-              omfUrl,
+              OSIsoftConfig.getOmfUrl(),
               "Post",
-              omfPostHeaders + postHeaderType,
-              batchBuffer.toString(),
+              OSIsoftConfig.getOmfPostHeaders() + postHeaderType,
+              payload,
               "",
               responseFilename); // data
 
     } catch (JSONException e) {
       Logger.LOG_SERIOUS("Exception caught on posting omf data points");
-      e.printStackTrace();
+      Logger.LOG_EXCEPTION(e);
     }
     if (res != NO_ERROR) {
       return false;
@@ -335,10 +355,17 @@ public class OSIsoftServer {
    * @param payload the payload to post
    * @return returns the http response code
    */
-  public static boolean postBatch() {
+  public static boolean postBatch(String payload) {
     int res = NO_ERROR;
     try {
-      res = RequestHTTPS(targetURL + "batch/", "Post", postHeaders, batchBuffer.toString(), "", "");
+      res =
+          RequestHTTPS(
+              OSIsoftConfig.getTargetURL() + "batch/",
+              "Post",
+              OSIsoftConfig.getPostHeaders(),
+              payload,
+              "",
+              "");
     } catch (JSONException e) {
       Logger.LOG_SERIOUS("Failed to post tags due to malformed JSON response");
       Logger.LOG_EXCEPTION(e);
