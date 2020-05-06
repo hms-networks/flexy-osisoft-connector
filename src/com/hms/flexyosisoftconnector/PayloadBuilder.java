@@ -198,7 +198,7 @@ public class PayloadBuilder {
   /**
    * This constructs the start of a new container.
    *
-   * @param the tag's name
+   * @param tagName the tag's name
    * @return the payload segment as a string
    */
   public static String addContainerStartToOMFDataMessage(String tagName) {

@@ -10,39 +10,46 @@ import com.hms.flexyosisoftconnector.JSON.*;
  */
 public class OSIsoftConfig {
 
-  // IP address of OSIsoft PI Server
+  /** IP address of OSIsoft PI Server */
   String piServerIP;
 
-  // WebID of the OSIsoft PI Dataserver
+  /** WebID of the OSIsoft PI Dataserver */
   String dataServerWebID;
 
-  // Your BASE64 encoded BASIC authentication credentials
-  // Visit https://www.base64encode.org/
-  // Encode: "username:password"
+  /**
+   * Your BASE64 encoded BASIC authentication credentials. Visit https://www.base64encode.org/
+   * Encode: "username:password"
+   */
   String piServerLogin;
 
-  // Path to the directory containing your OSIsoft server's certificate
+  /** Path to the directory containing your OSIsoft server's certificate */
   String ewonCertificatePath;
 
-  // Update rate for all tags in milliseconds
+  /** Update rate for all tags in milliseconds */
   int cycleTimeMs;
 
-  // String converted to int for use in switch statement
-  // Either (0) pre2019 for piwebapi or (1) post2019 for OMF
+  /**
+   * String converted to int for use in switch statement. Either (0) pre2019 for piwebapi or (1)
+   * post2019 for OMF
+   */
   int communicationType;
 
-  // Strings you can get off of the json file
+  /** The string stored in the config file when a user sets it to PIWebAPI */
   String pre2019 = "piwebapi";
+
+  /** The string stored in the config file when a user sets it to OMF */
   String post2019 = "omf";
-  // Strings set by web page config tool
+
+  /** The string stored in the config file when chosing OMF in the web config page */
   String secondPre2019 = "PI Web API 2018 and older";
+
+  /** The string stored in the config file when chosing PIWebAPI in the web config page */
   String secondPost2019 = "PI Web API 2019+";
 
-  // Expose these for switch statement conditionals
+  /** PIWebAPI comminucation type */
   public static final int piwebapi = 0;
+  /** OMF communication type */
   public static final int omf = 1;
-
-  // List of tags
 
   public static ArrayList tags = new ArrayList();
 
@@ -111,17 +118,29 @@ public class OSIsoftConfig {
     }
   }
 
-  // Returns the IP Address of the OSIsoft Server
+  /**
+   * Get the server ip address.
+   *
+   * @return the IP Address of the OSIsoft Server
+   */
   public String getServerIP() {
     return piServerIP;
   }
 
-  // Returns the BASE64 encoded authentication credentials
+  /**
+   * Get the authentication credentials.
+   *
+   * @return the BASE64 encoded authentication credentials
+   */
   public String getServerLogin() {
     return piServerLogin;
   }
 
-  // Returns the Web ID of the dataserver
+  /**
+   * Get the server web ID
+   *
+   * @return the Web ID of the dataserver
+   */
   public String getServerWebID() {
     return dataServerWebID;
   }
@@ -131,12 +150,20 @@ public class OSIsoftConfig {
     return tags;
   }
 
-  // Returns the path to the OSIsoft server's certificate
+  /**
+   * Get the certificate path
+   *
+   * @return the path to the OSIsoft server's certificate
+   */
   public String getCertificatePath() {
     return ewonCertificatePath;
   }
 
-  // Returns the cycle time in milliseconds
+  /**
+   * Get the cycle time in milliseconds.
+   *
+   * @return the cycle time in milliseconds
+   */
   public int getCycleTimeMs() {
     return cycleTimeMs;
   }
