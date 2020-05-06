@@ -33,9 +33,6 @@ public class Main {
   /** Filename of connector config file */
   static final String CONNECTOR_CONFIG_FILENAME = "/usr/ConnectorConfig.json";
 
-  /** Configuration of PI connector */
-  static OSIsoftConfig piConfig;
-
   /** PI Server management object */
   static OSIsoftServer piServer;
 
@@ -57,26 +54,19 @@ public class Main {
 
     // Indicate the version number and that the application is starting
     Logger.LOG_CRITICAL("OSIsoft Connector v" + MAJOR_VERSION + "." + MINOR_VERSION + " starting");
+    OSIsoftConfig.initConfig(CONNECTOR_CONFIG_FILENAME);
 
     // Check that the flexy has a non-default name, stop the application if not
-    if (flexyName.equals(DEFAULT_EWON_NAME)) {
+    if (OSIsoftConfig.getFlexyName().equals(DEFAULT_EWON_NAME)) {
       Logger.LOG_SERIOUS("Device name is set to \"eWON\" which is the default name");
       Logger.LOG_SERIOUS("This device's name must be changed from default");
       Logger.LOG_SERIOUS("Application aborting due to default name use");
       System.exit(0);
     }
 
-    try {
-      piConfig = new OSIsoftConfig(CONNECTOR_CONFIG_FILENAME);
-    } catch (JSONException e) {
-      Logger.LOG_SERIOUS(CONNECTOR_CONFIG_FILENAME + " is malformed");
-      Logger.LOG_EXCEPTION(e);
-      System.exit(0);
-    }
-
     // Set the path to the directory holding the certificate for the server
     // Only needed if the certificate is self signed
-    setCertificatePath(piConfig.getCertificatePath());
+    setCertificatePath(OSIsoftConfig.getCertificatePath());
     setHttpTimeouts();
 
     int res = OSIsoftServer.NO_ERROR;
