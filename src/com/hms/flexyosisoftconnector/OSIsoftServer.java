@@ -1,6 +1,7 @@
 package com.hms.flexyosisoftconnector;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -8,7 +9,14 @@ import java.util.ArrayList;
 
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.ScheduledActionManager;
-import com.hms.flexyosisoftconnector.JSON.*;
+import com.hms_networks.americas.sc.fileutils.FileAccessManager;
+import com.hms_networks.americas.sc.json.JSONArray;
+import com.hms_networks.americas.sc.json.JSONException;
+import com.hms_networks.americas.sc.json.JSONObject;
+import com.hms_networks.americas.sc.json.JSONTokener;
+import com.hms_networks.americas.sc.logging.Logger;
+import com.hms_networks.americas.sc.taginfo.TagInfo;
+import com.hms_networks.americas.sc.taginfo.TagInfoManager;
 
 /**
  * Class object for an OSIsoft PI Server.
