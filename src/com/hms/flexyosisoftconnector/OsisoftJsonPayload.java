@@ -88,6 +88,8 @@ public class OsisoftJsonPayload {
   /** Error message to display on unknown communication type. */
   String comsErrMsg = "Unknown communication type given. Unable to build payload.";
 
+  public static int MAX_PAYLOAD_NUM_CHARACTERS = 0;
+
   /**
    * Constructor for the OsisoftJsonPayload.
    *
@@ -103,8 +105,8 @@ public class OsisoftJsonPayload {
 
     final int byteSizePerDataPoint = 80;
     final int byteSizeForStartAndEnd = 200;
-    final int maxByteSize = (MAX_DATA_POINTS * byteSizePerDataPoint) + byteSizeForStartAndEnd;
-    payload = new PreAllocatedStringBuilder(maxByteSize);
+    MAX_PAYLOAD_NUM_CHARACTERS = (MAX_DATA_POINTS * byteSizePerDataPoint) + byteSizeForStartAndEnd;
+    payload = new PreAllocatedStringBuilder(MAX_PAYLOAD_NUM_CHARACTERS);
     status = PAYLOAD_NOT_STARTED;
     communicationType = comType;
 
@@ -331,7 +333,7 @@ public class OsisoftJsonPayload {
       // add all the tag's info to the payload
       for (int i = 0; i < tagPayloadArr.length; i++) {
 
-        if (tagPayloadArr[i] != null && tagPayloadArr[i].payload.length() > 1) {
+        if (tagPayloadArr[i] != null && tagPayloadArr[i].getPayload().length() > 1) {
 
           TagPayload tagPayload = (TagPayload) tagPayloadArr[i];
 
@@ -345,7 +347,7 @@ public class OsisoftJsonPayload {
 
           payload.append(PayloadBuilder.addContainerStartToOMFDataMessage(tagName));
 
-          payload.append(tagPayload.payload);
+          payload.append(tagPayload.getPayload());
 
           payload.append(PayloadBuilder.addContainerEndToOMFDataMessage());
         }
