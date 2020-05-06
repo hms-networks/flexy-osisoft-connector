@@ -21,12 +21,6 @@ public class Main {
   /** Application Minor Version Number */
   static final int MINOR_VERSION = 0;
 
-  /** Minimum amount of free memory before data trimming occurs */
-  static final long MINIMUM_MEMORY = 5000000;
-
-  /** Number of tags to trim when memory is low */
-  static final int TAGS_TO_TRIM = 2;
-
   /** Default name of a new Ewon */
   static final String DEFAULT_EWON_NAME = "eWON";
 
@@ -36,21 +30,11 @@ public class Main {
   /** PI Server management object */
   static OSIsoftServer piServer;
 
-  /** Current available JVM memory */
-  static long AvailableMemory;
-
   public static void main(String[] args) {
-
-    // Time keeping variables
-    long lastUpdateTimeMs = 0;
-    long currentTimeMs;
 
     // Start the webserver to accept json file
     RestFileServer restServer = new RestFileServer();
     restServer.start();
-
-    // Unique name of the flexy
-    String flexyName = getFlexyName();
 
     // Indicate the version number and that the application is starting
     Logger.LOG_CRITICAL("OSIsoft Connector v" + MAJOR_VERSION + "." + MINOR_VERSION + " starting");
@@ -87,45 +71,6 @@ public class Main {
     DataPoster datathread = new DataPoster(piConfig.getCommunicationType());
     datathread.start();
 
-    // Infinite loop
-    while (true) {
-
-      AvailableMemory = Runtime.getRuntime().freeMemory();
-      currentTimeMs = System.currentTimeMillis();
-
-      if ((currentTimeMs - lastUpdateTimeMs) >= piConfig.getCycleTimeMs()) {
-
-        // Update the last update time
-        lastUpdateTimeMs = currentTimeMs;
-
-        String time = piServer.convertTimeString(new Date());
-        for (int i = 0; i < piConfig.getTags().size(); i++) {
-          if (AvailableMemory < MINIMUM_MEMORY) {
-            ((Tag) piConfig.getTags().get(i)).trimOldestEntries(TAGS_TO_TRIM);
-          }
-          ((Tag) piConfig.getTags().get(i)).recordTagValue(time);
-        }
-
-        Thread.yield();
-      }
-    }
-  }
-
-  /**
-   * Reads the unique name given to the flexy
-   *
-   * @return Name of the Flexy
-   */
-  private static String getFlexyName() {
-    String res = "";
-    SysControlBlock SCB;
-    try {
-      SCB = new SysControlBlock(SysControlBlock.SYS);
-      res = SCB.getItem("Identification");
-    } catch (Exception e) {
-      Logger.LOG_SERIOUS("Error reading Ewon's name");
-    }
-    return res;
   }
 
   /**
