@@ -31,13 +31,13 @@ public class Main {
   static OSIsoftServer piServer;
 
   public static void main(String[] args) {
+    // Indicate the version number and that the application is starting
+    Logger.LOG_CRITICAL("OSIsoft Connector v" + MAJOR_VERSION + "." + MINOR_VERSION + " starting");
 
     // Start the webserver to accept json file
     RestFileServer restServer = new RestFileServer();
     restServer.start();
 
-    // Indicate the version number and that the application is starting
-    Logger.LOG_CRITICAL("OSIsoft Connector v" + MAJOR_VERSION + "." + MINOR_VERSION + " starting");
     OSIsoftConfig.initConfig(CONNECTOR_CONFIG_FILENAME);
 
     // Check that the flexy has a non-default name, stop the application if not
