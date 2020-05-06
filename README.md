@@ -23,7 +23,8 @@ This application is supported by HMS' North American offices.
    4. [Running](#Running)
 2. [Certificates](#Certificates)
 3. [Configuration File](#Configuration-File)
-4. [Customizing the Application](#Customizing-the-application)
+4. [Tag Configuration](#Tag-Configuration)
+5. [Customizing the Application](#Customizing-the-application)
 
 ## Getting Started
 
@@ -106,8 +107,7 @@ static String eWONCertificatePath = "/usr/Certificates";
       "CycleTimeMs":1000,
       "PostDuplicateTagValues": false,
       "CommunicationType":"omf"
-   },
-   "TagList":["ExampleTag1", "ExampleTag2", "ExampleTag3", "ExampleTag4"]
+   }
 }
 ```
 ### ServerConfig
@@ -136,13 +136,25 @@ PostDuplicateTagValues - Controls when datapoints are logged.  If set to true, d
 
 CommunicationType - This refers to if you are using OMF (OSIsoft message format). If you have PIWEBAPI 2019 or later, and you have OMF enabled, set this string to "omf". If you are using an older version of PIWEBAPI set the string to "piwebapi". Any other values will result in an error. For more information on OMF read the section here:  [OMF](#OMF-Support)
 
-### TagList
-
-TagList - List of eWON tags that should be connected to the OSIsoft PI server.  If PI Points with (non case sensitive) matching names do not exist on the PI server they will be created automatically.
-
 ## Customizing the application
 
 If you wish to modify, debug, or rebuild the application the toolkit and documentation is available here https://developer.ewon.biz/content/java-0. The instructions for setting up your development environment are here  https://developer.ewon.biz/system/files_force/AUG-072-0-EN-%28JAVA%20J2SE%20Toolkit%20for%20eWON%20Flexy%29.pdf?download=1
+
+## Tag Configuration
+To have a tag's historical data sent to OSIsoft, the tag needs to have historical logging enabled and needs to be assigned to a group. Follow the steps below for each tag.
+
+>Navigate to the tag values page. If the "mode" slider on the top left of the screen is set to "view", click on it to set it to "setup".
+
+![osisoft tag configuration step 1](docs/images/step1.PNG)
+
+>Double click on a tag to open the tag configuration page.
+>Enable historical logging for each tag you want recorded in OSIsoft by clicking the "Historical Logging Enabled" checkbox. 
+
+![osisoft tag configuration step 2](docs/images/step2.PNG)
+
+>Ensure the tag is added to a group. If it is not, no the tag data will not be sent to OSIsoft.
+
+![osisoft tag configuration step 3](docs/images/step3.PNG)
 
 ## OMF Support
 
