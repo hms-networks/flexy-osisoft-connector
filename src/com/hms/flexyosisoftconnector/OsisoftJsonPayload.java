@@ -86,7 +86,11 @@ public class OsisoftJsonPayload {
   /** Error message to display on unknown communication type. */
   String comsErrMsg = "Unknown communication type given. Unable to build payload.";
 
-  public static int MAX_PAYLOAD_NUM_CHARACTERS = 0;
+  /** Constant for error handling */
+  public static final int UNINITIALIZED_INTEGER = -1;
+
+  /** Maximum number of characters in a payload */
+  public static int MAX_PAYLOAD_NUM_CHARACTERS = UNINITIALIZED_INTEGER;
 
   /**
    * Constructor for the OsisoftJsonPayload.
