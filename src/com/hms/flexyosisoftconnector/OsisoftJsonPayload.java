@@ -307,7 +307,7 @@ public class OsisoftJsonPayload {
   private String getFormattedStartTime(long time) {
     final int timeMillisPerSec = 1000;
     Date d = new Date(time * timeMillisPerSec);
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss'Z'");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     String timestamp = dateFormat.format(d);
     return timestamp;
