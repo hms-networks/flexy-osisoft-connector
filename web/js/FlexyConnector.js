@@ -357,8 +357,8 @@ var waitingDialog = waitingDialog || (function ($)
 
    return {
       /**
-      * Opens dialog
-      */
+       * Opens dialog
+       */
       show: function (message, options)
       {
 
@@ -371,9 +371,9 @@ var waitingDialog = waitingDialog || (function ($)
          // Opening dialog
          $dialog.modal();
       },
-		/**
-		 * Closes dialog
-		 */
+      /**
+       * Closes dialog
+       */
       hide: function ()
       {
          $dialog.modal('hide');
