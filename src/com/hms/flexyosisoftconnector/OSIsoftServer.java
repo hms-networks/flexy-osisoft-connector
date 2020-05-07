@@ -283,16 +283,21 @@ public class OSIsoftServer {
 
         // set batch buffer with list of tag containers to initialize for if they have not been
         // already
-        payload = PayloadBuilder.getContainerSettingJson();
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOmfUrl(),
-                "Post",
-                OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-                payload,
-                "",
-                responseFilename);
-        if (res != NO_ERROR) retval = res;
+        final int numTagsInList = TagInfoManager.getTagInfoList().size();
+        final int numTagsInitializing = 100;
+
+        for (int currentTagIndex = 0; currentTagIndex < numTagsInList; currentTagIndex += numTagsInitializing) {
+          payload = PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
+          res =
+              RequestHTTPS(
+                  OSIsoftConfig.getOmfUrl(),
+                  "Post",
+                  OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+                  payload,
+                  "",
+                  responseFilename);
+          if (res != NO_ERROR) retval = res;
+        }
         break;
         // legacy PIWEBAPI setup
       case OSIsoftConfig.piwebapi:

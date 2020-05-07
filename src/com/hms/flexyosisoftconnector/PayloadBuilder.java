@@ -5,6 +5,7 @@ import com.hms_networks.americas.sc.datapoint.DataPoint;
 import com.hms_networks.americas.sc.datapoint.DataType;
 import com.hms_networks.americas.sc.json.JSONException;
 import com.hms_networks.americas.sc.logging.Logger;
+import com.hms_networks.americas.sc.string.PreAllocatedStringBuilder;
 import com.hms_networks.americas.sc.taginfo.TagInfo;
 import com.hms_networks.americas.sc.taginfo.TagInfoManager;
 import com.hms_networks.americas.sc.taginfo.TagType;
@@ -289,29 +290,41 @@ public class PayloadBuilder {
   }
 
   /**
-   * This sets up OMF to have the containers
+   * This sets up OMF to have the containers for each tag. Instead of doing all of them at once, it
+   * will get the complete payload for container setup in batches.
    *
+   * @param startTagIndex The starting index of which tag to resume getting JSON for.
+   * @param numToProccess How many tags will be have JSON returned for them.
    * @return returns the JSON segment to construct a container for each of the tags.
    */
-  public static String getContainerSettingJson() {
+  public static String getContainerSettingJson(int startTagIndex, int numToProccess) {
     String typeID = "HMS-type-" + getFlexyName();
-    ;
-    String payload = startOMFDataMessage();
 
-    for (int i = 0; i < TagInfoManager.getTagInfoList().size(); i++) {
+    final int perTagSize = 60;
+    final int containerMessageSize = numToProccess * perTagSize;
+    PreAllocatedStringBuilder payload = new PreAllocatedStringBuilder(containerMessageSize);
+
+    payload.append(startOMFDataMessage());
+    int endTagIndex;
+    if ((startTagIndex + numToProccess) < TagInfoManager.getTagInfoList().size()) {
+      endTagIndex = (startTagIndex + numToProccess);
+    } else {
+      endTagIndex = TagInfoManager.getTagInfoList().size();
+    }
+    for (int i = startTagIndex; i < endTagIndex; i++) {
 
       String tagName = ((TagInfo) TagInfoManager.getTagInfoList().get(i)).getName();
 
       // after the first tag, separate by comma
-      if (i > 0) {
-        payload += ",";
+      if (i > startTagIndex) {
+        payload.append(",");
       }
 
-      payload += "{" + "\"id\": \"" + tagName + "\"," + "\"typeid\": \"" + typeID + "\"" + "}";
+      payload.append("{" + "\"id\": \"" + tagName + "\"," + "\"typeid\": \"" + typeID + "\"" + "}");
     }
 
-    payload += endOMFDataMessage();
-    return payload;
+    payload.append(endOMFDataMessage());
+    return payload.toString();
   }
 
   /**
