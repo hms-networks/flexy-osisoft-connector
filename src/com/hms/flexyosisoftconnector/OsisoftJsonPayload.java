@@ -4,9 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.hms.flexyosisoftconnector.PayloadBuilder;
 import com.hms_networks.americas.sc.datapoint.DataPoint;
-import com.hms_networks.americas.sc.json.JSONException;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.string.PreAllocatedStringBuilder;
 import com.hms_networks.americas.sc.taginfo.TagConstants;
