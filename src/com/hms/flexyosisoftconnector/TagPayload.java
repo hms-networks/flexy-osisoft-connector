@@ -1,6 +1,7 @@
 package com.hms.flexyosisoftconnector;
 
 import com.hms_networks.americas.sc.datapoint.DataPoint;
+import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.string.PreAllocatedStringBuilder;
 
 /**
@@ -18,7 +19,12 @@ public class TagPayload {
 
   /** Constructs a new empty payload. */
   public TagPayload() {
-    payload = new PreAllocatedStringBuilder(OsisoftJsonPayload.MAX_PAYLOAD_NUM_CHARACTERS);
+    if(OsisoftJsonPayload.MAX_PAYLOAD_NUM_CHARACTERS == OsisoftJsonPayload.UNINITIALIZED_INTEGER){
+      Logger.LOG_SERIOUS("The OSIsoftJSONPayload class has not been initialized.");
+      Logger.LOG_SERIOUS("Unable to allocate space for a new PreAllocatedStringBuilder object.");
+    } else {
+      payload = new PreAllocatedStringBuilder(OsisoftJsonPayload.MAX_PAYLOAD_NUM_CHARACTERS);
+    }
   }
 
   /**
