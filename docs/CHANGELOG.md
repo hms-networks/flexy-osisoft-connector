@@ -1,5 +1,34 @@
 # Flexy OSIsoft Changelog
 
+## v2.0
+### Major Changes
++ Added new logic to add data points to a payload
++ Refactored mechanism to send data points to OSIsoft
++ Refactored to make use of SC data point library
++ Refactored to make use of SC file util library
++ Refactored to make use of SC historical data queue library
++ Refactored to make use of SC JSON library
++ Refactored to make use of SC logger library
++ Refactored to make use of SC string library
++ Refactored to make use of SC tag info library
+### Minor Changes
++ Various adjustments to log messages.
+
+
+## v1.0
+### Major Changes
++ Added in support for OMF while retaining support for old versions of piwebapi
++ Communication type can be changed in json file through new config setting
+### Minor Changes
++ None
+
+## v0.4
+### Major Changes
++ None
+### Minor Changes
++ X-Requested-With header added to webapi calls
++ eWON Boolean tags now map to Digital types in OSIsoft
+
 ## v0.3
 ### Major Changes
 #### Configuration Webpage
