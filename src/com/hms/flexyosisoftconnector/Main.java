@@ -98,6 +98,7 @@ public class Main {
    * Grabs a new set of data points from the top of the queue and feeds each on to payload manager.
    */
   private static void getNewPayloadToSend() {
+    Logger.LOG_DEBUG("Getting next section of datapoints");
     ArrayList queuePoints = new ArrayList();
     try {
       if (!HistoricalDataQueueManager.doesTimeTrackerExist()) {
@@ -109,10 +110,13 @@ public class Main {
       }
     } catch (IOException e) {
       Logger.LOG_EXCEPTION(e);
+      Logger.LOG_WARN(
+          "Exception thrown when obtaining new batch of datapoints. The queue will retry.");
     }
 
     // if there are data points to send
     if (queuePoints.size() != 0) {
+      Logger.LOG_DEBUG("Grabbed " + queuePoints.size() + " datapoints for proccessing.");
       for (int i = 0; i < queuePoints.size(); i++) {
         DataPoint data = ((DataPoint) queuePoints.get(i));
 
