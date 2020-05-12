@@ -65,7 +65,7 @@ public class Main {
     TagInfoManager.refreshTagList();
 
     payloadMngr = new PayloadManager(OSIsoftConfig.getCommunicationType());
-    
+
     piServer = new OSIsoftServer();
 
     int res;
