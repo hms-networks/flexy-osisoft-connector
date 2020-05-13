@@ -105,7 +105,7 @@ public class OsisoftJsonPayload {
       Logger.LOG_SERIOUS("Invalid communication type set. Please check the config file settings.");
     }
 
-    final int byteSizePerDataPoint = 80;
+    final int byteSizePerDataPoint = 110;
     final int byteSizeForStartAndEnd = 200;
     MAX_PAYLOAD_NUM_CHARACTERS = (MAX_DATA_POINTS * byteSizePerDataPoint) + byteSizeForStartAndEnd;
     payload = new PreAllocatedStringBuilder(MAX_PAYLOAD_NUM_CHARACTERS);
