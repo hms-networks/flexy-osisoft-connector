@@ -53,7 +53,7 @@ public class DataPoster extends Thread {
       // thread finished
       Thread.yield();
       try {
-        final int sleepTimeMs = 1000;
+        final int sleepTimeMs = 100;
         Thread.sleep(sleepTimeMs);
       } catch (InterruptedException e) {
         Logger.LOG_SERIOUS("Unable to sleep connected DataPoster thread.");
