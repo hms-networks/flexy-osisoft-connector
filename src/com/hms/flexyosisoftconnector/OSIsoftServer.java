@@ -260,12 +260,12 @@ public class OSIsoftServer {
   public int initTags() throws JSONException {
     int retval = NO_ERROR;
     int res;
+    final String responseFilename = "/usr/response.json";
 
     switch (OSIsoftConfig.getCommunicationType()) {
         // OMF setup
       case OSIsoftConfig.omf:
         // setup type
-        String responseFilename = "/usr/response.txt";
         String messageTypeHeader = "&messagetype=type";
 
         String payload = PayloadBuilder.getTypeBody();
@@ -297,6 +297,38 @@ public class OSIsoftServer {
                   "",
                   responseFilename);
           if (res != NO_ERROR) retval = res;
+        }
+        break;
+        // OMF OCS setup
+      case OSIsoftConfig.OCS:
+        // setup type
+        final String ocsMessageTypeHeader = "&messagetype=type";
+
+        final String ocsPayload = PayloadBuilder.getTypeBody();
+        res =
+            RequestHTTPS(
+                OSIsoftConfig.getOcsUrl(),
+                "Post",
+                OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+                ocsPayload,
+                "",
+                responseFilename);
+
+        // setup containers
+        messageTypeHeader = "&messagetype=container";
+
+        // initialize tag containers
+        payload = PayloadBuilder.getContainerSettingJson();
+        res =
+            RequestHTTPS(
+                OSIsoftConfig.getOcsUrl(),
+                "Post",
+                OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
+                payload,
+                "",
+                responseFilename);
+        if (res != NO_ERROR) {
+          retval = res;
         }
         break;
         // legacy PIWEBAPI setup
@@ -352,6 +384,43 @@ public class OSIsoftServer {
       return false;
     }
     return true;
+  }
+  
+  /**
+   * Posts the OMF batch to OSIsoft Cloud Services.
+   *
+   * @param payload the payload to post
+   * @return returns the http response code
+   */
+  public static boolean postOcsBatch(String payload) {
+
+    String postHeaderType = "&messagetype=type";
+
+    int res = NO_ERROR;
+    boolean requestSuccessful = false;
+
+    try {
+      postHeaderType = "&messagetype=data";
+      String responseFilename = "/usr/response.txt";
+
+      // posting OMF batch
+      res =
+          RequestHTTPS(
+              OSIsoftConfig.getOcsUrl(),
+              "Post",
+              OSIsoftConfig.getOcsPostHeaders() + postHeaderType,
+              payload,
+              "",
+              responseFilename);
+
+    } catch (JSONException e) {
+      Logger.LOG_SERIOUS("Exception caught on posting omf data points.");
+      Logger.LOG_EXCEPTION(e);
+    }
+    if (res == NO_ERROR) {
+      requestSuccessful = true;
+    }
+    return requestSuccessful;
   }
 
   /**
