@@ -40,6 +40,12 @@ public class DataPoster extends Thread {
           case OSIsoftConfig.piwebapi:
             retval = OSIsoftServer.postBatch(payload);
             break;
+          case OSIsoftConfig.OCS:
+            // see if we need to update the OCS token
+            OSIsoftConfig.updateOcsToken();
+            // send the data after updating
+            retval = OSIsoftServer.postOcsBatch(payload);
+            break;
           default:
             Logger.LOG_SERIOUS(OSIsoftConfig.COM_ERR_MSG);
             break;
