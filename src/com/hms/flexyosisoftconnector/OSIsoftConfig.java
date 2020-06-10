@@ -1,12 +1,17 @@
 package com.hms.flexyosisoftconnector;
 
+import com.ewon.ewonitf.EWException;
+import com.ewon.ewonitf.ScheduledActionManager;
 import com.ewon.ewonitf.SysControlBlock;
+import com.ewon.ewonitf.TagControl;
 import com.hms_networks.americas.sc.fileutils.FileAccessManager;
 import com.hms_networks.americas.sc.json.JSONException;
 import com.hms_networks.americas.sc.json.JSONObject;
 import com.hms_networks.americas.sc.json.JSONTokener;
 import com.hms_networks.americas.sc.logging.Logger;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 /**
  * This class contains the configuration for the Flexy <-> OSIsoft connection
@@ -45,6 +50,9 @@ public class OSIsoftConfig {
   /** The string stored in the config file when a user sets it to OMF */
   private static String post2019 = "omf";
 
+  /** The string stored in the config file when a user sets it to OMF via OCS */
+  private static String omfOcs = "omfOcs";
+
   /** The string stored in the config file when chosing OMF in the web config page */
   private static String secondPre2019 = "PI Web API 2018 and older";
 
@@ -55,6 +63,8 @@ public class OSIsoftConfig {
   public static final int piwebapi = 0;
   /** OMF communication type */
   public static final int omf = 1;
+  /** OCS communication type */
+  public static final int OCS = 2;
 
   /** Error message to be displayed on invalid communication type */
   public static final String COM_ERR_MSG = "Error: Communication type is not valid.";
@@ -74,8 +84,17 @@ public class OSIsoftConfig {
   /** Post headers for OMF */
   private static String omfPostHeaders;
 
+  /** Post headers for OCS */
+  private static String ocsPostHeaders;
+
   /** Unique type for OMF messages from this flexy */
   private static String typeID;
+
+  /** Access token for OCS OMF. The token expires every hour. */
+  private static String ocsOmfToken;
+
+  /** OCS OMF URL for making requests to OCS. */
+  private static String ocsUrl;
 
   /**
    * Initializes the configuration class and all required information.
@@ -115,6 +134,10 @@ public class OSIsoftConfig {
     } else if (tmpCommunicationType.equalsIgnoreCase(post2019)
         || tmpCommunicationType.equalsIgnoreCase(secondPost2019)) {
       communicationType = omf;
+    } else if (tmpCommunicationType.equalsIgnoreCase(omfOcs)) {
+      communicationType = OCS;
+      setOcsToken();
+      Logger.LOG_DEBUG("The Flexy configuration file has been set to use OMF OCS.");
     } else {
       // can't do anything without a valid communication type..
       Logger.LOG_SERIOUS("Invalid communication type in config json");
@@ -133,6 +156,22 @@ public class OSIsoftConfig {
       }
     }
 
+    if (communicationType == OCS) {
+      // grab OCS specific information from config file
+      String namespace = "";
+      String tenantId = "";
+
+      namespace = serverConfig.getString("namespace");
+      tenantId = serverConfig.getString("tenantId");
+
+      ocsUrl =
+          "https://dat-b.osisoft.com/api/v1/Tenants/"
+              + tenantId
+              + "/Namespaces/"
+              + namespace
+              + "/omf";
+    }
+
     targetURL = "https://" + piServerIP + "/piwebapi/";
     omfUrl = targetURL + "omf";
     typeID = "HMS-type-" + flexyName;
@@ -146,7 +185,102 @@ public class OSIsoftConfig {
             + "&Content-Type=application/json"
             + "&X-Requested-With=JSONHttpRequest"
             + "&messageformat=json&omfversion=1.1";
+    ocsPostHeaders =
+        "Authorization=Bearer "
+            + OSIsoftConfig.getOcsToken()
+            + "&Content-Type=application/json"
+            + "&messageformat=json&omfversion=1.1"
+            + "&Producertoken="
+            + OSIsoftConfig.getOcsToken();
+
     setFlexyName();
+  }
+
+  /**
+   * The token will be retrieved in a BASIC script due to issues with the request when made in Java.
+   * Assume the response file exists and read from it.
+   */
+  private static void setOcsToken() {
+    // file name hardcoded in basic script and should never change.
+    String tokenFile = "/usr/token.json";
+    JSONTokener JsonT = null;
+    String token = "";
+    try {
+      JsonT = new JSONTokener(FileAccessManager.readFileToString(tokenFile));
+      // Build a JSON Object containing the whole file
+      JSONObject tokenJSON = new JSONObject(JsonT);
+
+      token = tokenJSON.getString("access_token");
+    } catch (IOException e) {
+      Logger.LOG_SERIOUS("Unable to read OCS token from https request response file.");
+      Logger.LOG_EXCEPTION(e);
+    } catch (JSONException e) {
+      Logger.LOG_SERIOUS(
+          "Unable to parse JSON in OCS token response file from OCS new token https request.");
+      Logger.LOG_EXCEPTION(e);
+    }
+
+    // Set the access token
+    ocsOmfToken = token;
+  }
+
+  /**
+   * This function need to have a basic script running that is specified in the README. Updates the
+   * OCS token if the OCS token tag is not set to 0. This tag will then be reset to 0.
+   */
+  public static void updateOcsToken() {
+
+    /* Ensure the JVM and basic script are working together by checking the value of a tag is 0.
+     * The basic script will increment the tag value by 1 every time a new request is sent.
+     * The Java program should reset that tag to 0 after the request's response file is handled.
+     */
+    final int tagInitialValue = 0;
+
+    // check tag to see if it is {@link TAG_INITIAL_VALUE}
+    TagControl tc = null;
+    try {
+      tc = new TagControl("tokenReq");
+
+    } catch (EWException e) {
+      Logger.LOG_SERIOUS("Unable to read OCS token requester tag.");
+      Logger.LOG_SERIOUS(
+          "Please make sure the tag 'tokenReq' exists and the tag datatype is set to integer.");
+      Logger.LOG_EXCEPTION(e);
+    }
+
+    int tagValue = tc.getTagValueAsInt();
+
+    if (tagValue > tagInitialValue) {
+
+      // if tag is not TAG_INITIAL_VALUE
+      setOcsToken();
+
+      // reset tag to TAG_INITIAL_VALUE
+      try {
+        tc.setTagValueAsInt(tagInitialValue);
+      } catch (EWException e) {
+        Logger.LOG_SERIOUS("Unable to change OCS token requester tag value.");
+        Logger.LOG_EXCEPTION(e);
+      }
+    }
+  }
+
+  /**
+   * Get the OCS URL.
+   *
+   * @return the OCS URL
+   */
+  public static String getOcsUrl() {
+    return ocsUrl;
+  }
+
+  /**
+   * Get the OCS OMF access token.
+   *
+   * @return
+   */
+  public static String getOcsToken() {
+    return ocsOmfToken;
   }
 
   /**
@@ -271,5 +405,14 @@ public class OSIsoftConfig {
    */
   public static int getCommunicationType() {
     return communicationType;
+  }
+
+  /**
+   * Get the headers specific to OCS.
+   *
+   * @return the OCS headers
+   */
+  public static String getOcsPostHeaders() {
+    return ocsPostHeaders;
   }
 }
