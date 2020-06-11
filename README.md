@@ -22,9 +22,15 @@ This application is supported by HMS' North American offices.
    3. [Installation](#Installation)
    4. [Running](#Running)
 2. [Certificates](#Certificates)
+   1. [Generate The Certificate](#generate-the-certificate)
+   2. [Install The Certificate On Server](#install-the-certificate-on-server)
+   3. [Transfer Certificate To Flexy](#transfer-certificate-to-flexy)
 3. [Configuration File](#Configuration-File)
-4. [Tag Configuration](#Tag-Configuration)
-5. [Customizing the Application](#Customizing-the-application)
+4. [Customizing The Application](#Customizing-the-application)
+5. [Tag Configuration](#Tag-Configuration)
+6. [OMF Support](#OMF-Support)
+7. [OSIsoft Cloud Service](#OSIsoft-Cloud-Service)
+8. [Troubleshooting Common Issues](#Troubleshooting-common-issues)
 
 ## Getting Started
 
@@ -171,6 +177,113 @@ The OSIsoft connector now has the ability to support OMF. To enable OMF follow t
    1. Make sure there is a green checkmark next to every field.
    1. IMPORTANT: The PI Data Archive Server can disconnect for various reasons. Make sure this is connected if you have a connection issue.
    1. Click confirm and finish running the utility.
+
+## OSIsoft Cloud Service
+
+### OCS Account Setup
+The OSIsoft connector supports an OCS connection. To make use of this feature, follow the below steps.
+1. First create an OCS account.
+1. Under the namespace tab, create an OCS namespace of your choosing.
+   1. Save the namespace for later use. It will be needed in another step.
+1. Under the client tab, create a client.
+   1. Select "Client-Credentials" as the client type.
+   1. Click the "Add Client button.
+   1. Give the client a name. NOTE: the client will be the Flexy device.
+   1. Select the "Account Administrator" role which will check all the role selection boxes.
+   1. Make sure the token lifetime is set to 3600 seconds.
+   1. Add a secret decription of your choosing.
+   1. Check the box that says "Never Expires".
+   1. Click "Add".
+   1. Copy both the client ID and client secret to use later.
+1. Under the connections tab, create a new client connection.
+   1. Select OMF as the connection type.
+   1. Click the "Add Connection" button.
+   1. Enter the connection name, and hit next.
+   1. Select the client you just created and hit next.
+   1. Select the namespace you created and hit next.
+   1. Click the "Save" button.
+   1. Expand the dropdown menu that now shows up under the list of clients.
+   1. Click on your new client, more details will be available on the right hand panel.
+1. Obtain the Client ID.
+   1. Navigate to the namespace tab.
+   1. Select your namespace.
+   1. Click the "Display Details" button.
+   1. Copy the Account id for later use. This is your tenant ID.
+   
+The namespace and tenantId will need to be added to the ConnectorConfig file and uploaded to the Flexy.
+The Client ID and the Client Secret will be needed for the basic script you will have running on the Flexy.
+
+### Flexy OCS Configuration File Changes
+1. Add OCS information to the ConnectorConfig.json file.
+   1. Replace the xxx below with your namespace.
+   1. Replace the yyy below with your tenant ID.
+   1. Copy these into the ServerConfig portion of the json file.
+      ```
+      "Namespace":"xxx",
+      "TenantId":"yyy"
+      ```
+   1. Make sure that the JSON formatting is valid. Below is an example of a properly formatted configuration file.
+   ```
+   {
+   "ServerConfig":{
+      "IP":"192.168.1.8",
+      "WebID":"F1DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPUC0wQ1MyUDFT",
+      "Credentials":"dsZtOnBfdsjklfh==",
+      "Namespace":"testNameSpace1",
+      "TenantId":"4da89f7d-b3ce-48a6-b906-b96c367000a9"
+   },
+   "eWONConfig":{
+      "CertificatePath":"/usr"
+   },
+   "AppConfig": {
+       "LoggingLevel": 4,
+       "CycleTimeMs": 1000,
+       "CommunicationType": "omfOcs",
+       "PostDuplicateTagValues": false
+       }
+   }
+   ```
+   1. Upload the updated ConnectorConfig.json file to the /usr directory of your Flexy.
+
+### Flexy OCS BASIC Script
+1. Create a tag in your Flexy for the Basic script to store information.
+   1. On the Flexy's web page, click to expand the "Tags" section.
+   1. Click the "Values" tab.
+   1. Click the "MODE" slider to say "setup".
+   1. Click the "Add" button.
+   1. Enter the tag name "tokenReq".
+   1. Under the "I/O Server Setup" section, change the type to "Integer".
+   1. Leave everything else as the default values and click "Add Tag" at the bottom right of the window.
+
+1. Obtain URL encoded client Id and client secret.
+   1. In a web browser such as Internet Explorer or Chrome, navigate to the website https://www.urlencoder.org/
+   1. Copy your client ID into the encoder section of that website.
+   1. Leave the destination character set as UTF-8.
+   1. Leave the destination newline seperator as LF (Unix).
+   1. Hit Encode.
+   1. Copy out the encoded client id and save for later use.
+   1. Copy your client secret into the encoder section of that website.
+   1. Leave the destination character set as UTF-8.
+   1. Leave the destination newline seperator as LF (Unix).
+   1. Hit Encode.
+   1. Copy out your encoded client secret for later use.
+
+
+1. Import the below basic script to the Flexy Basic IDE.
+   1. On the Flexy's web page, click to expand the "Setup" section.
+   1. Click on the "BASIC IDE" tab.
+   1. Click "File".
+   1. Click "Import".
+   1. Click "Select".
+   1. Navigate to the unzipped directory of the OSIsoft Connector and select the file "OcsBasicScript.txt"
+   1. Click "Import".
+   1. Change the xxxxxx for client ID to be your URL encoded client id that you saved previously.
+   1. Change the yyyyyy for client secret your URL encoded client secret you saved previously.
+   1. Click on "File".
+   1. Click on "Save".
+   1. Click on the script execution slider that says "Stopped" to switch it to say "Running".
+   
+You can now restart your Flexy to restart the Java application. Messages will be sent to your OCS endpoint.
 
 ## Troubleshooting common issues
 
