@@ -264,7 +264,7 @@ public class OSIsoftServer {
 
     switch (OSIsoftConfig.getCommunicationType()) {
         // OMF setup
-      case OSIsoftConfig.omf:
+      case OSIsoftConfig.OMF:
         // setup type
         String messageTypeHeader = "&messagetype=type";
 
@@ -332,7 +332,7 @@ public class OSIsoftServer {
         }
         break;
         // legacy PIWEBAPI setup
-      case OSIsoftConfig.piwebapi:
+      case OSIsoftConfig.PI_WEB_API:
         // web id's are stored in the payload builder
         PayloadBuilder.initWebIdList();
 
