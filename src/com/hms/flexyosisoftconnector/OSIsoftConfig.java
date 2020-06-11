@@ -265,7 +265,7 @@ public class OSIsoftConfig {
   }
 
   /**
-   * Get the comminucation type.
+   * Get the communication type.
    *
    * @return the communication type
    */
