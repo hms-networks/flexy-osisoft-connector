@@ -131,9 +131,12 @@ public class OSIsoftConfig {
     if (tmpCommunicationType.equalsIgnoreCase(pre2019)
         || tmpCommunicationType.equalsIgnoreCase(secondPre2019)) {
       communicationType = PI_WEB_API;
+      Logger.LOG_DEBUG(
+          "The Flexy configuration file has been set to use PIWEBAPI as the communication type.");
     } else if (tmpCommunicationType.equalsIgnoreCase(post2019)
         || tmpCommunicationType.equalsIgnoreCase(secondPost2019)) {
       communicationType = OMF;
+      Logger.LOG_DEBUG("The Flexy configuration file has been set to use OMF with PIWEBAPI.");
     } else if (tmpCommunicationType.equalsIgnoreCase(omfOcs)) {
       communicationType = OCS;
       setOcsToken();
