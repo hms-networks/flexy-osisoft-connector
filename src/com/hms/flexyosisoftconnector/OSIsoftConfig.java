@@ -60,9 +60,9 @@ public class OSIsoftConfig {
   private static String secondPost2019 = "PI Web API 2019+";
 
   /** PIWebAPI comminucation type */
-  public static final int piwebapi = 0;
+  public static final int PI_WEB_API = 0;
   /** OMF communication type */
-  public static final int omf = 1;
+  public static final int OMF = 1;
   /** OCS communication type */
   public static final int OCS = 2;
 
@@ -130,10 +130,10 @@ public class OSIsoftConfig {
     String tmpCommunicationType = appConfig.getString("CommunicationType");
     if (tmpCommunicationType.equalsIgnoreCase(pre2019)
         || tmpCommunicationType.equalsIgnoreCase(secondPre2019)) {
-      communicationType = piwebapi;
+      communicationType = PI_WEB_API;
     } else if (tmpCommunicationType.equalsIgnoreCase(post2019)
         || tmpCommunicationType.equalsIgnoreCase(secondPost2019)) {
-      communicationType = omf;
+      communicationType = OMF;
     } else if (tmpCommunicationType.equalsIgnoreCase(omfOcs)) {
       communicationType = OCS;
       setOcsToken();

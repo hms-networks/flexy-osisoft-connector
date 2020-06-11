@@ -34,10 +34,10 @@ public class DataPoster extends Thread {
 
         boolean retval = false;
         switch (OSIsoftConfig.getCommunicationType()) {
-          case OSIsoftConfig.omf:
+          case OSIsoftConfig.OMF:
             retval = OSIsoftServer.postOMFBatch(payload);
             break;
-          case OSIsoftConfig.piwebapi:
+          case OSIsoftConfig.PI_WEB_API:
             retval = OSIsoftServer.postBatch(payload);
             break;
           case OSIsoftConfig.OCS:

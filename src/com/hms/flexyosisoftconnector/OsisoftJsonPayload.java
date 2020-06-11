@@ -100,8 +100,8 @@ public class OsisoftJsonPayload {
    */
   public OsisoftJsonPayload(int comType) {
 
-    if (comType != OSIsoftConfig.piwebapi && comType != OSIsoftConfig.omf) {
-      comType = OSIsoftConfig.omf;
+    if (comType != OSIsoftConfig.PI_WEB_API && comType != OSIsoftConfig.OMF) {
+      comType = OSIsoftConfig.OMF;
       Logger.LOG_SERIOUS("Invalid communication type set. Please check the config file settings.");
     }
 
@@ -177,10 +177,10 @@ public class OsisoftJsonPayload {
     String startOfPayload;
 
     switch (communicationType) {
-      case OSIsoftConfig.omf:
+      case OSIsoftConfig.OMF:
         startOfPayload = PayloadBuilder.startOMFDataMessage();
         break;
-      case OSIsoftConfig.piwebapi:
+      case OSIsoftConfig.PI_WEB_API:
         startOfPayload = PayloadBuilder.startBatchOldFormat();
         break;
       default:
@@ -262,12 +262,12 @@ public class OsisoftJsonPayload {
     }
 
     switch (communicationType) {
-      case OSIsoftConfig.omf:
+      case OSIsoftConfig.OMF:
         newPayloadPart =
             PayloadBuilder.addPointToOMFDataMessage(
                 dataPoint.getValueString(), timestamp, isFirstPoint);
         break;
-      case OSIsoftConfig.piwebapi:
+      case OSIsoftConfig.PI_WEB_API:
         newPayloadPart = PayloadBuilder.addPointOldFormat(dataPoint, dataPointsEncounteredCount);
         break;
       default:
