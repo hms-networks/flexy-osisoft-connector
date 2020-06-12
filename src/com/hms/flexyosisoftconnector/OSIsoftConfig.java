@@ -164,8 +164,8 @@ public class OSIsoftConfig {
       String namespace = "";
       String tenantId = "";
 
-      namespace = serverConfig.getString("namespace");
-      tenantId = serverConfig.getString("tenantId");
+      namespace = serverConfig.getString("Namespace");
+      tenantId = serverConfig.getString("TenantId");
 
       ocsUrl =
           "https://dat-b.osisoft.com/api/v1/Tenants/"
