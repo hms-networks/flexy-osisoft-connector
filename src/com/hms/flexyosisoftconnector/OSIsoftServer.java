@@ -262,6 +262,10 @@ public class OSIsoftServer {
     int res;
     final String responseFilename = "/usr/response.json";
 
+    // initialize list of tag containers
+    final int numTagsInList = TagInfoManager.getTagInfoList().size();
+    final int numTagsInitializing = 100;
+
     switch (OSIsoftConfig.getCommunicationType()) {
         // OMF setup
       case OSIsoftConfig.OMF:
@@ -280,11 +284,6 @@ public class OSIsoftServer {
 
         // setup containers
         messageTypeHeader = "&messagetype=container";
-
-        // set batch buffer with list of tag containers to initialize for if they have not been
-        // already
-        final int numTagsInList = TagInfoManager.getTagInfoList().size();
-        final int numTagsInitializing = 100;
 
         for (int currentTagIndex = 0; currentTagIndex < numTagsInList; currentTagIndex += numTagsInitializing) {
           payload = PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
@@ -318,17 +317,21 @@ public class OSIsoftServer {
         messageTypeHeader = "&messagetype=container";
 
         // initialize tag containers
-        payload = PayloadBuilder.getContainerSettingJson();
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOcsUrl(),
-                "Post",
-                OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
-                payload,
-                "",
-                responseFilename);
-        if (res != NO_ERROR) {
-          retval = res;
+        for (int currentTagIndex = 0;
+            currentTagIndex < numTagsInList;
+            currentTagIndex += numTagsInitializing) {
+          payload = PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
+          res =
+              RequestHTTPS(
+                  OSIsoftConfig.getOcsUrl(),
+                  "Post",
+                  OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
+                  payload,
+                  "",
+                  responseFilename);
+          if (res != NO_ERROR) {
+            retval = res;
+          }
         }
         break;
         // legacy PIWEBAPI setup
