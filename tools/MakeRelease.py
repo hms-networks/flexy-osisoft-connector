@@ -52,7 +52,7 @@ def MinifyWebFiles():
          minFilename = os.path.splitext(filename)[0] + ".min.js"
          retval = call(["java", "-jar", JAVA_JS_COMPILER,JAVA_JS_COMP_LEVEL, JAVA_JS_WARN_LEVEL,"--js_output_file=\"" + JS_MIN_PATH + minFilename + "\"", JS_PATH + filename])
          if (retval != 0):
-            print "Something went wrong in minification of " + filename + " return value: " + retval
+            print("Something went wrong in minification of " + filename + " return value: " + retval)
 
    #CSS
    #create css/min directory, yuicomplier cannot do this
@@ -64,7 +64,7 @@ def MinifyWebFiles():
          minFilename = os.path.splitext(filename)[0] + ".min.css"
          retval = call(["java", "-jar", JAVA_CSS_COMPILER, "--type", "css", "-o", CSS_MIN_PATH + minFilename, CSS_PATH + filename])
          if (retval != 0):
-            print "Something went wrong in minification of " + filename + " return value: " + retval
+            print("Something went wrong in minification of " + filename + " return value: " + retval)
 
 def CreateRelease(version):
 
@@ -99,12 +99,12 @@ def CreateRelease(version):
    #Close the release zip folder
    zf.close()
 
-   print "\nSuccessfully made release: " + releaseFilename + ".zip"
+   print("\nSuccessfully made release: " + releaseFilename + ".zip")
 
 if __name__ == '__main__':
 
    if len(sys.argv) != 2:
-      print "Usage: MakeRelease.py versionNumber"
+      print("Usage: MakeRelease.py versionNumber")
       sys.exit(0)
 
    CreateRelease(sys.argv[1])
