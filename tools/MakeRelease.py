@@ -25,18 +25,19 @@ ZIP_CONNECTOR_JS_PATH = ZIP_CONNECTOR_PATH + "js/"
 ZIP_CONNECTOR_CSS_PATH = ZIP_CONNECTOR_PATH + "css/"
 
 #File names for release files
-README_FILENAME    = "README.md"
-CHANGELOG_FILENAME = "CHANGELOG.md"
-JAR_FILENAME       = PROJECT_NAME + ".jar"
-CONFIG_FILENAME    = "ConnectorConfig.json"
-JVMRUN_FILENAME    = "jvmrun"
+README_FILENAME     = "README.md"
+CHANGELOG_FILENAME  = "CHANGELOG.md"
+JAR_FILENAME        = PROJECT_NAME + ".jar"
+CONFIG_FILENAME     = "ConnectorConfig.json"
+JVMRUN_FILENAME     = "jvmrun"
+OCS_SCRIPT_FILENAME = "OcsBasicScript.bas";
 
 #Paths for release files
 README_PATH    = "../"
 CHANGELOG_PATH = "../docs/"
 JAR_PATH       = "../build/"
 CONFIG_PATH    = "../config/"
-JVMRUN_PATH    = "../scripts/"
+SCRIPTS_PATH   = "../scripts/"
 
 #Web file paths
 WEB_PATH     = "../web/"
@@ -82,7 +83,8 @@ def CreateRelease(version):
    zf.write(os.path.abspath(os.path.join(CHANGELOG_PATH,CHANGELOG_FILENAME)), CHANGELOG_FILENAME)
    zf.write(os.path.abspath(os.path.join(JAR_PATH,JAR_FILENAME)), ZIP_CONNECTOR_PATH + JAR_FILENAME)
    zf.write(os.path.abspath(os.path.join(CONFIG_PATH,CONFIG_FILENAME)), ZIP_CONNECTOR_PATH + CONFIG_FILENAME)
-   zf.write(os.path.abspath(os.path.join(JVMRUN_PATH,JVMRUN_FILENAME)), ZIP_CONNECTOR_PATH + JVMRUN_FILENAME)
+   zf.write(os.path.abspath(os.path.join(SCRIPTS_PATH,JVMRUN_FILENAME)), ZIP_CONNECTOR_PATH + JVMRUN_FILENAME)
+   zf.write(os.path.abspath(os.path.join(SCRIPTS_PATH,OCS_SCRIPT_FILENAME)), ZIP_CONNECTOR_PATH + OCS_SCRIPT_FILENAME)
 
    #web
    MinifyWebFiles()
