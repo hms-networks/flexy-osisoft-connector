@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## v2.1
+### Major Changes
++ Added Support for OCS with OMF.
+### Minor Changes
++ Connector Configuration file has new OCS specific additions
+
 ## v2.0
 ### Major Changes
 + Added new logic to add data points to a payload
