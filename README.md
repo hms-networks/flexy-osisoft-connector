@@ -110,8 +110,6 @@ static String eWONCertificatePath = "/usr/Certificates";
       "CertificatePath":"/usr/Certificates"
    },
    "AppConfig":{
-      "CycleTimeMs":1000,
-      "PostDuplicateTagValues": false,
       "CommunicationType":"omf"
    }
 }
@@ -237,9 +235,7 @@ The Client ID and the Client Secret will be needed for the basic script you will
    },
    "AppConfig": {
        "LoggingLevel": 4,
-       "CycleTimeMs": 1000,
-       "CommunicationType": "omfOcs",
-       "PostDuplicateTagValues": false
+       "CommunicationType": "omfOcs"
        }
    }
    ```

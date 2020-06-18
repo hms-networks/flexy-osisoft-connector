@@ -35,9 +35,6 @@ public class OSIsoftConfig {
   /** Path to the directory containing your OSIsoft server's certificate */
   private static String ewonCertificatePath;
 
-  /** Update rate for all tags in milliseconds */
-  private static int cycleTimeMs;
-
   /**
    * String converted to int for use in switch statement. Either (0) pre2019 for piwebapi or (1)
    * post2019 for OMF
@@ -125,7 +122,6 @@ public class OSIsoftConfig {
 
     // Build a JSON Object containing the "AppConfig"
     JSONObject appConfig = configJSON.getJSONObject("AppConfig");
-    cycleTimeMs = appConfig.getInt("CycleTimeMs");
 
     String tmpCommunicationType = appConfig.getString("CommunicationType");
     if (tmpCommunicationType.equalsIgnoreCase(pre2019)
@@ -149,8 +145,6 @@ public class OSIsoftConfig {
       Logger.LOG_SERIOUS("OSIsoft connector Shutting down.");
       System.exit(1);
     }
-
-    boolean shouldLogDuplicateValues = appConfig.getBoolean("PostDuplicateTagValues");
 
     if (appConfig.has("LoggingLevel")) {
       boolean res = Logger.SET_LOG_LEVEL(appConfig.getInt("LoggingLevel"));
@@ -320,15 +314,6 @@ public class OSIsoftConfig {
    */
   public static String getCertificatePath() {
     return ewonCertificatePath;
-  }
-
-  /**
-   * Get the cycle time in milliseconds.
-   *
-   * @return the cycle time in milliseconds
-   */
-  public static int getCycleTimeMs() {
-    return cycleTimeMs;
   }
 
   /**

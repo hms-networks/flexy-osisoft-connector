@@ -8,9 +8,6 @@
       "CertificatePath":"/usr/Certificates"
    },
    "AppConfig":{
-      "CycleTimeMs":1000,
-      "PostDuplicateTagValues": false,
       "CommunicationType":"omf"
-   },
-   "TagList":["ExampleTag1", "ExampleTag2", "ExampleTag3", "ExampleTag4"]
+   }
 }
