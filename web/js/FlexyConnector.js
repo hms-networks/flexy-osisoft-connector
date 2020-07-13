@@ -24,10 +24,8 @@ function saveJSON()
    jsonObject.eWONConfig = { CertificatePath: CertificatePath };
 
    //Fetch the AppConfig
-   var CycleTimeMs = document.getElementById("CycleTimeMs").value;
-   var PostDuplicateTagValues = document.getElementById("PostDuplicateTagValues").value;
    var CommunicationType = document.getElementById("CommunicationType").value;
-   jsonObject.AppConfig = { CycleTimeMs: CycleTimeMs, PostDuplicateTagValues: PostDuplicateTagValues, CommunicationType: CommunicationType };
+   jsonObject.AppConfig = { CommunicationType: CommunicationType };
 
    //Fetch the TagList
    jsonObject.TagList = [];
@@ -159,10 +157,7 @@ function loadPage()
       addCellsInput("OSIsoft Web ID:", obj.ServerConfig.WebID, "WebID", "Invalid WebID");
       addCellsInput("OSIsoft Credentials:", obj.ServerConfig.Credentials, "Credentials", "");
       addCellsInput("Flexy Certificate Path:", obj.eWONConfig.CertificatePath, "CertificatePath", "");
-      addCellsInput("Global Tag Posting Cycle Time (ms):", obj.AppConfig.CycleTimeMs, "CycleTimeMs", "Cycle time must be a positive whole number");
 
-      var options = ["true", "false"];
-      addCellsSelection("Post Duplicate Tag Values:", obj.AppConfig.PostDuplicateTagValues, "PostDuplicateTagValues", options);
       options = ["PI Web API 2018 and older", "PI Web API 2019+"];
       addCellsSelection("Select your version of PI Web API to enable or disable OMF:", obj.AppConfig.communicationType, "CommunicationType", options);
 
@@ -191,9 +186,6 @@ function loadPage()
                break;
             case "CertificatePath":
                break;
-            case "CycleTimeMs":
-               res = validateCycleTime(element.value);
-               break;
             default:
                break;
          }
@@ -215,13 +207,6 @@ function loadPage()
 function validateWebID(id)
 {
    return (id.length === 40);
-}
-
-//Validates a CycleTime
-//Must be a positive whole number
-function validateCycleTime(time)
-{
-   return (/^([0-9]+)$/.test(time));
 }
 
 //Validates an IP Address
