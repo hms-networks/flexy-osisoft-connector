@@ -16,21 +16,27 @@ This application is supported by HMS' North American offices.
 
 ## [Table of Contents](#table-of-contents)
 
-1. [Getting Started](#Getting-Started)
+1. [General Information](#General-Information)
+2. [Getting Started](#Getting-Started)
    1. [Configuration](#Configuration)
    2. [Clock Settings](#Flexy-Clock-Settings)
    3. [Installation](#Installation)
    4. [Running](#Running)
-2. [Certificates](#Certificates)
+3. [Certificates](#Certificates)
    1. [Generate The Certificate](#generate-the-certificate)
    2. [Install The Certificate On Server](#install-the-certificate-on-server)
    3. [Transfer Certificate To Flexy](#transfer-certificate-to-flexy)
-3. [Configuration File](#Configuration-File)
-4. [Customizing The Application](#Customizing-the-application)
-5. [Tag Configuration](#Tag-Configuration)
-6. [OMF Support](#OMF-Support)
-7. [OSIsoft Cloud Service](#OSIsoft-Cloud-Service)
-8. [Troubleshooting Common Issues](#Troubleshooting-common-issues)
+4. [Configuration File](#Configuration-File)
+5. [Customizing The Application](#Customizing-the-application)
+6. [Tag Configuration](#Tag-Configuration)
+7. [OMF Support](#OMF-Support)
+8. [OSIsoft Cloud Service](#OSIsoft-Cloud-Service)
+9. [JVM Logger](#JVM-Logger)
+10. [Troubleshooting Common Issues](#Troubleshooting-common-issues)
+
+## General Information
+The OSIsoft connector makes use of the Flexy's historical logging functionality to send historical data points from a Flexy to OSIsoft PIWebApi. The connector utilizes this functionality to buffer up to 900,000 data points when connection to PIWebApi is lost.
+More information can be found here: [Ewon Historical Logging](https://developer.ewon.biz/content/historical-logging)
 
 ## Getting Started
 
@@ -280,6 +286,31 @@ The Client ID and the Client Secret will be needed for the basic script you will
    1. Click on the script execution slider that says "Stopped" to switch it to say "Running".
    
 You can now restart your Flexy to restart the Java application. Messages will be sent to your OCS endpoint.
+
+## JVM Logger
+The OSIsoft connector uses the [HMS Solution Center logging library](https://github.com/hms-networks/sc-flexy-logger-lib) for application logging to the Ewon Flexy's realtime logs.
+
+To change the logging level in the configuration file, specify the logging level under the AppConfig object.
+LoggingLevel is an optional field in the configuration file and is not required by the application to properly run.
+
+Below is an example of the configuration file set to log general application state information.
+See [Log Level](https://github.com/hms-networks/sc-flexy-logger-lib#log-level) for more information.
+   ```
+   {
+   "ServerConfig":{
+      "IP":"192.168.1.1",
+      "WebID":"F2DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPdaswQ1MyUDFT",
+      "Credentials":"cGFzc3dvcmQ=",
+   },
+   "eWONConfig":{
+      "CertificatePath":"/usr"
+   },
+   "AppConfig": {
+       "LoggingLevel": 4,
+       "CommunicationType": "omf"
+       }
+   }
+   ```
 
 ## Troubleshooting common issues
 
