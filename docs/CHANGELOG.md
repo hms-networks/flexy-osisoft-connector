@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## v2.2
+### Major Changes
++ Updated Solution Center libraries
+### Minor Changes
++ Readme updated
+
 ## v2.1
 ### Major Changes
 + Added Support for OCS with OMF.
