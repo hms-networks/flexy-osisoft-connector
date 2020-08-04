@@ -70,6 +70,16 @@ public class Main {
 
     int res;
     do {
+      // Sleep between initialization attempts to increase Flexy performance.
+      Thread.yield();
+      try {
+        final int threadWaitMS = 5;
+        Thread.sleep(threadWaitMS);
+      } catch (InterruptedException e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_SERIOUS("Exception thrown while sleeping thread.");
+      }
+
       Logger.LOG_INFO("Initializing tags");
       res = piServer.initTags();
 
