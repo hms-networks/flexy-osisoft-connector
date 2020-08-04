@@ -126,6 +126,21 @@ public class Main {
 
     // if there are data points to send
     if (queuePoints.size() != 0) {
+      // Check if queue is behind
+      try {
+        long queueBehindMillis =
+            HistoricalDataQueueManager.getCurrentTimeWithOffset()
+                - HistoricalDataQueueManager.getCurrentTimeTrackerValue();
+        long queueBehindSeconds = queueBehindMillis / 1000;
+        if (queueBehindSeconds >= OSIsoftConfig.WARNING_LIMIT_QUEUE_BEHIND_SECONDS) {
+          Logger.LOG_WARN(
+              "The historical data queue is running behind by " + queueBehindSeconds + " seconds.");
+        }
+      } catch (IOException e) {
+        Logger.LOG_SERIOUS("Unable to detect if historical data queue is running behind.");
+        Logger.LOG_EXCEPTION(e);
+      }
+
       Logger.LOG_DEBUG("Grabbed " + queuePoints.size() + " datapoints for proccessing.");
       for (int i = 0; i < queuePoints.size(); i++) {
         DataPoint data = ((DataPoint) queuePoints.get(i));

@@ -20,6 +20,9 @@ import java.util.Arrays;
  */
 public class OSIsoftConfig {
 
+  /** Number of seconds queue can fall beind before warnings are logged. */
+  public static final int WARNING_LIMIT_QUEUE_BEHIND_SECONDS = 15;
+
   /** IP address of OSIsoft PI Server */
   private static String piServerIP;
 
