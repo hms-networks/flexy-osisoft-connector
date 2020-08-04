@@ -121,7 +121,9 @@ public class Main {
         DataPoint data = ((DataPoint) queuePoints.get(i));
 
         // build a payload out of data points
-        payloadMngr.appendDataPointToPayLoad(data);
+        if (data != null) {
+          payloadMngr.appendDataPointToPayLoad(data);
+        }
 
         // Sleep between datapoints to significantly increase Flexy performance.
         Thread.yield();
