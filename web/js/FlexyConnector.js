@@ -27,17 +27,6 @@ function saveJSON()
    var CommunicationType = document.getElementById("CommunicationType").value;
    jsonObject.AppConfig = { CommunicationType: CommunicationType };
 
-   //Fetch the TagList
-   jsonObject.TagList = [];
-   var tagTableRef = document.getElementById('tagTable').getElementsByTagName('tbody')[0];
-   for (var i = 0, row; row = tagTableRef.rows[i]; i++)
-   {
-      if (row.cells[tagSelectedColumn].children[0].children[0].checked)
-      {
-         jsonObject.TagList.push(row.cells[0].innerText.trim());
-      }
-   }
-
    //Send the JSON file to the eWON
    var xhr = new XMLHttpRequest();
    xhr.onreadystatechange = function ()
