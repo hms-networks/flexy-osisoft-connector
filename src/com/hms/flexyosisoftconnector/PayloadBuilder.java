@@ -312,15 +312,17 @@ public class PayloadBuilder {
       endTagIndex = TagInfoManager.getTagInfoList().size();
     }
     for (int i = startTagIndex; i < endTagIndex; i++) {
+      if (TagInfoManager.getTagInfoList().get(i) != null) {
+        String tagName = ((TagInfo) TagInfoManager.getTagInfoList().get(i)).getName();
 
-      String tagName = ((TagInfo) TagInfoManager.getTagInfoList().get(i)).getName();
+        // after the first tag, separate by comma
+        if (i > startTagIndex) {
+          payload.append(",");
+        }
 
-      // after the first tag, separate by comma
-      if (i > startTagIndex) {
-        payload.append(",");
+        payload.append(
+            "{" + "\"id\": \"" + tagName + "\"," + "\"typeid\": \"" + typeID + "\"" + "}");
       }
-
-      payload.append("{" + "\"id\": \"" + tagName + "\"," + "\"typeid\": \"" + typeID + "\"" + "}");
     }
 
     payload.append(endOMFDataMessage());
