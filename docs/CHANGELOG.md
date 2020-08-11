@@ -1,5 +1,15 @@
 # Flexy OSIsoft Changelog
 
+## v2.3
+### Major Changes
++ Supported storing tags as different data types in OSIsoft with OMF
+### Minor Changes
++ Improved performance during initial connection establishment
++ Adding logging for data queue status
++ Fixed tag indexing error
++ Fixed issue with webpage not saving configurations
++ Accounted for the new tag indexing that includes null points on tag gaps
+
 ## v2.2
 ### Major Changes
 + Updated Solution Center libraries
