@@ -218,22 +218,30 @@ public class PayloadBuilder {
    * @return return the JSON payload for a new OMF data point
    */
   public static String addPointToOMFDataMessage(
-      String tagValue, String timestamp, boolean isFirstPoint) {
+      DataPoint dataPoint, String timestamp, boolean isFirstPoint) {
     String payload = "";
+    String tagValue = "";
 
     if (!isFirstPoint) {
       payload += ",";
     }
 
+    if (dataPoint.getType().equals(DataType.STRING)) {
+      tagValue = "\"" + dataPoint.getValueString() + "\"";
+    } else if (dataPoint.getType().equals(DataType.BOOLEAN)) {
+      // pass 1 and 0 as true and false
+      if (dataPoint.getValueString().equalsIgnoreCase("0")) {
+        tagValue = "false";
+      } else {
+        // boolean is set to true on the flexy
+        tagValue = "true";
+      }
+    } else {
+      tagValue = dataPoint.getValueString();
+    }
+
     payload +=
-        "{"
-            + " \"timestamp\": \""
-            + timestamp
-            + ".000Z\","
-            + " \"tagValue\": \""
-            + tagValue
-            + "\""
-            + "}";
+        "{" + " \"timestamp\": \"" + timestamp + ".000Z\"," + " \"tagValue\": " + tagValue + "}";
 
     return payload;
   }
@@ -257,6 +265,68 @@ public class PayloadBuilder {
   public static String endOMFDataMessage() {
 
     String payload = "]";
+    return payload;
+  }
+
+  /**
+   * Setup the format for how string data from this device will be stored with omf
+   *
+   * @return returns the JSON payload to construct a new Type message.
+   */
+  public static String getStringTypeBody() {
+    return getGenericTypeBody("string");
+  }
+
+  /**
+   * Setup the format for how number data from this device will be stored with omf
+   *
+   * @return returns the JSON payload to construct a new Type message.
+   */
+  public static String getNumberTypeBody() {
+    return getGenericTypeBody("number");
+  }
+
+  /**
+   * Setup the format for how boolean data from this device will be stored with omf
+   *
+   * @return returns the JSON payload to construct a new Type message.
+   */
+  public static String getBooleanTypeBody() {
+    return getGenericTypeBody("boolean");
+  }
+
+  /**
+   * Setup the format for how generic data from this device will be stored with omf
+   *
+   * @return returns the JSON payload to construct a new Type message.
+   */
+  private static String getGenericTypeBody(String type) {
+    String payload =
+        "[{"
+            + "\"id\": \"HMS-"
+            + type
+            + "-type-"
+            + getFlexyName()
+            + "\","
+            + "\"classification\": \"dynamic\","
+            + "\"type\": \"object\","
+            + "\"properties\": {"
+            + "\"timestamp\": {"
+            + "\"type\": \"string\","
+            + "\"format\": \"date-time\","
+            + "\"isindex\": true"
+            + "},"
+            + "\"tagValue\": {"
+            + "\"type\": \""
+            + type
+            + "\","
+            + "\"description\": \"Ewon Flexy's tag value stored as a "
+            + type
+            + "\""
+            + "}"
+            + "}"
+            + "}]";
+
     return payload;
   }
 
@@ -298,7 +368,7 @@ public class PayloadBuilder {
    * @return returns the JSON segment to construct a container for each of the tags.
    */
   public static String getContainerSettingJson(int startTagIndex, int numToProccess) {
-    String typeID = "HMS-type-" + getFlexyName();
+    String typeID;
 
     final int perTagSize = 60;
     final int containerMessageSize = numToProccess * perTagSize;
@@ -313,7 +383,24 @@ public class PayloadBuilder {
     }
     for (int i = startTagIndex; i < endTagIndex; i++) {
       if (TagInfoManager.getTagInfoList().get(i) != null) {
-        String tagName = ((TagInfo) TagInfoManager.getTagInfoList().get(i)).getName();
+        TagInfo currentTag = ((TagInfo) TagInfoManager.getTagInfoList()).get(i);
+        String tagName = currentTag.getName();
+
+        if (currentTag.getType() == TagType.FLOAT) {
+          typeID = "HMS-number-type-" + getFlexyName();
+        } else if (currentTag.getType() == TagType.INTEGER) {
+          typeID = "HMS-number-type-" + getFlexyName();
+        } else if (currentTag.getType() == TagType.BOOLEAN) {
+          typeID = "HMS-boolean-type-" + getFlexyName();
+        } else if (currentTag.getType() == TagType.DWORD) {
+          typeID = "HMS-number-type-" + getFlexyName();
+        } else if (currentTag.getType() == TagType.STRING) {
+          typeID = "HMS-string-type-" + getFlexyName();
+        } else {
+          Logger.LOG_SERIOUS("Unsupported tag type was selected for tag " + tagName);
+          Logger.LOG_SERIOUS(
+              "Please change that tag type to one of the following: Integer, Boolean, DWord, Float, or String.");
+        }
 
         // after the first tag, separate by comma
         if (i > startTagIndex) {
