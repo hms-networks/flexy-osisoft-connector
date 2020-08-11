@@ -264,8 +264,7 @@ public class OsisoftJsonPayload {
     switch (communicationType) {
       case OSIsoftConfig.OMF:
         newPayloadPart =
-            PayloadBuilder.addPointToOMFDataMessage(
-                dataPoint.getValueString(), timestamp, isFirstPoint);
+            PayloadBuilder.addPointToOMFDataMessage(dataPoint, timestamp, isFirstPoint);
         break;
       case OSIsoftConfig.PI_WEB_API:
         newPayloadPart = PayloadBuilder.addPointOldFormat(dataPoint, dataPointsEncounteredCount);
