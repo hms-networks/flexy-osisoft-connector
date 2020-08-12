@@ -9,6 +9,7 @@
 + Fixed tag indexing error
 + Fixed issue with webpage not saving configurations
 + Accounted for the new tag indexing that includes null points on tag gaps
++ Updated libraries
 
 ## v2.2
 ### Major Changes
