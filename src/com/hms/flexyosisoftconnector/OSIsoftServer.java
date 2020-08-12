@@ -280,6 +280,7 @@ public class OSIsoftServer {
                 PayloadBuilder.getStringTypeBody(),
                 "",
                 responseFilename);
+        checkInitResponseCode(res);
 
         res =
             RequestHTTPS(
@@ -289,6 +290,7 @@ public class OSIsoftServer {
                 PayloadBuilder.getNumberTypeBody(),
                 "",
                 responseFilename);
+        checkInitResponseCode(res);
 
         res =
             RequestHTTPS(
@@ -298,6 +300,7 @@ public class OSIsoftServer {
                 PayloadBuilder.getBooleanTypeBody(),
                 "",
                 responseFilename);
+        checkInitResponseCode(res);
 
         // setup containers
         messageTypeHeader = "&messagetype=container";
@@ -329,6 +332,7 @@ public class OSIsoftServer {
                 PayloadBuilder.getStringTypeBody(),
                 "",
                 responseFilename);
+        checkInitResponseCode(res);
 
         res =
             RequestHTTPS(
@@ -338,6 +342,7 @@ public class OSIsoftServer {
                 PayloadBuilder.getStringTypeBody(),
                 "",
                 responseFilename);
+        checkInitResponseCode(res);
 
         res =
             RequestHTTPS(
@@ -347,6 +352,7 @@ public class OSIsoftServer {
                 PayloadBuilder.getNumberTypeBody(),
                 "",
                 responseFilename);
+        checkInitResponseCode(res);
 
         res =
             RequestHTTPS(
@@ -356,6 +362,7 @@ public class OSIsoftServer {
                 PayloadBuilder.getBooleanTypeBody(),
                 "",
                 responseFilename);
+        checkInitResponseCode(res);
 
         // setup containers
         messageTypeHeader = "&messagetype=container";
@@ -396,6 +403,18 @@ public class OSIsoftServer {
     }
 
     return retval;
+  }
+
+  /**
+   * Helper function to print out errors when initializing OMF types or containers.
+   *
+   * @param res The response code of an HTTPS request
+   */
+  private void checkInitResponseCode(int res) {
+    if (res != NO_ERROR) {
+      Logger.LOG_WARN(
+          "The HTTPS request to initialize OMF data points was not completed successfully");
+    }
   }
 
   /**
