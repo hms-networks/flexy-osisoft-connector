@@ -368,7 +368,7 @@ public class PayloadBuilder {
    * @return returns the JSON segment to construct a container for each of the tags.
    */
   public static String getContainerSettingJson(int startTagIndex, int numToProccess) {
-    String typeID;
+    String typeID = "";
 
     final int perTagSize = 60;
     final int containerMessageSize = numToProccess * perTagSize;
