@@ -383,7 +383,7 @@ public class PayloadBuilder {
     }
     for (int i = startTagIndex; i < endTagIndex; i++) {
       if (TagInfoManager.getTagInfoList().get(i) != null) {
-        TagInfo currentTag = ((TagInfo) TagInfoManager.getTagInfoList()).get(i);
+        TagInfo currentTag = (TagInfo) TagInfoManager.getTagInfoList().get(i);
         String tagName = currentTag.getName();
 
         if (currentTag.getType() == TagType.FLOAT) {
