@@ -394,9 +394,13 @@ public class OSIsoftServer {
         PayloadBuilder.initWebIdList();
 
         for (int i = 0; i < TagInfoManager.getTagInfoList().size(); i++) {
-          res = setTagWebId((TagInfo) TagInfoManager.getTagInfoList().get(i));
-          if (res != NO_ERROR) {
-            retval = res;
+          TagInfo tag = (TagInfo) TagInfoManager.getTagInfoList().get(i);
+
+          if (tag != null) {
+            res = setTagWebId(tag);
+            if (res != NO_ERROR) {
+              retval = res;
+            }
           }
         }
 
