@@ -400,6 +400,8 @@ public class OSIsoftServer {
             res = setTagWebId(tag);
             if (res != NO_ERROR) {
               retval = res;
+              Logger.LOG_WARN("There was a problem obtaining the web ID for tag " + tag.getName());
+              Logger.LOG_WARN("This tag will not be updated in OSIsoft.");
             }
           }
         }
