@@ -316,7 +316,9 @@ public class OSIsoftServer {
                   payload,
                   "",
                   responseFilename);
-          if (res != NO_ERROR) retval = res;
+          if (res != NO_ERROR) {
+            retval = res;
+          }
         }
         break;
         // OMF OCS setup
@@ -393,7 +395,9 @@ public class OSIsoftServer {
 
         for (int i = 0; i < TagInfoManager.getTagInfoList().size(); i++) {
           res = setTagWebId((TagInfo) TagInfoManager.getTagInfoList().get(i));
-          if (res != NO_ERROR) return retval = res;
+          if (res != NO_ERROR) {
+            return retval = res;
+          }
         }
 
         break;
