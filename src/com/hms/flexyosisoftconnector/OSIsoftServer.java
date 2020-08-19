@@ -297,6 +297,16 @@ public class OSIsoftServer {
                 OSIsoftConfig.getOmfUrl(),
                 "Post",
                 OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+                PayloadBuilder.getIntegerTypeBody(),
+                "",
+                responseFilename);
+        checkInitResponseCode(res);
+
+        res =
+            RequestHTTPS(
+                OSIsoftConfig.getOmfUrl(),
+                "Post",
+                OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
                 PayloadBuilder.getBooleanTypeBody(),
                 "",
                 responseFilename);
@@ -342,6 +352,16 @@ public class OSIsoftServer {
                 "Post",
                 OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
                 PayloadBuilder.getStringTypeBody(),
+                "",
+                responseFilename);
+        checkInitResponseCode(res);
+
+        res =
+            RequestHTTPS(
+                OSIsoftConfig.getOcsUrl(),
+                "Post",
+                OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+                PayloadBuilder.getIntegerTypeBody(),
                 "",
                 responseFilename);
         checkInitResponseCode(res);

@@ -287,6 +287,15 @@ public class PayloadBuilder {
   }
 
   /**
+   * Setup the format for how integer data from this device will be stored with omf
+   *
+   * @return returns the JSON payload to construct a new Type message.
+   */
+  public static String getIntegerTypeBody() {
+    return getGenericTypeBody("integer");
+  }
+
+  /**
    * Setup the format for how boolean data from this device will be stored with omf
    *
    * @return returns the JSON payload to construct a new Type message.
@@ -389,7 +398,7 @@ public class PayloadBuilder {
         if (currentTag.getType() == TagType.FLOAT) {
           typeID = "HMS-number-type-" + getFlexyName();
         } else if (currentTag.getType() == TagType.INTEGER) {
-          typeID = "HMS-number-type-" + getFlexyName();
+          typeID = "HMS-integer-type-" + getFlexyName();
         } else if (currentTag.getType() == TagType.BOOLEAN) {
           typeID = "HMS-boolean-type-" + getFlexyName();
         } else if (currentTag.getType() == TagType.DWORD) {
