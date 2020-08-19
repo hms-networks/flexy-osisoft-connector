@@ -11,7 +11,7 @@ import com.hms_networks.americas.sc.logging.Logger;
 import java.io.IOException;
 
 /**
- * This class contains the configuration for the Flexy <-> OSIsoft connection
+ * This class contains the configuration for the Flexy to OSIsoft connection.
  *
  * <p>HMS Networks Inc. Solution Center
  */
@@ -274,7 +274,7 @@ public class OSIsoftConfig {
   /**
    * Get the OCS OMF access token.
    *
-   * @return
+   * @return the OCS OMF access token as a string.
    */
   public static String getOcsToken() {
     return ocsOmfToken;

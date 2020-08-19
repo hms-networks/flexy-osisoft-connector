@@ -71,8 +71,8 @@ public class PayloadBuilder {
   /**
    * Builds the JSON contents for a new data point in the payload.
    *
-   * <p>The payload needs a comma before adding the next point, which is added when {@link
-   * #isFirstPoint} is set to false;
+   * <p>The payload needs a comma before adding the next point whenever it is not the first data
+   * point being added.
    *
    * @param tagName the name of the tag
    * @param tagValue the value of the tag
@@ -210,7 +210,7 @@ public class PayloadBuilder {
   /**
    * This constructs a new data point omf message.
    *
-   * @param tagValue data point's value
+   * @param dataPoint the tag's data
    * @param timestamp data point's time stamp
    * @param isFirstPoint marks if this is the first data point in the message
    * @return return the JSON payload for a new OMF data point
