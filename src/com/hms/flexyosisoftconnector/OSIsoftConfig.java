@@ -141,7 +141,8 @@ public class OSIsoftConfig {
       // can't do anything without a valid communication type..
       Logger.LOG_SERIOUS("Invalid communication type in config json");
       Logger.LOG_SERIOUS(
-          "Change the communication Type in config json to one of the valid options in the readme and restart the connector.");
+          "Change the communication Type in config json to one of the valid options in the readme"
+              + " and restart the connector.");
       Logger.LOG_SERIOUS("OSIsoft connector Shutting down.");
       System.exit(1);
     }
@@ -343,9 +344,7 @@ public class OSIsoftConfig {
     return flexyName;
   }
 
-  /**
-   * Set the flexy device name
-   */
+  /** Set the flexy device name */
   public static void setFlexyName() {
     String res = "";
     SysControlBlock SCB;
@@ -357,7 +356,6 @@ public class OSIsoftConfig {
     }
     flexyName = res;
   }
-
 
   /**
    * Get the OMF post Headers

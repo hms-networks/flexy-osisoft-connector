@@ -4,10 +4,7 @@ import com.hms_networks.americas.sc.logging.Logger;
 
 public class DataPoster extends Thread {
 
-
-  /**
-   * The PayloadManager to retrieve finished payloads from.
-   */
+  /** The PayloadManager to retrieve finished payloads from. */
   private PayloadManager payloadHolder;
 
   /**
@@ -19,9 +16,7 @@ public class DataPoster extends Thread {
     payloadHolder = payloadManager;
   }
 
-  /**
-   * Run function used to continuously send payloads to OSIsoft.
-   */
+  /** Run function used to continuously send payloads to OSIsoft. */
   public void run() {
 
     while (true) {
