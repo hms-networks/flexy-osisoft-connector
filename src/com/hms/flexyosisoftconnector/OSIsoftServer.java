@@ -1,8 +1,5 @@
 package com.hms.flexyosisoftconnector;
 
-import java.io.File;
-import java.io.IOException;
-
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.ScheduledActionManager;
 import com.hms_networks.americas.sc.fileutils.FileAccessManager;
@@ -13,6 +10,8 @@ import com.hms_networks.americas.sc.json.JSONTokener;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.taginfo.TagInfo;
 import com.hms_networks.americas.sc.taginfo.TagInfoManager;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Class object for an OSIsoft PI Server.
@@ -311,7 +310,9 @@ public class OSIsoftServer {
         // setup containers
         messageTypeHeader = "&messagetype=container";
 
-        for (int currentTagIndex = 0; currentTagIndex < numTagsInList; currentTagIndex += numTagsInitializing) {
+        for (int currentTagIndex = 0;
+            currentTagIndex < numTagsInList;
+            currentTagIndex += numTagsInitializing) {
           String payload =
               PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
           res =
@@ -478,7 +479,7 @@ public class OSIsoftServer {
     }
     return true;
   }
-  
+
   /**
    * Posts the OMF batch to OSIsoft Cloud Services.
    *

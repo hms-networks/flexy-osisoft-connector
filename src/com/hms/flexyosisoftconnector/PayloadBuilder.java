@@ -9,7 +9,6 @@ import com.hms_networks.americas.sc.taginfo.TagInfo;
 import com.hms_networks.americas.sc.taginfo.TagInfoManager;
 import com.hms_networks.americas.sc.taginfo.TagType;
 
-
 /**
  * Class to build up a JSON payload in segments of strings.
  *
@@ -406,7 +405,8 @@ public class PayloadBuilder {
         } else {
           Logger.LOG_SERIOUS("Unsupported tag type was selected for tag " + tagName);
           Logger.LOG_SERIOUS(
-              "Please change that tag type to one of the following: Integer, Boolean, DWord, Float, or String.");
+              "Please change that tag type to one of the following: Integer, Boolean, DWord,"
+                  + " Float, or String.");
         }
 
         // after the first tag, separate by comma

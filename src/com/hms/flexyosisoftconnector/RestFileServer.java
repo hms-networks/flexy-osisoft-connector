@@ -91,7 +91,11 @@ public class RestFileServer extends Thread {
 
         // Hardcoded response header
         String responseHeaders =
-            "HTTP/1.1 200\r\nContent-Type:  text/plain\r\nAccess-Control-Allow-Origin: *\r\nAccess-Control-Request-Headers: content-type\r\nConnection: close\r\n";
+            "HTTP/1.1 200\r\n"
+                + "Content-Type:  text/plain\r\n"
+                + "Access-Control-Allow-Origin: *\r\n"
+                + "Access-Control-Request-Headers: content-type\r\n"
+                + "Connection: close\r\n";
         outWriter.println(responseHeaders);
         Logger.LOG_DEBUG("Response to HTTP POST sent");
 

@@ -1,14 +1,13 @@
 package com.hms.flexyosisoftconnector;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.ewon.ewonitf.SysControlBlock;
 import com.hms_networks.americas.sc.datapoint.DataPoint;
 import com.hms_networks.americas.sc.historicaldata.HistoricalDataQueueManager;
 import com.hms_networks.americas.sc.json.JSONException;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.taginfo.TagInfoManager;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Ewon Flexy java demo for OSIsoft Server

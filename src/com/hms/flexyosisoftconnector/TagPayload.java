@@ -19,7 +19,7 @@ public class TagPayload {
 
   /** Constructs a new empty payload. */
   public TagPayload() {
-    if(OsisoftJsonPayload.MAX_PAYLOAD_NUM_CHARACTERS == OsisoftJsonPayload.UNINITIALIZED_INTEGER){
+    if (OsisoftJsonPayload.MAX_PAYLOAD_NUM_CHARACTERS == OsisoftJsonPayload.UNINITIALIZED_INTEGER) {
       Logger.LOG_SERIOUS("The OSIsoftJSONPayload class has not been initialized.");
       Logger.LOG_SERIOUS("Unable to allocate space for a new PreAllocatedStringBuilder object.");
     } else {
