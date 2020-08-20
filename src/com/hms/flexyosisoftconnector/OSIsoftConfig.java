@@ -1,7 +1,6 @@
 package com.hms.flexyosisoftconnector;
 
 import com.ewon.ewonitf.EWException;
-import com.ewon.ewonitf.ScheduledActionManager;
 import com.ewon.ewonitf.SysControlBlock;
 import com.ewon.ewonitf.TagControl;
 import com.hms_networks.americas.sc.fileutils.FileAccessManager;
@@ -10,8 +9,6 @@ import com.hms_networks.americas.sc.json.JSONObject;
 import com.hms_networks.americas.sc.json.JSONTokener;
 import com.hms_networks.americas.sc.logging.Logger;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 
 /**
  * This class contains the configuration for the Flexy <-> OSIsoft connection
