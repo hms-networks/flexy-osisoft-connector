@@ -3,14 +3,12 @@ package com.hms.flexyosisoftconnector;
 import com.ewon.ewonitf.SysControlBlock;
 import com.hms_networks.americas.sc.datapoint.DataPoint;
 import com.hms_networks.americas.sc.datapoint.DataType;
-import com.hms_networks.americas.sc.json.JSONException;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.string.PreAllocatedStringBuilder;
 import com.hms_networks.americas.sc.taginfo.TagInfo;
 import com.hms_networks.americas.sc.taginfo.TagInfoManager;
 import com.hms_networks.americas.sc.taginfo.TagType;
 
-import java.util.ArrayList;
 
 /**
  * Class to build up a JSON payload in segments of strings.
