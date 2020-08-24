@@ -48,7 +48,7 @@ public class OSIsoftServer {
    * @param FileName File name for response
    * @return The HTTP response code
    */
-  public static int RequestHTTPS(
+  public static boolean RequestHTTPS(
       String CnxParam,
       String Method,
       String Headers,
@@ -141,7 +141,11 @@ public class OSIsoftServer {
       Logger.LOG_SERIOUS("Connection restored");
     }
 
-    return res;
+    boolean success = false;
+    if (res == NO_ERROR) {
+      success = true;
+    }
+    return success;
   }
 
   /**
@@ -150,11 +154,12 @@ public class OSIsoftServer {
    * @param tag the tag to attempt to initialize in OSIsoft
    * @return returns the HTTP response code
    */
-  public int setTagWebId(TagInfo tag) {
+  public boolean setTagWebId(TagInfo tag) {
 
     String tagWebID = "not found";
 
-    int res = NO_ERROR;
+    boolean requestSuccess = false;
+    boolean webIDSet = false;
 
     // HTTPS responses are stored in this file
     String responseFilename = "/usr/response.txt";
@@ -170,7 +175,7 @@ public class OSIsoftServer {
             + "/points";
 
     // Check if the tag already exists in the dataserver
-    res =
+    requestSuccess =
         RequestHTTPS(
             url + "?nameFilter=" + tagName,
             "Get",
@@ -178,7 +183,7 @@ public class OSIsoftServer {
             "",
             "",
             responseFilename);
-    if (res == NO_ERROR) {
+    if (!requestSuccess) {
       // Parse the JSON response and retrieve the JSON Array of items
       JSONTokener JsonT = null;
       try {
@@ -205,6 +210,7 @@ public class OSIsoftServer {
 
       if (items.length() > 0) {
         // tag exists
+        webIDSet = true;
         try {
           tagWebID = items.getJSONObject(0).getString("WebId");
         } catch (JSONException e) {
@@ -214,15 +220,15 @@ public class OSIsoftServer {
       } else {
         // tag does not exist and must be created
         String payload = PayloadBuilder.buildNewPointBody(tag);
-        res =
+        requestSuccess =
             RequestHTTPS(
                 url, "Post", OSIsoftConfig.getPostHeaders(), payload, "", responseFilename);
 
-        if (res == NO_ERROR) {
+        if (!requestSuccess) {
           /* The WebID is sent back in the headers of the previous post
           however, there is no mechanism currently to retrieve it so
           another request must be issued.*/
-          res =
+          requestSuccess =
               RequestHTTPS(
                   url + "?nameFilter=" + tagName,
                   "Get",
@@ -230,7 +236,7 @@ public class OSIsoftServer {
                   "",
                   "",
                   responseFilename);
-          if (res == NO_ERROR) {
+          if (!requestSuccess) {
             // Parse the JSON response and retrieve the JSON Array of items
             try {
               JsonT = new JSONTokener(FileAccessManager.readFileToString(responseFilename));
@@ -253,13 +259,14 @@ public class OSIsoftServer {
               }
             if (items.length() > 0) {
               // tag exists
+              webIDSet = true;
               try {
                 tagWebID = items.getJSONObject(0).getString("WebId");
               } catch (JSONException e) {
                 Logger.LOG_EXCEPTION(e);
                 Logger.LOG_SERIOUS("Unable to parse JSON string from request's response file.");
               }
-              res =
+              requestSuccess =
                   RequestHTTPS(
                       OSIsoftConfig.getTargetURL()
                           + "points/"
@@ -270,17 +277,16 @@ public class OSIsoftServer {
                       "\"HMS\"",
                       "",
                       "");
-              if (res != NO_ERROR) {
-                Logger.LOG_SERIOUS(
-                    "Could not set point source of " + tag.getName() + ". Error: " + res);
+              if (!requestSuccess) {
+                Logger.LOG_SERIOUS("Could not set point source of " + tag.getName() + ".");
               }
             } else {
               // tag does not exist, error
-              Logger.LOG_SERIOUS("PI Point creation failed.  Error: " + res);
+              Logger.LOG_SERIOUS("PI Point creation failed.");
             }
           }
         } else {
-          Logger.LOG_SERIOUS("Error in creating tag.  Error: " + res);
+          Logger.LOG_SERIOUS("Error in creating tag.");
         }
       }
 
@@ -294,7 +300,7 @@ public class OSIsoftServer {
     // set tag web id to list for later lookup
     PayloadBuilder.setTagWebId(tag.getId(), tagWebID);
 
-    return res;
+    return webIDSet;
   }
 
   /**
@@ -394,8 +400,8 @@ public class OSIsoftServer {
       TagInfo tag = (TagInfo) TagInfoManager.getTagInfoList().get(i);
 
       if (tag != null) {
-        int res = setTagWebId(tag);
-        if (res != NO_ERROR) {
+        boolean success = setTagWebId(tag);
+        if (!success) {
           Logger.LOG_WARN("There was a problem obtaining the web ID for tag " + tag.getName());
           Logger.LOG_WARN("This tag will not be updated in OSIsoft.");
         }
@@ -484,13 +490,11 @@ public class OSIsoftServer {
 
     String postHeaderType = "&messagetype=type";
 
-    int res = NO_ERROR;
-
     postHeaderType = "&messagetype=data";
     String responseFilename = "/usr/response.txt";
 
     // posting OMF batch
-    res =
+    boolean requestSuccess =
         RequestHTTPS(
             OSIsoftConfig.getOmfUrl(),
             "Post",
@@ -498,10 +502,10 @@ public class OSIsoftServer {
             payload,
             "",
             responseFilename); // data
-    if (res != NO_ERROR) {
-      return false;
+    if (!requestSuccess) {
+      Logger.LOG_SERIOUS("Could not post batch of OMF data points to OSIsoft.");
     }
-    return true;
+    return requestSuccess;
   }
 
   /**
@@ -514,14 +518,11 @@ public class OSIsoftServer {
 
     String postHeaderType = "&messagetype=type";
 
-    int res = NO_ERROR;
-    boolean requestSuccessful = false;
-
     postHeaderType = "&messagetype=data";
     String responseFilename = "/usr/response.txt";
 
     // posting OMF batch
-    res =
+    boolean requestSuccess =
         RequestHTTPS(
             OSIsoftConfig.getOcsUrl(),
             "Post",
@@ -529,10 +530,10 @@ public class OSIsoftServer {
             payload,
             "",
             responseFilename);
-    if (res == NO_ERROR) {
-      requestSuccessful = true;
+    if (!requestSuccess) {
+      Logger.LOG_SERIOUS("Could not post batch of data point to OCS.");
     }
-    return requestSuccessful;
+    return requestSuccess;
   }
 
   /**
@@ -542,8 +543,7 @@ public class OSIsoftServer {
    * @return returns the http response code
    */
   public static boolean postBatch(String payload) {
-    int res = NO_ERROR;
-    res =
+    boolean requestSuccess =
         RequestHTTPS(
             OSIsoftConfig.getTargetURL() + "batch/",
             "Post",
@@ -552,9 +552,9 @@ public class OSIsoftServer {
             "",
             "");
 
-    if (res != NO_ERROR) {
-      return false;
+    if (!requestSuccess) {
+      Logger.LOG_SERIOUS("Could not post batch of data points to OSIsoft.");
     }
-    return true;
+    return requestSuccess;
   }
 }
