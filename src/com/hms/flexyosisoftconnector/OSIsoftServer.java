@@ -150,9 +150,8 @@ public class OSIsoftServer {
    *
    * @param tag the tag to attempt to initialize in OSIsoft
    * @return returns the HTTP response code
-   * @throws JSONException Throws when JSON is malformed
    */
-  public int setTagWebId(TagInfo tag) throws JSONException {
+  public int setTagWebId(TagInfo tag) {
 
     String tagWebID = "not found";
 
@@ -189,13 +188,30 @@ public class OSIsoftServer {
         Logger.LOG_EXCEPTION(e);
         Logger.LOG_SERIOUS("Unable to read malformed HTTPS response JSON from previous request.");
       }
-      JSONObject requestResponse = new JSONObject(JsonT);
+      JSONObject requestResponse = null;
+      try {
+        requestResponse = new JSONObject(JsonT);
+      } catch (JSONException e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_SERIOUS("Unable to parse JSON object from request's response file.");
+      }
       JSONArray items = new JSONArray();
-      if (requestResponse.has("Items")) items = requestResponse.getJSONArray("Items");
+      if (requestResponse.has("Items"))
+        try {
+          items = requestResponse.getJSONArray("Items");
+        } catch (JSONException e) {
+          Logger.LOG_EXCEPTION(e);
+          Logger.LOG_SERIOUS("Unable to parse JSON array from request's response file.");
+        }
 
       if (items.length() > 0) {
         // tag exists
-        tagWebID = items.getJSONObject(0).getString("WebId");
+        try {
+          tagWebID = items.getJSONObject(0).getString("WebId");
+        } catch (JSONException e) {
+          Logger.LOG_EXCEPTION(e);
+          Logger.LOG_SERIOUS("Unable to parse JSON string from request's response file.");
+        }
       } else {
         // tag does not exist and must be created
         String payload = PayloadBuilder.buildNewPointBody(tag);
@@ -223,11 +239,27 @@ public class OSIsoftServer {
               Logger.LOG_EXCEPTION(e);
               Logger.LOG_SERIOUS("Unable to read response file from previous request.");
             }
-            requestResponse = new JSONObject(JsonT);
-            if (requestResponse.has("Items")) items = requestResponse.getJSONArray("Items");
+            try {
+              requestResponse = new JSONObject(JsonT);
+            } catch (JSONException e) {
+              Logger.LOG_EXCEPTION(e);
+              Logger.LOG_SERIOUS("Unable to parse JSON object from request's response file.");
+            }
+            if (requestResponse.has("Items"))
+              try {
+                items = requestResponse.getJSONArray("Items");
+              } catch (JSONException e) {
+                Logger.LOG_EXCEPTION(e);
+                Logger.LOG_SERIOUS("Unable to parse JSON array from request's response file.");
+              }
             if (items.length() > 0) {
               // tag exists
-              tagWebID = items.getJSONObject(0).getString("WebId");
+              try {
+                tagWebID = items.getJSONObject(0).getString("WebId");
+              } catch (JSONException e) {
+                Logger.LOG_EXCEPTION(e);
+                Logger.LOG_SERIOUS("Unable to parse JSON string from request's response file.");
+              }
               res =
                   RequestHTTPS(
                       OSIsoftConfig.getTargetURL()
