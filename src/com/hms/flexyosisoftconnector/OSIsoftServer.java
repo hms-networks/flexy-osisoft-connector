@@ -306,175 +306,19 @@ public class OSIsoftServer {
    */
   public int initTags() throws JSONException {
     int retval = NO_ERROR;
-    int res;
-    final String responseFilename = "/usr/response.json";
-
-    // initialize list of tag containers
-    final int numTagsInList = TagInfoManager.getTagInfoList().size();
-    final int numTagsInitializing = 100;
 
     switch (OSIsoftConfig.getCommunicationType()) {
         // OMF setup
       case OSIsoftConfig.OMF:
-        // setup type
-        String messageTypeHeader = "&messagetype=type";
-
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOmfUrl(),
-                "Post",
-                OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-                PayloadBuilder.getStringTypeBody(),
-                "",
-                responseFilename);
-        checkInitResponseCode(res);
-
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOmfUrl(),
-                "Post",
-                OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-                PayloadBuilder.getNumberTypeBody(),
-                "",
-                responseFilename);
-        checkInitResponseCode(res);
-
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOmfUrl(),
-                "Post",
-                OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-                PayloadBuilder.getIntegerTypeBody(),
-                "",
-                responseFilename);
-        checkInitResponseCode(res);
-
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOmfUrl(),
-                "Post",
-                OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-                PayloadBuilder.getBooleanTypeBody(),
-                "",
-                responseFilename);
-        checkInitResponseCode(res);
-
-        // setup containers
-        messageTypeHeader = "&messagetype=container";
-
-        for (int currentTagIndex = 0;
-            currentTagIndex < numTagsInList;
-            currentTagIndex += numTagsInitializing) {
-          String payload =
-              PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
-          res =
-              RequestHTTPS(
-                  OSIsoftConfig.getOmfUrl(),
-                  "Post",
-                  OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-                  payload,
-                  "",
-                  responseFilename);
-          if (res != NO_ERROR) {
-            retval = res;
-          }
-        }
+        initOMF();
         break;
         // OMF OCS setup
       case OSIsoftConfig.OCS:
-        // setup type
-        final String ocsMessageTypeHeader = "&messagetype=type";
-
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOcsUrl(),
-                "Post",
-                OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-                PayloadBuilder.getStringTypeBody(),
-                "",
-                responseFilename);
-        checkInitResponseCode(res);
-
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOcsUrl(),
-                "Post",
-                OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-                PayloadBuilder.getStringTypeBody(),
-                "",
-                responseFilename);
-        checkInitResponseCode(res);
-
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOcsUrl(),
-                "Post",
-                OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-                PayloadBuilder.getIntegerTypeBody(),
-                "",
-                responseFilename);
-        checkInitResponseCode(res);
-
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOcsUrl(),
-                "Post",
-                OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-                PayloadBuilder.getNumberTypeBody(),
-                "",
-                responseFilename);
-        checkInitResponseCode(res);
-
-        res =
-            RequestHTTPS(
-                OSIsoftConfig.getOcsUrl(),
-                "Post",
-                OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-                PayloadBuilder.getBooleanTypeBody(),
-                "",
-                responseFilename);
-        checkInitResponseCode(res);
-
-        // setup containers
-        messageTypeHeader = "&messagetype=container";
-
-        // initialize tag containers
-        for (int currentTagIndex = 0;
-            currentTagIndex < numTagsInList;
-            currentTagIndex += numTagsInitializing) {
-          String payload =
-              PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
-          res =
-              RequestHTTPS(
-                  OSIsoftConfig.getOcsUrl(),
-                  "Post",
-                  OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
-                  payload,
-                  "",
-                  responseFilename);
-          if (res != NO_ERROR) {
-            retval = res;
-          }
-        }
+        initOCS();
         break;
         // legacy PIWEBAPI setup
       case OSIsoftConfig.PI_WEB_API:
-        // web id's are stored in the payload builder
-        PayloadBuilder.initWebIdList();
-
-        for (int i = 0; i < TagInfoManager.getTagInfoList().size(); i++) {
-          TagInfo tag = (TagInfo) TagInfoManager.getTagInfoList().get(i);
-
-          if (tag != null) {
-            res = setTagWebId(tag);
-            if (res != NO_ERROR) {
-              retval = res;
-              Logger.LOG_WARN("There was a problem obtaining the web ID for tag " + tag.getName());
-              Logger.LOG_WARN("This tag will not be updated in OSIsoft.");
-            }
-          }
-        }
-
+        initLegacyFormat();
         break;
       default:
         Logger.LOG_SERIOUS(OSIsoftConfig.COM_ERR_MSG);
@@ -482,6 +326,167 @@ public class OSIsoftServer {
     }
 
     return retval;
+  }
+
+  private void initOMF() {
+    // setup type
+    String messageTypeHeader = "&messagetype=type";
+    final String responseFilename = "/usr/response.json";
+
+    int res =
+        RequestHTTPS(
+            OSIsoftConfig.getOmfUrl(),
+            "Post",
+            OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+            PayloadBuilder.getStringTypeBody(),
+            "",
+            responseFilename);
+    checkInitResponseCode(res);
+
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getOmfUrl(),
+            "Post",
+            OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+            PayloadBuilder.getNumberTypeBody(),
+            "",
+            responseFilename);
+    checkInitResponseCode(res);
+
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getOmfUrl(),
+            "Post",
+            OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+            PayloadBuilder.getIntegerTypeBody(),
+            "",
+            responseFilename);
+    checkInitResponseCode(res);
+
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getOmfUrl(),
+            "Post",
+            OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+            PayloadBuilder.getBooleanTypeBody(),
+            "",
+            responseFilename);
+    checkInitResponseCode(res);
+
+    // setup containers
+    final int numTagsInList = TagInfoManager.getTagInfoList().size();
+    final int numTagsInitializing = 100;
+
+    messageTypeHeader = "&messagetype=container";
+
+    for (int currentTagIndex = 0;
+        currentTagIndex < numTagsInList;
+        currentTagIndex += numTagsInitializing) {
+      String payload = PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
+      res =
+          RequestHTTPS(
+              OSIsoftConfig.getOmfUrl(),
+              "Post",
+              OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+              payload,
+              "",
+              responseFilename);
+    }
+  }
+
+  private void initLegacyFormat() {
+    // web id's are stored in the payload builder
+    PayloadBuilder.initWebIdList();
+
+    for (int i = 0; i < TagInfoManager.getTagInfoList().size(); i++) {
+      TagInfo tag = (TagInfo) TagInfoManager.getTagInfoList().get(i);
+
+      if (tag != null) {
+        int res = setTagWebId(tag);
+        if (res != NO_ERROR) {
+          Logger.LOG_WARN("There was a problem obtaining the web ID for tag " + tag.getName());
+          Logger.LOG_WARN("This tag will not be updated in OSIsoft.");
+        }
+      }
+    }
+  }
+
+  private void initOCS() {
+    final String responseFilename = "/usr/response.json";
+
+    // setup type
+    final String ocsMessageTypeHeader = "&messagetype=type";
+
+    int res =
+        RequestHTTPS(
+            OSIsoftConfig.getOcsUrl(),
+            "Post",
+            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+            PayloadBuilder.getStringTypeBody(),
+            "",
+            responseFilename);
+    checkInitResponseCode(res);
+
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getOcsUrl(),
+            "Post",
+            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+            PayloadBuilder.getStringTypeBody(),
+            "",
+            responseFilename);
+    checkInitResponseCode(res);
+
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getOcsUrl(),
+            "Post",
+            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+            PayloadBuilder.getIntegerTypeBody(),
+            "",
+            responseFilename);
+    checkInitResponseCode(res);
+
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getOcsUrl(),
+            "Post",
+            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+            PayloadBuilder.getNumberTypeBody(),
+            "",
+            responseFilename);
+    checkInitResponseCode(res);
+
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getOcsUrl(),
+            "Post",
+            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+            PayloadBuilder.getBooleanTypeBody(),
+            "",
+            responseFilename);
+    checkInitResponseCode(res);
+
+    // setup containers
+    String messageTypeHeader = "&messagetype=container";
+
+    // initialize tag containers
+    final int numTagsInList = TagInfoManager.getTagInfoList().size();
+    final int numTagsInitializing = 100;
+
+    for (int currentTagIndex = 0;
+        currentTagIndex < numTagsInList;
+        currentTagIndex += numTagsInitializing) {
+      String payload = PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
+      res =
+          RequestHTTPS(
+              OSIsoftConfig.getOcsUrl(),
+              "Post",
+              OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
+              payload,
+              "",
+              responseFilename);
+    }
   }
 
   /**
