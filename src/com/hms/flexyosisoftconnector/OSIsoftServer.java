@@ -47,7 +47,6 @@ public class OSIsoftServer {
    * @param FileFields File location for response
    * @param FileName File name for response
    * @return The HTTP response code
-   * @throws JSONException Throws when JSON is malformed
    */
   public static int RequestHTTPS(
       String CnxParam,
@@ -302,9 +301,8 @@ public class OSIsoftServer {
    * Initializes all of the tags into OSIsoft for future storage on the server.
    *
    * @return returns the HTTP response code
-   * @throws JSONException Throws when JSON is malformed
    */
-  public int initTags() throws JSONException {
+  public int initTags() {
     int retval = NO_ERROR;
 
     switch (OSIsoftConfig.getCommunicationType()) {
