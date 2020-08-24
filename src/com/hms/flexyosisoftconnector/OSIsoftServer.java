@@ -55,8 +55,7 @@ public class OSIsoftServer {
       String Headers,
       String TextFields,
       String FileFields,
-      String FileName)
-      throws JSONException {
+      String FileName) {
     int res = NO_ERROR;
 
     try {
@@ -84,15 +83,36 @@ public class OSIsoftServer {
         fileStr = fileStr.substring(i);
       }
       JSONTokener JsonT = new JSONTokener(fileStr);
-      JSONObject response = new JSONObject(JsonT);
+      JSONObject response = null;
+      try {
+        response = new JSONObject(JsonT);
+      } catch (JSONException e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_SERIOUS("Unable to generate new JSON object from request's response file.");
+        Logger.LOG_SERIOUS("The request " + CnxParam + " has a bad response file.");
+      }
       if (response.has("Message")) {
         res = AUTH_ERROR;
         Logger.LOG_SERIOUS("User Credentials are incorrect");
       }
       if (response.has("Errors")) {
-        JSONArray errors = response.getJSONArray("Errors");
+        JSONArray errors = null;
+        try {
+          errors = response.getJSONArray("Errors");
+        } catch (JSONException e) {
+          Logger.LOG_EXCEPTION(e);
+          Logger.LOG_SERIOUS("Unable to parse JSON array from request's response file.");
+          Logger.LOG_SERIOUS("The request " + CnxParam + " has a bad response file.");
+        }
         for (int i = 0; i < errors.length(); i++) {
-          String error = errors.getString(i);
+          String error = null;
+          try {
+            error = errors.getString(i);
+          } catch (JSONException e) {
+            Logger.LOG_EXCEPTION(e);
+            Logger.LOG_SERIOUS("Unable to parse JSON string from request's response file.");
+            Logger.LOG_SERIOUS("The request " + CnxParam + " has a bad response file.");
+          }
           if (error.substring(0, WEB_ID_ERROR_STRING.length()).equals(WEB_ID_ERROR_STRING)) {
             res = WEB_ID_ERROR;
             Logger.LOG_SERIOUS("WEB ID: \"" + OSIsoftConfig.getServerWebID() + "\"");
@@ -456,24 +476,18 @@ public class OSIsoftServer {
 
     int res = NO_ERROR;
 
-    try {
-      postHeaderType = "&messagetype=data";
-      String responseFilename = "/usr/response.txt";
+    postHeaderType = "&messagetype=data";
+    String responseFilename = "/usr/response.txt";
 
-      // posting OMF batch
-      res =
-          RequestHTTPS(
-              OSIsoftConfig.getOmfUrl(),
-              "Post",
-              OSIsoftConfig.getOmfPostHeaders() + postHeaderType,
-              payload,
-              "",
-              responseFilename); // data
-
-    } catch (JSONException e) {
-      Logger.LOG_SERIOUS("Exception caught on posting omf data points");
-      Logger.LOG_EXCEPTION(e);
-    }
+    // posting OMF batch
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getOmfUrl(),
+            "Post",
+            OSIsoftConfig.getOmfPostHeaders() + postHeaderType,
+            payload,
+            "",
+            responseFilename); // data
     if (res != NO_ERROR) {
       return false;
     }
@@ -493,24 +507,18 @@ public class OSIsoftServer {
     int res = NO_ERROR;
     boolean requestSuccessful = false;
 
-    try {
-      postHeaderType = "&messagetype=data";
-      String responseFilename = "/usr/response.txt";
+    postHeaderType = "&messagetype=data";
+    String responseFilename = "/usr/response.txt";
 
-      // posting OMF batch
-      res =
-          RequestHTTPS(
-              OSIsoftConfig.getOcsUrl(),
-              "Post",
-              OSIsoftConfig.getOcsPostHeaders() + postHeaderType,
-              payload,
-              "",
-              responseFilename);
-
-    } catch (JSONException e) {
-      Logger.LOG_SERIOUS("Exception caught on posting omf data points.");
-      Logger.LOG_EXCEPTION(e);
-    }
+    // posting OMF batch
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getOcsUrl(),
+            "Post",
+            OSIsoftConfig.getOcsPostHeaders() + postHeaderType,
+            payload,
+            "",
+            responseFilename);
     if (res == NO_ERROR) {
       requestSuccessful = true;
     }
@@ -525,20 +533,14 @@ public class OSIsoftServer {
    */
   public static boolean postBatch(String payload) {
     int res = NO_ERROR;
-    try {
-      res =
-          RequestHTTPS(
-              OSIsoftConfig.getTargetURL() + "batch/",
-              "Post",
-              OSIsoftConfig.getPostHeaders(),
-              payload,
-              "",
-              "");
-    } catch (JSONException e) {
-      Logger.LOG_SERIOUS("Failed to post tags due to malformed JSON response");
-      Logger.LOG_EXCEPTION(e);
-      res = JSON_ERROR;
-    }
+    res =
+        RequestHTTPS(
+            OSIsoftConfig.getTargetURL() + "batch/",
+            "Post",
+            OSIsoftConfig.getPostHeaders(),
+            payload,
+            "",
+            "");
 
     if (res != NO_ERROR) {
       return false;
