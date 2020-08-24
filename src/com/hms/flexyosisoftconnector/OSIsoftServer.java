@@ -326,6 +326,7 @@ public class OSIsoftServer {
     return retval;
   }
 
+  /** Initialize the types and containers needed by OMF data messages into OSIsoft. */
   private void initOMF() {
     // setup type
     String messageTypeHeader = "&messagetype=type";
@@ -384,6 +385,7 @@ public class OSIsoftServer {
     }
   }
 
+  /** Initialize the Flexy tags in OSIsoft for use by PI Web API's legacy data message format. */
   private void initLegacyFormat() {
     // web id's are stored in the payload builder
     PayloadBuilder.initWebIdList();
@@ -401,6 +403,9 @@ public class OSIsoftServer {
     }
   }
 
+  /**
+   * Initialize the types and containers needed by OMF data messages into OSIsoft cloud services.
+   */
   private void initOCS() {
     final String responseFilename = "/usr/response.json";
 
