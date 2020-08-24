@@ -333,45 +333,37 @@ public class OSIsoftServer {
     String messageTypeHeader = "&messagetype=type";
     final String responseFilename = "/usr/response.json";
 
-    int res =
-        RequestHTTPS(
-            OSIsoftConfig.getOmfUrl(),
-            "Post",
-            OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-            PayloadBuilder.getStringTypeBody(),
-            "",
-            responseFilename);
-    checkInitResponseCode(res);
+    RequestHTTPS(
+        OSIsoftConfig.getOmfUrl(),
+        "Post",
+        OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+        PayloadBuilder.getStringTypeBody(),
+        "",
+        responseFilename);
 
-    res =
-        RequestHTTPS(
-            OSIsoftConfig.getOmfUrl(),
-            "Post",
-            OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-            PayloadBuilder.getNumberTypeBody(),
-            "",
-            responseFilename);
-    checkInitResponseCode(res);
+    RequestHTTPS(
+        OSIsoftConfig.getOmfUrl(),
+        "Post",
+        OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+        PayloadBuilder.getNumberTypeBody(),
+        "",
+        responseFilename);
 
-    res =
-        RequestHTTPS(
-            OSIsoftConfig.getOmfUrl(),
-            "Post",
-            OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-            PayloadBuilder.getIntegerTypeBody(),
-            "",
-            responseFilename);
-    checkInitResponseCode(res);
+    RequestHTTPS(
+        OSIsoftConfig.getOmfUrl(),
+        "Post",
+        OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+        PayloadBuilder.getIntegerTypeBody(),
+        "",
+        responseFilename);
 
-    res =
-        RequestHTTPS(
-            OSIsoftConfig.getOmfUrl(),
-            "Post",
-            OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-            PayloadBuilder.getBooleanTypeBody(),
-            "",
-            responseFilename);
-    checkInitResponseCode(res);
+    RequestHTTPS(
+        OSIsoftConfig.getOmfUrl(),
+        "Post",
+        OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+        PayloadBuilder.getBooleanTypeBody(),
+        "",
+        responseFilename);
 
     // setup containers
     final int numTagsInList = TagInfoManager.getTagInfoList().size();
@@ -383,14 +375,14 @@ public class OSIsoftServer {
         currentTagIndex < numTagsInList;
         currentTagIndex += numTagsInitializing) {
       String payload = PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
-      res =
-          RequestHTTPS(
-              OSIsoftConfig.getOmfUrl(),
-              "Post",
-              OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
-              payload,
-              "",
-              responseFilename);
+
+      RequestHTTPS(
+          OSIsoftConfig.getOmfUrl(),
+          "Post",
+          OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
+          payload,
+          "",
+          responseFilename);
     }
   }
 
@@ -417,55 +409,45 @@ public class OSIsoftServer {
     // setup type
     final String ocsMessageTypeHeader = "&messagetype=type";
 
-    int res =
-        RequestHTTPS(
-            OSIsoftConfig.getOcsUrl(),
-            "Post",
-            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-            PayloadBuilder.getStringTypeBody(),
-            "",
-            responseFilename);
-    checkInitResponseCode(res);
+    RequestHTTPS(
+        OSIsoftConfig.getOcsUrl(),
+        "Post",
+        OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+        PayloadBuilder.getStringTypeBody(),
+        "",
+        responseFilename);
 
-    res =
-        RequestHTTPS(
-            OSIsoftConfig.getOcsUrl(),
-            "Post",
-            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-            PayloadBuilder.getStringTypeBody(),
-            "",
-            responseFilename);
-    checkInitResponseCode(res);
+    RequestHTTPS(
+        OSIsoftConfig.getOcsUrl(),
+        "Post",
+        OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+        PayloadBuilder.getStringTypeBody(),
+        "",
+        responseFilename);
 
-    res =
-        RequestHTTPS(
-            OSIsoftConfig.getOcsUrl(),
-            "Post",
-            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-            PayloadBuilder.getIntegerTypeBody(),
-            "",
-            responseFilename);
-    checkInitResponseCode(res);
+    RequestHTTPS(
+        OSIsoftConfig.getOcsUrl(),
+        "Post",
+        OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+        PayloadBuilder.getIntegerTypeBody(),
+        "",
+        responseFilename);
 
-    res =
-        RequestHTTPS(
-            OSIsoftConfig.getOcsUrl(),
-            "Post",
-            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-            PayloadBuilder.getNumberTypeBody(),
-            "",
-            responseFilename);
-    checkInitResponseCode(res);
+    RequestHTTPS(
+        OSIsoftConfig.getOcsUrl(),
+        "Post",
+        OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+        PayloadBuilder.getNumberTypeBody(),
+        "",
+        responseFilename);
 
-    res =
-        RequestHTTPS(
-            OSIsoftConfig.getOcsUrl(),
-            "Post",
-            OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
-            PayloadBuilder.getBooleanTypeBody(),
-            "",
-            responseFilename);
-    checkInitResponseCode(res);
+    RequestHTTPS(
+        OSIsoftConfig.getOcsUrl(),
+        "Post",
+        OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
+        PayloadBuilder.getBooleanTypeBody(),
+        "",
+        responseFilename);
 
     // setup containers
     String messageTypeHeader = "&messagetype=container";
@@ -478,26 +460,14 @@ public class OSIsoftServer {
         currentTagIndex < numTagsInList;
         currentTagIndex += numTagsInitializing) {
       String payload = PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
-      res =
-          RequestHTTPS(
-              OSIsoftConfig.getOcsUrl(),
-              "Post",
-              OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
-              payload,
-              "",
-              responseFilename);
-    }
-  }
 
-  /**
-   * Helper function to print out errors when initializing OMF types or containers.
-   *
-   * @param res The response code of an HTTPS request
-   */
-  private void checkInitResponseCode(int res) {
-    if (res != NO_ERROR) {
-      Logger.LOG_WARN(
-          "The HTTPS request to initialize OMF data points was not completed successfully");
+      RequestHTTPS(
+          OSIsoftConfig.getOcsUrl(),
+          "Post",
+          OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
+          payload,
+          "",
+          responseFilename);
     }
   }
 
