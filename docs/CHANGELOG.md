@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## v2.4
+### Major Changes
++ Fixed integer type storage bug in OSIsoft AF server
+### Minor Changes
++ Specified type format for OMF instead of using default type
+
 ## v2.3
 ### Major Changes
 + Supported storing tags as different data types in OSIsoft with OMF
