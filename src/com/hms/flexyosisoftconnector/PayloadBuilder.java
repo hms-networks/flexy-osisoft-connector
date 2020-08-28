@@ -271,7 +271,7 @@ public class PayloadBuilder {
    * @return returns the JSON payload to construct a new Type message.
    */
   public static String getStringTypeBody() {
-    return getGenericTypeBody("string");
+    return getGenericTypeBody("string", "");
   }
 
   /**
@@ -280,7 +280,7 @@ public class PayloadBuilder {
    * @return returns the JSON payload to construct a new Type message.
    */
   public static String getNumberTypeBody() {
-    return getGenericTypeBody("number");
+    return getGenericTypeBody("number", "float32");
   }
 
   /**
@@ -289,7 +289,7 @@ public class PayloadBuilder {
    * @return returns the JSON payload to construct a new Type message.
    */
   public static String getIntegerTypeBody() {
-    return getGenericTypeBody("integer");
+    return getGenericTypeBody("integer", "int32");
   }
 
   /**
@@ -298,15 +298,25 @@ public class PayloadBuilder {
    * @return returns the JSON payload to construct a new Type message.
    */
   public static String getBooleanTypeBody() {
-    return getGenericTypeBody("boolean");
+    return getGenericTypeBody("boolean", "");
   }
 
   /**
    * Setup the format for how generic data from this device will be stored with omf
    *
+   * @param type specifies what OMF type the data messages are stored as
+   * @param format specifies what format the type uses on the AF server for bit count and signed or
+   *     unsigned
    * @return returns the JSON payload to construct a new Type message.
    */
-  private static String getGenericTypeBody(String type) {
+  private static String getGenericTypeBody(String type, String format) {
+    String formatString = "";
+
+    // include if not booleans or strings
+    if (type.equalsIgnoreCase("string") || type.equalsIgnoreCase("boolean")) {
+      formatString = "\"format\": \"" + format + "\"";
+    }
+
     String payload =
         "[{"
             + "\"id\": \"HMS-"
@@ -326,6 +336,7 @@ public class PayloadBuilder {
             + "\"type\": \""
             + type
             + "\","
+            + formatString
             + "\"description\": \"Ewon Flexy's tag value stored as a "
             + type
             + "\""
