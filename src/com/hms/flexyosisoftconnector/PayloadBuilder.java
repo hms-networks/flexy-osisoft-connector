@@ -428,8 +428,16 @@ public class PayloadBuilder {
           payload.append(",");
         }
 
+        final String flexySerial = OSIsoftConfig.getFlexySerial();
+
+        /* Ensure the container is uniquely identified across devices communicating to the same
+         * OSIsoft server under the same Type declaration.
+         * Types are treated as immutable and changing the type creates a new container.
+         */
+        final String containerId = tagName + "-" + typeString + "-" + flexySerial;
+
         payload.append(
-            "{" + "\"id\": \"" + tagName + "\"," + "\"typeid\": \"" + typeID + "\"" + "}");
+            "{" + "\"id\": \"" + containerId + "\"," + "\"typeid\": \"" + typeID + "\"" + "}");
       }
     }
 

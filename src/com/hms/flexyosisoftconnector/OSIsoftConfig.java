@@ -75,6 +75,9 @@ public class OSIsoftConfig {
   /** Unique name of this flexy */
   private static String flexyName;
 
+  /** Flexy's serial number */
+  private static String flexySerialNum;
+
   /** Post headers for PIWebAPI */
   private static String postHeaders;
 
@@ -192,6 +195,7 @@ public class OSIsoftConfig {
             + OSIsoftConfig.getOcsToken();
 
     setFlexyName();
+    readFlexySerial();
   }
 
   /**
@@ -355,6 +359,27 @@ public class OSIsoftConfig {
       Logger.LOG_SERIOUS("Error reading eWON's name");
     }
     flexyName = res;
+  }
+
+  /** Read the Flexy serial number and store it. */
+  public static void readFlexySerial() {
+    try {
+      SysControlBlock sysControlBlock = new SysControlBlock(SysControlBlock.INF);
+      flexySerialNum = sysControlBlock.getItem("SerNum");
+    } catch (EWException e) {
+      Logger.LOG_SERIOUS(
+          "An error occurred while getting the serial number of the host Ewon Flexy.");
+      Logger.LOG_EXCEPTION(e);
+    }
+  }
+
+  /**
+   * Get the Flexy serial number.
+   *
+   * @return the Flexy serial number
+   */
+  public static String getFlexySerial() {
+    return flexySerialNum;
   }
 
   /**
