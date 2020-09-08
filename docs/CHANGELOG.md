@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## v2.5
+### Major Changes
++ None
+### Minor Changes
++ OMF container ID's are unique across devices
+
 ## v2.4
 ### Major Changes
 + Fixed integer type storage bug in OSIsoft AF server
