@@ -402,23 +402,26 @@ public class PayloadBuilder {
       if (TagInfoManager.getTagInfoList().get(i) != null) {
         TagInfo currentTag = (TagInfo) TagInfoManager.getTagInfoList().get(i);
         String tagName = currentTag.getName();
+        String typeString = "";
 
         if (currentTag.getType() == TagType.FLOAT) {
           typeID = "HMS-number-type-" + getFlexyName();
+          typeString = "number";
         } else if (currentTag.getType() == TagType.INTEGER) {
-          typeID = "HMS-integer-type-" + getFlexyName();
+          typeString = "integer";
         } else if (currentTag.getType() == TagType.BOOLEAN) {
-          typeID = "HMS-boolean-type-" + getFlexyName();
+          typeString = "boolean";
         } else if (currentTag.getType() == TagType.DWORD) {
-          typeID = "HMS-number-type-" + getFlexyName();
+          typeString = "number";
         } else if (currentTag.getType() == TagType.STRING) {
-          typeID = "HMS-string-type-" + getFlexyName();
+          typeString = "string";
         } else {
           Logger.LOG_SERIOUS("Unsupported tag type was selected for tag " + tagName);
           Logger.LOG_SERIOUS(
               "Please change that tag type to one of the following: Integer, Boolean, DWord,"
                   + " Float, or String.");
         }
+        typeID = "HMS-" + typeString + "-type-" + getFlexyName();
 
         // after the first tag, separate by comma
         if (i > startTagIndex) {
