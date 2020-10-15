@@ -23,7 +23,7 @@ public class Main {
   static final int MAJOR_VERSION = 2;
 
   /** Application Minor Version Number */
-  static final int MINOR_VERSION = 5;
+  static final int MINOR_VERSION = 6;
 
   /** Default name of a new Ewon */
   static final String DEFAULT_EWON_NAME = "eWON";
