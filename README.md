@@ -128,6 +128,28 @@ IP – IP address of the system running the Web API (in this example assume the 
 
 WebID – WebID of your OSIsoft Web API.  This value can be attained by pointing a browser to the IP address (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step.  (A security warning may occur when trying to access this page, this warning should be ignored)
 
+#### Proxy URL
+
+Adding the field "ProxyURL" under the server config section will change request endpoints to https://server-ip/proxy-url. This field is optional. 
+Below is an example config file with the optional proxy URL in use.
+   ```
+   {
+   "ServerConfig":{
+      "IP":"192.168.1.1",
+      "WebID":"F2DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPdaswQ1MyUDFT",
+      "Credentials":"cGFzc3dvcmQ=",
+      "ProxyURL":"long/proxy/example/omf"
+   },
+   "eWONConfig":{
+      "CertificatePath":"/usr"
+   },
+   "AppConfig": {
+       "LoggingLevel": 4,
+       "CommunicationType": "omf"
+       }
+   }
+   ```
+
 ### Credentials - Base64 encoded user credentials for basic authentication
 
 To generate your Base64 encoded user credentials visit https://www.base64encode.org/ and encode "username:password"
