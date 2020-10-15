@@ -1,5 +1,12 @@
 # Flexy OSIsoft Changelog
 
+## v2.6
+### Major Changes
++ None
+### Minor Changes
++ Add support for proxy URL
++ Updated libraries
+
 ## v2.5
 ### Major Changes
 + None
