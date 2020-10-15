@@ -96,6 +96,9 @@ public class OSIsoftConfig {
   /** OCS OMF URL for making requests to OCS. */
   private static String ocsUrl;
 
+  /** Proxy URL to replace pi endpoint when needed */
+  private static String proxyURL;
+
   /**
    * Initializes the configuration class and all required information.
    *
@@ -173,8 +176,17 @@ public class OSIsoftConfig {
               + "/omf";
     }
 
-    targetURL = "https://" + piServerIP + "/piwebapi/";
-    omfUrl = targetURL + "omf";
+    if (serverConfig.has("ProxyURL")) {
+      proxyURL = serverConfig.getString("ProxyURL");
+      // if a proxy URL is present user defines endpoints
+      targetURL = "https://" + piServerIP + "/" + proxyURL;
+      omfUrl = targetURL;
+    } else {
+      // there is not proxy in use
+      targetURL = "https://" + piServerIP + "/piwebapi/";
+      omfUrl = targetURL + "omf";
+    }
+
     typeID = "HMS-type-" + flexyName;
     postHeaders =
         "Authorization=Basic "
