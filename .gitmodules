@@ -2,10 +2,6 @@
 	path = sc-flexy-datapoint-lib
 	url = https://github.com/hms-networks/sc-flexy-datapoint-lib.git
 	branch = master
-[submodule "sc-flexy-historical-data-queue-lib"]
-	path = sc-flexy-historical-data-queue-lib
-	url = https://github.com/hms-networks/sc-flexy-historical-data-queue-lib.git
-	branch = master
 [submodule "sc-flexy-string-lib"]
 	path = sc-flexy-string-lib
 	url = https://github.com/hms-networks/sc-flexy-string-lib.git
@@ -26,3 +22,7 @@
 	path = sc-flexy-json-lib
 	url = https://github.com/hms-networks/sc-flexy-json-lib.git
 	branch = master
+[submodule "sc-flexy-tag-data-lib"]
+	path = sc-flexy-tag-data-lib
+	url = https://github.com/hms-networks/sc-flexy-tag-data-lib.git
+	branch = release/1.2
