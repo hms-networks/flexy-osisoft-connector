@@ -5,7 +5,7 @@
 name: Ewon Java Build
 
 env:
-  SRC_FOLDERS: src sc-flexy-datapoint-lib sc-flexy-file-util-lib sc-flexy-historical-data-queue-lib sc-flexy-json-lib sc-flexy-logger-lib sc-flexy-string-lib sc-flexy-tag-info-lib
+  SRC_FOLDERS: src sc-flexy-datapoint-lib sc-flexy-file-util-lib sc-flexy-tag-data-lib sc-flexy-json-lib sc-flexy-logger-lib sc-flexy-string-lib sc-flexy-tag-info-lib
   ETK_URL: https://github.com/hms-networks/GitHub-Actions-Generic/raw/main/libs/ewon-java-etk-1.4.4.jar
   ETK_LOCAL_FILE_NAME: ewon-java-etk.jar
   TMP_CP_FOLDER: tmp_classpath
