@@ -312,9 +312,9 @@ public class PayloadBuilder {
   private static String getGenericTypeBody(String type, String format) {
     String formatString = "";
 
-    // include if not booleans or strings
-    if (type.equalsIgnoreCase("string") || type.equalsIgnoreCase("boolean")) {
-      formatString = "\"format\": \"" + format + "\"";
+    // include format if not booleans or strings
+    if (!type.equalsIgnoreCase("string") || !type.equalsIgnoreCase("boolean")) {
+      formatString = "\"format\": \"" + format + "\",";
     }
 
     String payload =
