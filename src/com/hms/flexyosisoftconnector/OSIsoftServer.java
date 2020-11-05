@@ -340,7 +340,7 @@ public class OSIsoftServer {
 
     RequestHTTPS(
         OSIsoftConfig.getOmfUrl(),
-        "Post",
+        "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
         "",
@@ -348,7 +348,7 @@ public class OSIsoftServer {
 
     RequestHTTPS(
         OSIsoftConfig.getOmfUrl(),
-        "Post",
+        "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getNumberTypeBody(),
         "",
@@ -356,7 +356,7 @@ public class OSIsoftServer {
 
     RequestHTTPS(
         OSIsoftConfig.getOmfUrl(),
-        "Post",
+        "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getIntegerTypeBody(),
         "",
@@ -364,7 +364,7 @@ public class OSIsoftServer {
 
     RequestHTTPS(
         OSIsoftConfig.getOmfUrl(),
-        "Post",
+        "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getBooleanTypeBody(),
         "",
@@ -383,7 +383,7 @@ public class OSIsoftServer {
 
       RequestHTTPS(
           OSIsoftConfig.getOmfUrl(),
-          "Post",
+          "POST",
           OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
           payload,
           "",
@@ -420,7 +420,7 @@ public class OSIsoftServer {
 
     RequestHTTPS(
         OSIsoftConfig.getOcsUrl(),
-        "Post",
+        "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
         "",
@@ -428,7 +428,7 @@ public class OSIsoftServer {
 
     RequestHTTPS(
         OSIsoftConfig.getOcsUrl(),
-        "Post",
+        "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
         "",
@@ -436,7 +436,7 @@ public class OSIsoftServer {
 
     RequestHTTPS(
         OSIsoftConfig.getOcsUrl(),
-        "Post",
+        "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getIntegerTypeBody(),
         "",
@@ -444,7 +444,7 @@ public class OSIsoftServer {
 
     RequestHTTPS(
         OSIsoftConfig.getOcsUrl(),
-        "Post",
+        "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getNumberTypeBody(),
         "",
@@ -452,7 +452,7 @@ public class OSIsoftServer {
 
     RequestHTTPS(
         OSIsoftConfig.getOcsUrl(),
-        "Post",
+        "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getBooleanTypeBody(),
         "",
@@ -472,7 +472,7 @@ public class OSIsoftServer {
 
       RequestHTTPS(
           OSIsoftConfig.getOcsUrl(),
-          "Post",
+          "POST",
           OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
           payload,
           "",
@@ -497,7 +497,7 @@ public class OSIsoftServer {
     boolean requestSuccess =
         RequestHTTPS(
             OSIsoftConfig.getOmfUrl(),
-            "Post",
+            "POST",
             OSIsoftConfig.getOmfPostHeaders() + postHeaderType,
             payload,
             "",
@@ -525,7 +525,7 @@ public class OSIsoftServer {
     boolean requestSuccess =
         RequestHTTPS(
             OSIsoftConfig.getOcsUrl(),
-            "Post",
+            "POST",
             OSIsoftConfig.getOcsPostHeaders() + postHeaderType,
             payload,
             "",
@@ -546,7 +546,7 @@ public class OSIsoftServer {
     boolean requestSuccess =
         RequestHTTPS(
             OSIsoftConfig.getTargetURL() + "batch/",
-            "Post",
+            "POST",
             OSIsoftConfig.getPostHeaders(),
             payload,
             "",
