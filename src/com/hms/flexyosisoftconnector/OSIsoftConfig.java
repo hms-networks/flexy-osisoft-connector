@@ -197,14 +197,16 @@ public class OSIsoftConfig {
             + OSIsoftConfig.getServerLogin()
             + "&Content-Type=application/json"
             + "&X-Requested-With=JSONHttpRequest"
-            + "&messageformat=json&omfversion=1.1";
+            + "&messageformat=json&omfversion=1.1"
+            + "&action=Create";
     ocsPostHeaders =
         "Authorization=Bearer "
             + OSIsoftConfig.getOcsToken()
             + "&Content-Type=application/json"
             + "&messageformat=json&omfversion=1.1"
             + "&Producertoken="
-            + OSIsoftConfig.getOcsToken();
+            + OSIsoftConfig.getOcsToken()
+            + "&action=Create";
 
     setFlexyName();
     readFlexySerial();
