@@ -313,7 +313,7 @@ public class PayloadBuilder {
     String formatString = "";
 
     // include format if not booleans or strings
-    if (!type.equalsIgnoreCase("string") || !type.equalsIgnoreCase("boolean")) {
+    if (!(type.equalsIgnoreCase("string") || type.equalsIgnoreCase("boolean"))) {
       formatString = "\"format\": \"" + format + "\",";
     }
 
