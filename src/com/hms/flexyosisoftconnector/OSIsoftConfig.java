@@ -87,6 +87,15 @@ public class OSIsoftConfig {
   /** Post headers for OCS */
   private static String ocsPostHeaders;
 
+  /** Optional configuration to set the http timeout in seconds. */
+  private static int httpTimeoutSeconds;
+
+  /** default http timeout in seconds for if it is not set through configuration file. */
+  private static final int HTTP_TIMEOUT_SECONDS_DEFAULT = 2;
+
+  /** Key to access http timeout from config file JSON. */
+  private static final String HTTP_TIMEOUT_SECONDS_KEY = "httpTimeoutSeconds";
+
   /** Unique type for OMF messages from this flexy */
   private static String typeID;
 
@@ -158,6 +167,14 @@ public class OSIsoftConfig {
       if (!res) {
         Logger.LOG_SERIOUS("Invalid logging level specified");
       }
+    }
+
+    if (appConfig.has(HTTP_TIMEOUT_SECONDS_KEY)) {
+      httpTimeoutSeconds = appConfig.getInt("httpTimeoutSeconds");
+      Logger.LOG_INFO(
+          "HTTP timeout of " + httpTimeoutSeconds + " seconds retrieved from configuration file.");
+    } else {
+      httpTimeoutSeconds = HTTP_TIMEOUT_SECONDS_DEFAULT;
     }
 
     if (communicationType == OCS) {
@@ -288,6 +305,15 @@ public class OSIsoftConfig {
    */
   public static String getOcsUrl() {
     return ocsUrl;
+  }
+
+  /**
+   * Get the HTTP timeout in seconds.
+   *
+   * @return the HTTP timeout in seconds
+   */
+  public static int getHttpTimeoutSeconds() {
+    return httpTimeoutSeconds;
   }
 
   /**

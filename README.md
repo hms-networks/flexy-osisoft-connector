@@ -168,6 +168,8 @@ PostDuplicateTagValues - Controls when datapoints are logged.  If set to true, d
 
 CommunicationType - This refers to if you are using OMF (OSIsoft message format). If you have PIWEBAPI 2019 or later, and you have OMF enabled, set this string to "omf". If you are using an older version of PIWEBAPI set the string to "piwebapi". Any other values will result in an error. For more information on OMF read the section here:  [OMF](#OMF-Support)
 
+httpTimeoutSeconds - Optional field to override the default value used for HTTPS_TIMEOUT_S. If omitted the default value will be used. This field is only needed if https requests consistently take large amounts of time to complete.
+
 ## Customizing the application
 
 If you wish to modify, debug, or rebuild the application the toolkit and documentation is available here https://developer.ewon.biz/content/java-0. The instructions for setting up your development environment are here  https://developer.ewon.biz/system/files_force/AUG-072-0-EN-%28JAVA%20J2SE%20Toolkit%20for%20eWON%20Flexy%29.pdf?download=1

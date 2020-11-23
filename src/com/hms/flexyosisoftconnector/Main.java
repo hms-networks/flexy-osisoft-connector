@@ -58,7 +58,7 @@ public class Main {
     // Set the path to the directory holding the certificate for the server
     // Only needed if the certificate is self signed
     setCertificatePath(OSIsoftConfig.getCertificatePath());
-    setHttpTimeouts();
+    setHttpTimeouts(OSIsoftConfig.getHttpTimeoutSeconds());
 
     // update tag info to use later
     TagInfoManager.refreshTagList();
@@ -186,20 +186,21 @@ public class Main {
    * Sets the http timeouts Note: This changes the Ewon's global HTTP timeouts and stores these
    * values in NV memory.
    */
-  private static void setHttpTimeouts() {
+  private static void setHttpTimeouts(int timeoutSeconds) {
     SysControlBlock SCB;
     boolean needsSave = false;
-    final String HTTPS_TIMEOUT_S = "2";
+    final String httpTimeoutSec = String.valueOf(timeoutSeconds);
+    Logger.LOG_INFO("HTTP timeout set to " + httpTimeoutSec);
     try {
       SCB = new SysControlBlock(SysControlBlock.SYS);
 
-      if (!SCB.getItem("HTTPC_SDTO").equals(HTTPS_TIMEOUT_S)) {
-        SCB.setItem("HTTPC_SDTO", HTTPS_TIMEOUT_S);
+      if (!SCB.getItem("HTTPC_SDTO").equals(httpTimeoutSec)) {
+        SCB.setItem("HTTPC_SDTO", httpTimeoutSec);
         needsSave = true;
       }
 
-      if (!SCB.getItem("HTTPC_RDTO").equals(HTTPS_TIMEOUT_S)) {
-        SCB.setItem("HTTPC_RDTO", HTTPS_TIMEOUT_S);
+      if (!SCB.getItem("HTTPC_RDTO").equals(httpTimeoutSec)) {
+        SCB.setItem("HTTPC_RDTO", httpTimeoutSec);
         needsSave = true;
       }
 
