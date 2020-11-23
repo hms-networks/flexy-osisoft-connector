@@ -343,3 +343,9 @@ Commonly encountered issues:
     * The first thing to check is the 'common name' of the certificate. This needs to match the ip address or domain name of your OSIsoft server's machine.
 * Not connecting when OMF support is enabled.
     * We have found that you may need to rerun the PI Web API Admin Utility to ensure that PI data archive is connected. This is especially true if the connector was working properly and then stopped working after restarting the OSIsoft server machine.
+
+## OMF response logs
+OMF request responses will be logged in the /usr directory of the Flexy.
+Type initialization response logs are stored with the filename format {data type} + "Response.json"
+Container initialization response logs are stored with the filename format {container} + {container batch number} + "Response.json"
+Data message response logs are stored with the file name "dataMessage.json". Only the latest response is retained.

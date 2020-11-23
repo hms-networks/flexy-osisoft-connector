@@ -34,6 +34,32 @@ public class OSIsoftServer {
 
   static final String WEB_ID_ERROR_STRING = "Unknown or invalid WebID format:";
 
+  /** The directory where http(s) responses are stored. */
+  static final String RESPONSE_DIRECTORY = "/usr/";
+
+  /** The name appended to the end of all http(s) response files. */
+  static final String RESPONSE_FILE_NAME = "Response.json";
+
+  /** save the response for initializing string OMF types */
+  static final String STRING_RESPONSE_FILE_NAME =
+      RESPONSE_DIRECTORY + OsisoftJsonPayload.STRING_TAG_TYPE + RESPONSE_FILE_NAME;
+
+  /** save the response for initializing number OMF types */
+  static final String NUMBER_RESPONSE_FILE_NAME =
+      RESPONSE_DIRECTORY + OsisoftJsonPayload.NUMBER_TAG_TYPE + RESPONSE_FILE_NAME;
+
+  /** save the response for initializing integer OMF types */
+  static final String INTEGER_RESPONSE_FILE_NAME =
+      RESPONSE_DIRECTORY + OsisoftJsonPayload.INTEGER_TAG_TYPE + RESPONSE_FILE_NAME;
+
+  /** save the response for initializing boolean OMF types */
+  static final String BOOLEAN_RESPONSE_FILE_NAME =
+      RESPONSE_DIRECTORY + OsisoftJsonPayload.BOOLEAN_TAG_TYPE + RESPONSE_FILE_NAME;
+
+  /** save the response for initializing boolean OMF types */
+  static final String DATA_RESPONSE_FILE_NAME =
+      RESPONSE_DIRECTORY + "dataMessage" + RESPONSE_FILE_NAME;
+
   /** Constructs the OSIsoftServer object. */
   public OSIsoftServer() {}
 
@@ -336,7 +362,6 @@ public class OSIsoftServer {
   private void initOMF() {
     // setup type
     String messageTypeHeader = "&messagetype=type";
-    final String responseFilename = "/usr/response.json";
 
     RequestHTTPS(
         OSIsoftConfig.getOmfUrl(),
@@ -344,7 +369,7 @@ public class OSIsoftServer {
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
         "",
-        responseFilename);
+        STRING_RESPONSE_FILE_NAME);
 
     RequestHTTPS(
         OSIsoftConfig.getOmfUrl(),
@@ -352,7 +377,7 @@ public class OSIsoftServer {
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getNumberTypeBody(),
         "",
-        responseFilename);
+        NUMBER_RESPONSE_FILE_NAME);
 
     RequestHTTPS(
         OSIsoftConfig.getOmfUrl(),
@@ -360,7 +385,7 @@ public class OSIsoftServer {
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getIntegerTypeBody(),
         "",
-        responseFilename);
+        INTEGER_RESPONSE_FILE_NAME);
 
     RequestHTTPS(
         OSIsoftConfig.getOmfUrl(),
@@ -368,7 +393,7 @@ public class OSIsoftServer {
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getBooleanTypeBody(),
         "",
-        responseFilename);
+        BOOLEAN_RESPONSE_FILE_NAME);
 
     // setup containers
     final int numTagsInList = TagInfoManager.getTagInfoList().size();
@@ -387,7 +412,7 @@ public class OSIsoftServer {
           OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
           payload,
           "",
-          responseFilename);
+          RESPONSE_DIRECTORY + "containers" + currentTagIndex + RESPONSE_FILE_NAME);
     }
   }
 
@@ -491,7 +516,6 @@ public class OSIsoftServer {
     String postHeaderType = "&messagetype=type";
 
     postHeaderType = "&messagetype=data";
-    String responseFilename = "/usr/response.txt";
 
     // posting OMF batch
     boolean requestSuccess =
@@ -501,7 +525,7 @@ public class OSIsoftServer {
             OSIsoftConfig.getOmfPostHeaders() + postHeaderType,
             payload,
             "",
-            responseFilename); // data
+            DATA_RESPONSE_FILE_NAME);
     if (!requestSuccess) {
       Logger.LOG_SERIOUS("Could not post batch of OMF data points to OSIsoft.");
     }
