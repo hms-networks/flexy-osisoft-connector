@@ -199,9 +199,18 @@ public class PayloadBuilder {
    * @param tagName the tag's name
    * @return the payload segment as a string
    */
-  public static String addContainerStartToOMFDataMessage(String tagName) {
+  public static String addContainerStartToOMFDataMessage(String tagName, String tagType) {
+
+    final String flexySerial = OSIsoftConfig.getFlexySerial();
+
+    /* Ensure the container is uniquely identified across devices communicating to the same
+     * OSIsoft server under the same type declaration.
+     * Types are treated as immutable and changing the type creates a new container.
+     */
+    final String containerId = tagName + "-" + tagType + "-" + flexySerial;
+
     // each tag's container id is set to the tag's name
-    String payload = "{" + "\"containerid\": \"" + tagName + "\"" + "," + "\"values\": [";
+    String payload = "{" + "\"containerid\": \"" + containerId + "\"" + "," + "\"values\": [";
 
     return payload;
   }
@@ -406,15 +415,15 @@ public class PayloadBuilder {
 
         if (currentTag.getType() == TagType.FLOAT) {
           typeID = "HMS-number-type-" + getFlexyName();
-          typeString = "number";
+          typeString = OsisoftJsonPayload.NUMBER_TAG_TYPE;
         } else if (currentTag.getType() == TagType.INTEGER) {
-          typeString = "integer";
+          typeString = OsisoftJsonPayload.INTEGER_TAG_TYPE;
         } else if (currentTag.getType() == TagType.BOOLEAN) {
-          typeString = "boolean";
+          typeString = OsisoftJsonPayload.BOOLEAN_TAG_TYPE;
         } else if (currentTag.getType() == TagType.DWORD) {
-          typeString = "number";
+          typeString = OsisoftJsonPayload.NUMBER_TAG_TYPE;
         } else if (currentTag.getType() == TagType.STRING) {
-          typeString = "string";
+          typeString = OsisoftJsonPayload.STRING_TAG_TYPE;
         } else {
           Logger.LOG_SERIOUS("Unsupported tag type was selected for tag " + tagName);
           Logger.LOG_SERIOUS(

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import com.hms_networks.americas.sc.datapoint.DataPoint;
+import com.hms_networks.americas.sc.datapoint.DataType;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.string.PreAllocatedStringBuilder;
 import com.hms_networks.americas.sc.taginfo.TagConstants;
@@ -358,7 +359,28 @@ public class OsisoftJsonPayload {
             firstPayload = false;
           }
 
-          payload.append(PayloadBuilder.addContainerStartToOMFDataMessage(tagName));
+          String typeString = "";
+
+          if (tagPayload.getDataPoint().getType() == DataType.FLOAT) {
+            typeString = NUMBER_TAG_TYPE;
+          } else if (tagPayload.getDataPoint().getType() == DataType.INTEGER) {
+            typeString = INTEGER_TAG_TYPE;
+          } else if (tagPayload.getDataPoint().getType() == DataType.BOOLEAN) {
+            typeString = BOOLEAN_TAG_TYPE;
+          } else if (tagPayload.getDataPoint().getType() == DataType.DWORD) {
+            typeString = NUMBER_TAG_TYPE;
+          } else if (tagPayload.getDataPoint().getType() == DataType.STRING) {
+            typeString = STRING_TAG_TYPE;
+          } else {
+            Logger.LOG_SERIOUS(
+                "Unsupported tag type was selected for Ewon tag "
+                    + tagPayload.getDataPoint().getTagName());
+            Logger.LOG_SERIOUS(
+                "Please change that Ewon tag type to one of the following: Integer, Boolean, DWord,"
+                    + " Float, or String.");
+          }
+
+          payload.append(PayloadBuilder.addContainerStartToOMFDataMessage(tagName, typeString));
 
           payload.append(tagPayload.getPayload());
 
