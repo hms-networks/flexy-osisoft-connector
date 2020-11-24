@@ -92,6 +92,18 @@ public class OsisoftJsonPayload {
   /** Maximum number of characters in a payload */
   public static int MAX_PAYLOAD_NUM_CHARACTERS = UNINITIALIZED_INTEGER;
 
+  /** The OSIsoft tag type identifier stored as a string for integers. */
+  public static final String INTEGER_TAG_TYPE = "integer";
+
+  /** The OSIsoft tag type identifier stored as a string for floats and dwords. */
+  public static final String NUMBER_TAG_TYPE = "number";
+
+  /** The OSIsoft tag type identifier stored as a string for booleans. */
+  public static final String BOOLEAN_TAG_TYPE = "boolean";
+
+  /** The OSIsoft tag type identifier stored as a string for strings. */
+  public static final String STRING_TAG_TYPE = "string";
+
   /**
    * Constructor for the OsisoftJsonPayload.
    *
