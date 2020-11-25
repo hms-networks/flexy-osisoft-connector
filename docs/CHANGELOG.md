@@ -1,5 +1,15 @@
 # Flexy OSIsoft Changelog
 
+## V2.7
+### Major Changes
++ None
+### Minor Changes
++ Fixed OMF bug in tag initialization where containers referenced old type ID
++ Made HTTPS timeout value an optional configuration parameter
++ OMF request responses are now saved separately by request type
++ Fixed malformed post request using "Post" instead of "POST"
++ Fixed OMF logical error in setting type format field
+
 ## v2.6
 ### Major Changes
 + None
