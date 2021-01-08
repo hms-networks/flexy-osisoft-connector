@@ -35,7 +35,7 @@ public class OSIsoftServer {
   static final String WEB_ID_ERROR_STRING = "Unknown or invalid WebID format:";
 
   /** The directory where http(s) responses are stored. */
-  static final String RESPONSE_DIRECTORY = "/usr/";
+  static final String RESPONSE_DIRECTORY = "/usr/responses/";
 
   /** The name appended to the end of all http(s) response files. */
   static final String RESPONSE_FILE_NAME = "Response.json";
@@ -82,6 +82,7 @@ public class OSIsoftServer {
       String FileFields,
       String FileName) {
     int res = NO_ERROR;
+    FileName = RESPONSE_DIRECTORY + FileName;
 
     try {
       Logger.LOG_DEBUG("HTTPS request is: " + CnxParam);
@@ -188,7 +189,7 @@ public class OSIsoftServer {
     boolean webIDSet = false;
 
     // HTTPS responses are stored in this file
-    String responseFilename = "/usr/response.txt";
+    String responseFilename = "response.txt";
 
     String tagName = tag.getName();
 
@@ -337,6 +338,8 @@ public class OSIsoftServer {
   public int initTags() {
     int retval = NO_ERROR;
 
+    makeResponseDirectory();
+
     switch (OSIsoftConfig.getCommunicationType()) {
         // OMF setup
       case OSIsoftConfig.OMF:
@@ -356,6 +359,14 @@ public class OSIsoftServer {
     }
 
     return retval;
+  }
+
+  /** If there is not a directory to hold responses, create one. */
+  private void makeResponseDirectory() {
+    File directory = new File(RESPONSE_DIRECTORY);
+    if (!directory.exists()) {
+      directory.mkdir();
+    }
   }
 
   /** Initialize the types and containers needed by OMF data messages into OSIsoft. */
