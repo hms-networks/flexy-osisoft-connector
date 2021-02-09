@@ -205,7 +205,7 @@ public class OSIsoftServer {
     requestSuccess =
         RequestHTTPS(
             url + "?nameFilter=" + tagName,
-            "Get",
+            "GET",
             OSIsoftConfig.getPostHeaders(),
             "",
             "",
@@ -249,7 +249,7 @@ public class OSIsoftServer {
         String payload = PayloadBuilder.buildNewPointBody(tag);
         requestSuccess =
             RequestHTTPS(
-                url, "Post", OSIsoftConfig.getPostHeaders(), payload, "", responseFilename);
+                url, "POST", OSIsoftConfig.getPostHeaders(), payload, "", responseFilename);
 
         if (!requestSuccess) {
           /* The WebID is sent back in the headers of the previous post
@@ -258,7 +258,7 @@ public class OSIsoftServer {
           requestSuccess =
               RequestHTTPS(
                   url + "?nameFilter=" + tagName,
-                  "Get",
+                  "GET",
                   OSIsoftConfig.getPostHeaders(),
                   "",
                   "",
@@ -299,7 +299,7 @@ public class OSIsoftServer {
                           + "points/"
                           + tagWebID
                           + "/attributes/pointsource",
-                      "Put",
+                      "PUT",
                       OSIsoftConfig.getPostHeaders(),
                       "\"HMS\"",
                       "",
