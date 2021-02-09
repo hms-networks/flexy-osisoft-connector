@@ -1,5 +1,12 @@
 # Flexy OSIsoft Changelog
 
+## V2.8
+### Major Changes
++ None
+### Minor Changes
++ Fixed malformed HTTPS requests for piwebapi calls
++ Updated libraries
+
 ## V2.7
 ### Major Changes
 + None
