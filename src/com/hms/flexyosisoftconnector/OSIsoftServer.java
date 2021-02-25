@@ -42,23 +42,22 @@ public class OSIsoftServer {
 
   /** save the response for initializing string OMF types */
   static final String STRING_RESPONSE_FILE_NAME =
-      RESPONSE_DIRECTORY + OsisoftJsonPayload.STRING_TAG_TYPE + RESPONSE_FILE_NAME;
+      OsisoftJsonPayload.STRING_TAG_TYPE + RESPONSE_FILE_NAME;
 
   /** save the response for initializing number OMF types */
   static final String NUMBER_RESPONSE_FILE_NAME =
-      RESPONSE_DIRECTORY + OsisoftJsonPayload.NUMBER_TAG_TYPE + RESPONSE_FILE_NAME;
+      OsisoftJsonPayload.NUMBER_TAG_TYPE + RESPONSE_FILE_NAME;
 
   /** save the response for initializing integer OMF types */
   static final String INTEGER_RESPONSE_FILE_NAME =
-      RESPONSE_DIRECTORY + OsisoftJsonPayload.INTEGER_TAG_TYPE + RESPONSE_FILE_NAME;
+      OsisoftJsonPayload.INTEGER_TAG_TYPE + RESPONSE_FILE_NAME;
 
   /** save the response for initializing boolean OMF types */
   static final String BOOLEAN_RESPONSE_FILE_NAME =
-      RESPONSE_DIRECTORY + OsisoftJsonPayload.BOOLEAN_TAG_TYPE + RESPONSE_FILE_NAME;
+      OsisoftJsonPayload.BOOLEAN_TAG_TYPE + RESPONSE_FILE_NAME;
 
   /** save the response for initializing boolean OMF types */
-  static final String DATA_RESPONSE_FILE_NAME =
-      RESPONSE_DIRECTORY + "dataMessage" + RESPONSE_FILE_NAME;
+  static final String DATA_RESPONSE_FILE_NAME = "dataMessage" + RESPONSE_FILE_NAME;
 
   /** Constructs the OSIsoftServer object. */
   public OSIsoftServer() {}
@@ -82,8 +81,9 @@ public class OSIsoftServer {
       String FileFields,
       String FileName) {
     int res = NO_ERROR;
-    FileName = RESPONSE_DIRECTORY + FileName;
-
+    if (FileName.length() > 0) {
+      FileName = RESPONSE_DIRECTORY + FileName;
+    }
     try {
       Logger.LOG_DEBUG("HTTPS request is: " + CnxParam);
       res =
@@ -214,7 +214,9 @@ public class OSIsoftServer {
       // Parse the JSON response and retrieve the JSON Array of items
       JSONTokener JsonT = null;
       try {
-        JsonT = new JSONTokener(FileAccessManager.readFileToString(responseFilename));
+        JsonT =
+            new JSONTokener(
+                FileAccessManager.readFileToString(RESPONSE_DIRECTORY + responseFilename));
       } catch (IOException e) {
         Logger.LOG_EXCEPTION(e);
         Logger.LOG_SERIOUS("Unable to read malformed HTTPS response JSON from previous request.");
@@ -266,7 +268,9 @@ public class OSIsoftServer {
           if (!requestSuccess) {
             // Parse the JSON response and retrieve the JSON Array of items
             try {
-              JsonT = new JSONTokener(FileAccessManager.readFileToString(responseFilename));
+              JsonT =
+                  new JSONTokener(
+                      FileAccessManager.readFileToString(RESPONSE_DIRECTORY + responseFilename));
             } catch (IOException e) {
               Logger.LOG_EXCEPTION(e);
               Logger.LOG_SERIOUS("Unable to read response file from previous request.");
@@ -318,7 +322,7 @@ public class OSIsoftServer {
       }
 
       // Delete the https response file
-      File file = new File(responseFilename);
+      File file = new File(RESPONSE_DIRECTORY + responseFilename);
       if (!file.delete()) {
         Logger.LOG_SERIOUS("Failed to delete the HTTPS response file");
       }
@@ -423,7 +427,7 @@ public class OSIsoftServer {
           OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
           payload,
           "",
-          RESPONSE_DIRECTORY + "containers" + currentTagIndex + RESPONSE_FILE_NAME);
+          "containers" + currentTagIndex + RESPONSE_FILE_NAME);
     }
   }
 
