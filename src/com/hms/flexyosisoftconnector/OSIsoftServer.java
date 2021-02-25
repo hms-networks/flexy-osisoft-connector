@@ -210,7 +210,7 @@ public class OSIsoftServer {
             "",
             "",
             responseFilename);
-    if (!requestSuccess) {
+    if (requestSuccess) {
       // Parse the JSON response and retrieve the JSON Array of items
       JSONTokener JsonT = null;
       try {
@@ -253,7 +253,7 @@ public class OSIsoftServer {
             RequestHTTPS(
                 url, "POST", OSIsoftConfig.getPostHeaders(), payload, "", responseFilename);
 
-        if (!requestSuccess) {
+        if (requestSuccess) {
           /* The WebID is sent back in the headers of the previous post
           however, there is no mechanism currently to retrieve it so
           another request must be issued.*/
@@ -265,7 +265,7 @@ public class OSIsoftServer {
                   "",
                   "",
                   responseFilename);
-          if (!requestSuccess) {
+          if (requestSuccess) {
             // Parse the JSON response and retrieve the JSON Array of items
             try {
               JsonT =
