@@ -381,15 +381,34 @@ public class OsisoftJsonPayload {
                     + " Float, or String.");
           }
 
-          payload.append(PayloadBuilder.addContainerStartToOMFDataMessage(tagName, typeString));
-
-          payload.append(tagPayload.getPayload());
-
-          payload.append(PayloadBuilder.addContainerEndToOMFDataMessage());
+          switch (communicationType) {
+            case OSIsoftConfig.OMF:
+              payload.append(PayloadBuilder.addContainerStartToOMFDataMessage(tagName, typeString));
+              payload.append(tagPayload.getPayload());
+              payload.append(PayloadBuilder.addContainerEndToOMFDataMessage());
+              break;
+            case OSIsoftConfig.PI_WEB_API:
+              payload.append(tagPayload.getPayload());
+              break;
+            default:
+              Logger.LOG_SERIOUS(comsErrMsg);
+              break;
+          }
         }
       }
 
-      boolean allAppended = payload.append(PayloadBuilder.endOMFDataMessage());
+      boolean allAppended = false;
+      switch (communicationType) {
+        case OSIsoftConfig.OMF:
+          allAppended = payload.append(PayloadBuilder.endOMFDataMessage());
+          break;
+        case OSIsoftConfig.PI_WEB_API:
+          allAppended = payload.append(PayloadBuilder.endBatchOldFormat());
+          break;
+        default:
+          Logger.LOG_SERIOUS(comsErrMsg);
+          break;
+      }
 
       if (!allAppended) {
         Logger.LOG_SERIOUS(
