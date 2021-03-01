@@ -94,7 +94,7 @@ public class PayloadBuilder {
    * @param batchCount which data point we are adding
    * @return returns a JSON segment containing the added data point.
    */
-  public static String addPointOldFormat(DataPoint dataPoint, int batchCount) {
+  public static String addPointOldFormat(DataPoint dataPoint, String timeStamp, int batchCount) {
     int index = dataPoint.getTagId() - tagWebIdListIndexOffset;
     String webId = tagWebIdList[index];
     String targetURL = "https://" + OSIsoftConfig.getServerIP() + "/piwebapi/";
@@ -111,7 +111,7 @@ public class PayloadBuilder {
             + webId
             + "/Value\",\n"
             + "    \"Content\": \""
-            + buildBody(dataPoint.getValueString(), dataPoint.getTimeStamp(), true)
+            + buildBody(dataPoint.getValueString(), timeStamp, true)
             + "\",\n"
             + "    \"Headers\": {\"Authorization\": \"Basic "
             + authCredentials
