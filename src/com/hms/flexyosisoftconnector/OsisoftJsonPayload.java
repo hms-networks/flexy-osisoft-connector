@@ -280,7 +280,8 @@ public class OsisoftJsonPayload {
             PayloadBuilder.addPointToOMFDataMessage(dataPoint, timestamp, isFirstPoint);
         break;
       case OSIsoftConfig.PI_WEB_API:
-        newPayloadPart = PayloadBuilder.addPointOldFormat(dataPoint, dataPointsEncounteredCount);
+        newPayloadPart =
+            PayloadBuilder.addPointOldFormat(dataPoint, timestamp, dataPointsEncounteredCount);
         break;
       default:
         Logger.LOG_SERIOUS(comsErrMsg);
