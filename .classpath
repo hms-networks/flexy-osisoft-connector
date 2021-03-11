@@ -2,5 +2,12 @@
 <classpath>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="lib/sc-flexy-datapoint-lib/src"/>
+	<classpathentry kind="src" path="lib/sc-flexy-file-util-lib/src"/>
+	<classpathentry kind="src" path="lib/sc-flexy-json-lib/src"/>
+	<classpathentry kind="src" path="lib/sc-flexy-logger-lib/src"/>
+	<classpathentry kind="src" path="lib/sc-flexy-string-lib/src"/>
+	<classpathentry kind="src" path="lib/sc-flexy-tag-data-lib/src"/>
+	<classpathentry kind="src" path="lib/sc-flexy-tag-info-lib/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
