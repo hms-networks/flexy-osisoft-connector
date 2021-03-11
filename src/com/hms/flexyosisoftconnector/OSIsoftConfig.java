@@ -93,6 +93,9 @@ public class OSIsoftConfig {
   /** default http timeout in seconds for if it is not set through configuration file. */
   private static final int HTTP_TIMEOUT_SECONDS_DEFAULT = 2;
 
+  /** Default logging level for the SC logger library is set to 3 for 'warning'. */
+  private static final int LOGGING_LEVEL_DEFAULT = 3;
+
   /** Key to access http timeout from config file JSON. */
   private static final String HTTP_TIMEOUT_SECONDS_KEY = "httpTimeoutSeconds";
 
@@ -162,11 +165,17 @@ public class OSIsoftConfig {
       System.exit(1);
     }
 
+    boolean res;
     if (appConfig.has("LoggingLevel")) {
-      boolean res = Logger.SET_LOG_LEVEL(appConfig.getInt("LoggingLevel"));
-      if (!res) {
-        Logger.LOG_SERIOUS("Invalid logging level specified");
-      }
+      res = Logger.SET_LOG_LEVEL(appConfig.getInt("LoggingLevel"));
+    } else {
+      res = Logger.SET_LOG_LEVEL(LOGGING_LEVEL_DEFAULT);
+      Logger.LOG_WARN(
+          "No logging level was set in the configuration file. Using default logging"
+              + " level of 'warning'.");
+    }
+    if (!res) {
+      Logger.LOG_SERIOUS("Invalid logging level specified");
     }
 
     if (appConfig.has(HTTP_TIMEOUT_SECONDS_KEY)) {
