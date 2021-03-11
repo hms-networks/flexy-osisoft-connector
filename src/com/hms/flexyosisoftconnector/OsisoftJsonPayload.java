@@ -353,13 +353,6 @@ public class OsisoftJsonPayload {
           TagPayload tagPayload = (TagPayload) tagPayloadArr[i];
 
           String tagName = tagPayload.getDataPoint().getTagName();
-
-          if (!firstPayload) {
-            payload.append(",");
-          } else {
-            firstPayload = false;
-          }
-
           String typeString = "";
 
           if (tagPayload.getDataPoint().getType() == DataType.FLOAT) {
@@ -383,6 +376,11 @@ public class OsisoftJsonPayload {
 
           switch (communicationType) {
             case OSIsoftConfig.OMF:
+              if (!firstPayload) {
+                payload.append(",");
+              } else {
+                firstPayload = false;
+              }
               payload.append(PayloadBuilder.addContainerStartToOMFDataMessage(tagName, typeString));
               payload.append(tagPayload.getPayload());
               payload.append(PayloadBuilder.addContainerEndToOMFDataMessage());
