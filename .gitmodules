@@ -1,28 +1,28 @@
-[submodule "sc-flexy-datapoint-lib"]
-	path = sc-flexy-datapoint-lib
+[submodule "lib/sc-flexy-datapoint-lib"]
+	path = lib/sc-flexy-datapoint-lib
 	url = https://github.com/hms-networks/sc-flexy-datapoint-lib.git
 	branch = release/1.1
-[submodule "sc-flexy-string-lib"]
-	path = sc-flexy-string-lib
+[submodule "lib/sc-flexy-string-lib"]
+	path = lib/sc-flexy-string-lib
 	url = https://github.com/hms-networks/sc-flexy-string-lib.git
 	branch = release/1.2
-[submodule "sc-flexy-tag-info-lib"]
-	path = sc-flexy-tag-info-lib
+[submodule "lib/sc-flexy-tag-info-lib"]
+	path = lib/sc-flexy-tag-info-lib
 	url = https://github.com/hms-networks/sc-flexy-tag-info-lib.git
 	branch = release/1.0
-[submodule "sc-flexy-file-util-lib"]
-	path = sc-flexy-file-util-lib
+[submodule "lib/sc-flexy-file-util-lib"]
+	path = lib/sc-flexy-file-util-lib
 	url = https://github.com/hms-networks/sc-flexy-file-util-lib.git
 	branch = release/1.2
-[submodule "sc-flexy-logger-lib"]
-	path = sc-flexy-logger-lib
+[submodule "lib/sc-flexy-logger-lib"]
+	path = lib/sc-flexy-logger-lib
 	url = https://github.com/hms-networks/sc-flexy-logger-lib.git
 	branch = release/1.0
-[submodule "sc-flexy-json-lib"]
-	path = sc-flexy-json-lib
+[submodule "lib/sc-flexy-json-lib"]
+	path = lib/sc-flexy-json-lib
 	url = https://github.com/hms-networks/sc-flexy-json-lib.git
 	branch = release/1.0
-[submodule "sc-flexy-tag-data-lib"]
-	path = sc-flexy-tag-data-lib
+[submodule "lib/sc-flexy-tag-data-lib"]
+	path = lib/sc-flexy-tag-data-lib
 	url = https://github.com/hms-networks/sc-flexy-tag-data-lib.git
 	branch = release/2.1
