@@ -26,3 +26,7 @@
 	path = lib/sc-flexy-tag-data-lib
 	url = https://github.com/hms-networks/sc-flexy-tag-data-lib.git
 	branch = release/2.1
+[submodule "lib/sc-flexy-time-lib"]
+	path = lib/sc-flexy-time-lib
+	url = https://github.com/hms-networks/sc-flexy-time-lib.git
+	branch = release/1.0
