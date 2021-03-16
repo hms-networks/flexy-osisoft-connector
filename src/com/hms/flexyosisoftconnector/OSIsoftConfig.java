@@ -27,7 +27,7 @@ public class OSIsoftConfig {
   private static String ftpPassword;
 
   /** IP address of OSIsoft PI Server */
-  private static String piServerIP;
+  private static String piServerUrl;
 
   /** WebID of the OSIsoft PI Dataserver */
   private static String dataServerWebID;
@@ -136,7 +136,7 @@ public class OSIsoftConfig {
     JSONObject serverConfig = configJSON.getJSONObject("ServerConfig");
 
     // Set the server config parameters
-    piServerIP = serverConfig.getString("IP");
+    piServerUrl = serverConfig.getString("URL");
     dataServerWebID = serverConfig.getString("WebID");
     piServerLogin = serverConfig.getString("Credentials");
 
@@ -221,11 +221,11 @@ public class OSIsoftConfig {
     if (serverConfig.has("ProxyURL")) {
       proxyURL = serverConfig.getString("ProxyURL");
       // if a proxy URL is present user defines endpoints
-      targetURL = "https://" + piServerIP + "/" + proxyURL;
+      targetURL = "https://" + piServerUrl + "/" + proxyURL;
       omfUrl = targetURL;
     } else {
       // there is not proxy in use
-      targetURL = "https://" + piServerIP + "/piwebapi/";
+      targetURL = "https://" + piServerUrl + "/piwebapi/";
       omfUrl = targetURL + "omf";
     }
 
@@ -373,8 +373,8 @@ public class OSIsoftConfig {
    *
    * @return the IP Address of the OSIsoft Server
    */
-  public static String getServerIP() {
-    return piServerIP;
+  public static String getServerUrl() {
+    return piServerUrl;
   }
 
   /**
