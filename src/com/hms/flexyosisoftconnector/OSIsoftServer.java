@@ -196,7 +196,7 @@ public class OSIsoftServer {
     // url for the dataserver's pi points
     String url =
         "https://"
-            + OSIsoftConfig.getServerIP()
+            + OSIsoftConfig.getServerUrl()
             + "/piwebapi/dataservers/"
             + OSIsoftConfig.getServerWebID()
             + "/points";

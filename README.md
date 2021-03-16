@@ -108,7 +108,7 @@ static String eWONCertificatePath = "/usr/Certificates";
 ```
 {
    "ServerConfig":{
-      "IP":"192.168.0.124",
+      "URL":"192.168.0.124",
       "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
       "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
    },
@@ -124,20 +124,20 @@ static String eWONCertificatePath = "/usr/Certificates";
 ```
 ### ServerConfig
 
-The OSIsoft PI Database Web API must be installed for this connector to work.  The connector requires three items to connect to the OSIsoft PI Web API they are the IP address of the server running the PI Web API, WebID of the PI Web API and a valid user name and password for the system running the PI Web API software.
+The OSIsoft PI Database Web API must be installed for this connector to work.  The connector requires three items to connect to the OSIsoft PI Web API they are the URL of the server running the PI Web API, WebID of the PI Web API and a valid user name and password for the system running the PI Web API software.
 
-IP – IP address of the system running the Web API (in this example assume the IP address is 192.168.0.124)
+URL – IP address or domain name of the system running the Web API (in this example assume the IP address is 192.168.0.124)
 
-WebID – WebID of your OSIsoft Web API.  This value can be attained by pointing a browser to the IP address (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step.  (A security warning may occur when trying to access this page, this warning should be ignored)
+WebID – WebID of your OSIsoft Web API.  This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step.  (A security warning may occur when trying to access this page, this warning should be ignored)
 
 #### Proxy URL
 
-Adding the field "ProxyURL" under the server config section will change request endpoints to https://server-ip/proxy-url. This field is optional. 
+Adding the field "ProxyURL" under the server config section will change request endpoints to https://domain-name/proxy-path. This field is optional. 
 Below is an example config file with the optional proxy URL in use.
    ```
    {
    "ServerConfig":{
-      "IP":"192.168.1.1",
+      "URL":"192.168.1.1",
       "WebID":"F2DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPdaswQ1MyUDFT",
       "Credentials":"cGFzc3dvcmQ=",
       "ProxyURL":"long/proxy/example/omf"
@@ -256,7 +256,7 @@ The Client ID and the Client Secret will be needed for the basic script you will
    ```
    {
    "ServerConfig":{
-      "IP":"192.168.1.8",
+      "URL":"192.168.1.8",
       "WebID":"F1DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPUC0wQ1MyUDFT",
       "Credentials":"dsZtOnBfdsjklfh==",
       "Namespace":"testNameSpace1",

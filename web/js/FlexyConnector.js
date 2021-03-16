@@ -14,10 +14,10 @@ function saveJSON()
    var jsonObject = {};
 
    //Fetch the ServerConfig
-   var IPVal = document.getElementById("IP").value;
+   var UrlVal = document.getElementById("URL").value;
    var WebID = document.getElementById("WebID").value;
    var Credentials = document.getElementById("Credentials").value;
-   jsonObject.ServerConfig = { IP: IPVal, WebID: WebID, Credentials: Credentials };
+   jsonObject.ServerConfig = { URL: UrlVal, WebID: WebID, Credentials: Credentials };
 
    //Fetch the eWONConfig
    var CertificatePath = document.getElementById("CertificatePath").value;
@@ -142,7 +142,7 @@ function loadPage()
       }
 
       //Add and set the Connector Settings fields
-      addCellsInput("Server IP Address:", obj.ServerConfig.IP, "IP", "Invalid IP address format");
+      addCellsInput("Server URL:", obj.ServerConfig.URL, "URL", "Invalid URL format");
       addCellsInput("OSIsoft Web ID:", obj.ServerConfig.WebID, "WebID", "Invalid WebID");
       addCellsInput("OSIsoft Credentials:", obj.ServerConfig.Credentials, "Credentials", "");
       addCellsInput("Flexy Certificate Path:", obj.eWONConfig.CertificatePath, "CertificatePath", "");
@@ -165,8 +165,8 @@ function loadPage()
          var res = true;
          switch (element.id)
          {
-            case "IP":
-               res = validateIP(element.value);
+            case "URL":
+               res = validateUrl(element.value);
                break;
             case "WebID":
                res = validateWebID(element.value);
@@ -198,14 +198,14 @@ function validateWebID(id)
    return (id.length === 40);
 }
 
-//Validates an IP Address
+//Validates a URL
 //Must be in format xxx.xxx.xxx.xxx or xxx.xxx.xxx.xxx:pppp
-function validateIP(ip)
+function validateUrl(url)
 {
    var ip_pattern = '^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)';
    var port_pattern = '((:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?)$';
    var validation_regex = new RegExp(ip_pattern + port_pattern);
-   return validation_regex.test(ip);
+   return validation_regex.test(url);
 }
 
 
