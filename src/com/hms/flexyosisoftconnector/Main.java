@@ -6,6 +6,7 @@ import com.hms_networks.americas.sc.historicaldata.HistoricalDataQueueManager;
 import com.hms_networks.americas.sc.json.JSONException;
 import com.hms_networks.americas.sc.logging.Logger;
 import com.hms_networks.americas.sc.taginfo.TagInfoManager;
+import com.hms_networks.americas.sc.time.LocalTimeOffsetCalculator;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -46,6 +47,8 @@ public class Main {
     restServer.start();
 
     OSIsoftConfig.initConfig(CONNECTOR_CONFIG_FILENAME);
+
+    setLocalTimeZone();
 
     // Check that the flexy has a non-default name, stop the application if not
     if (OSIsoftConfig.getFlexyName().equals(DEFAULT_EWON_NAME)) {
@@ -212,5 +215,25 @@ public class Main {
       Logger.LOG_SERIOUS("Setting timeouts failed. Application ending");
       System.exit(0);
     }
+  }
+
+  /** Set the local time zone for use in all export block descriptor calls. */
+  private static void setLocalTimeZone() {
+    // Configure local time offset username/password
+    LocalTimeOffsetCalculator.setDeviceUsername(OSIsoftConfig.getFtpUser());
+    LocalTimeOffsetCalculator.setDevicePassword(OSIsoftConfig.getFtpPassword());
+
+    // Calculate local time offset and configure queue
+    try {
+      LocalTimeOffsetCalculator.calculateLocalTimeOffsetMilliseconds();
+    } catch (Exception e) {
+      Logger.LOG_SERIOUS("Unable to calculate offset between local time and UTC.");
+      Logger.LOG_EXCEPTION(e);
+    }
+    final long calculatedTimeOffsetMilliseconds =
+        LocalTimeOffsetCalculator.getLocalTimeOffsetMilliseconds();
+    HistoricalDataQueueManager.setLocalTimeOffset(calculatedTimeOffsetMilliseconds);
+    Logger.LOG_DEBUG(
+        "The local time offset is " + calculatedTimeOffsetMilliseconds + " milliseconds.");
   }
 }
