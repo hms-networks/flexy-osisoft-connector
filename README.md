@@ -19,7 +19,7 @@ This application is supported by HMS' North American offices.
 1. [General Information](#General-Information)
 2. [Getting Started](#Getting-Started)
    1. [Configuration](#Configuration)
-   2. [Clock Settings](#Flexy-Clock-Settings)
+   2. [Flexy Configuration](#Flexy-Configuration)
    3. [Installation](#Installation)
    4. [Running](#Running)
 3. [Certificates](#Certificates)
@@ -53,8 +53,8 @@ The ConnectorConfig.json file can be edited through the configuration webpage.  
 #### FTP Configuration
 If you wish to manually edit your ConnectorConfig.json file or you have a saved ConnectorConfig.json file from another Flexy you can load your ConnectorConfig.json file on the flexy in the /usr/ directory via FTP.
 
-### Flexy Clock Settings
-The Flexy's clock must be set to Coordinated Universal Time (UTC) in order to post accurate timestamps to OSIsoft.  This can be done manually on the Flexy's websever under Setup->System->Main->General->Date & Time or NTP can be used if there is an internet connection available.  NTP is setup in Setup->System->Main->Net services->NTP (time).  If using NTP time make sure the GMT Offset is set to zero hours
+### Flexy Configuration
+The Flexy must have a FTP user created to be used by the application in order to post accurate timestamps to OSIsoft. This can be done manually on the Flexy's websever under Setup->Users page through the "Add" button. The added user login should be specified in the EwonConfig section of the readme. By default, the credentials are "FtpUser" for the username and "FtpPassword" for the password. Check all global rights option check boxes when creating this user.
 
 ### Installation
 
@@ -113,7 +113,9 @@ static String eWONCertificatePath = "/usr/Certificates";
       "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
    },
    "eWONConfig":{
-      "CertificatePath":"/usr/Certificates"
+      "CertificatePath":"/usr/Certificates",
+      "FtpUser":"ftpUsernameExample",
+      "FtpPassword":"ftpPasswordExample"
    },
    "AppConfig":{
       "CommunicationType":"omf"

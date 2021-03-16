@@ -20,6 +20,12 @@ public class OSIsoftConfig {
   /** Number of seconds queue can fall beind before warnings are logged. */
   public static final int WARNING_LIMIT_QUEUE_BEHIND_SECONDS = 15;
 
+  /** FTP user set in the Ewon user settings. */
+  private static String ftpUser;
+
+  /** FTP user's password set in the Ewon user settings. */
+  private static String ftpPassword;
+
   /** IP address of OSIsoft PI Server */
   private static String piServerIP;
 
@@ -137,6 +143,16 @@ public class OSIsoftConfig {
     // Build a JSON Object containing the "eWONConfig"
     JSONObject ewonConfig = configJSON.getJSONObject("eWONConfig");
     ewonCertificatePath = ewonConfig.getString("CertificatePath");
+    if (ewonConfig.has("FtpUser")) {
+      ftpUser = ewonConfig.getString("FtpUser");
+      ftpPassword = ewonConfig.getString("FtpPassword");
+    } else {
+      Logger.LOG_WARN(
+          "No FTP user was set in the configuration file. Using default FTP user credentials"
+              + "specified in README.");
+      ftpUser = "FtpUser";
+      ftpPassword = "FtpPassword";
+    }
 
     // Build a JSON Object containing the "AppConfig"
     JSONObject appConfig = configJSON.getJSONObject("AppConfig");
@@ -314,6 +330,24 @@ public class OSIsoftConfig {
    */
   public static String getOcsUrl() {
     return ocsUrl;
+  }
+
+  /**
+   * Get the FTP user.
+   *
+   * @return the FTP user
+   */
+  public static String getFtpUser() {
+    return ftpUser;
+  }
+
+  /**
+   * Get the FTP password.
+   *
+   * @return the FTP password
+   */
+  public static String getFtpPassword() {
+    return ftpPassword;
   }
 
   /**
