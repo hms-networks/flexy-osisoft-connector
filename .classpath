@@ -9,5 +9,6 @@
 	<classpathentry kind="src" path="lib/sc-flexy-string-lib/src"/>
 	<classpathentry kind="src" path="lib/sc-flexy-tag-data-lib/src"/>
 	<classpathentry kind="src" path="lib/sc-flexy-tag-info-lib/src"/>
+	<classpathentry kind="src" path="lib/sc-flexy-time-lib/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
