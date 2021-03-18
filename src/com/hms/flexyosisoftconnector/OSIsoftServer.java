@@ -59,6 +59,12 @@ public class OSIsoftServer {
   /** save the response for initializing boolean OMF types */
   static final String DATA_RESPONSE_FILE_NAME = "dataMessage" + RESPONSE_FILE_NAME;
 
+  /** Save the response for sending PI Web API batch messages. */
+  static final String PI_WEB_API_RESPONSE_FILE_NAME = "piWeb" + RESPONSE_FILE_NAME;
+
+  /** Save the response for sending OCS data messages. */
+  static final String OCS_RESPONSE_FILE_NAME = "OcsDataMessage" + RESPONSE_FILE_NAME;
+
   /** Constructs the OSIsoftServer object. */
   public OSIsoftServer() {}
 
@@ -453,7 +459,7 @@ public class OSIsoftServer {
    * Initialize the types and containers needed by OMF data messages into OSIsoft cloud services.
    */
   private void initOCS() {
-    final String responseFilename = "/usr/response.json";
+    final String responseFilename = "OcsResponse.json";
 
     // setup type
     final String ocsMessageTypeHeader = "&messagetype=type";
@@ -558,7 +564,6 @@ public class OSIsoftServer {
     String postHeaderType = "&messagetype=type";
 
     postHeaderType = "&messagetype=data";
-    String responseFilename = "/usr/response.txt";
 
     // posting OMF batch
     boolean requestSuccess =
@@ -568,7 +573,7 @@ public class OSIsoftServer {
             OSIsoftConfig.getOcsPostHeaders() + postHeaderType,
             payload,
             "",
-            responseFilename);
+            OCS_RESPONSE_FILE_NAME);
     if (!requestSuccess) {
       Logger.LOG_SERIOUS("Could not post batch of data point to OCS.");
     }
@@ -589,7 +594,7 @@ public class OSIsoftServer {
             OSIsoftConfig.getPostHeaders(),
             payload,
             "",
-            "");
+            PI_WEB_API_RESPONSE_FILE_NAME);
 
     if (!requestSuccess) {
       Logger.LOG_SERIOUS("Could not post batch of data points to OSIsoft.");
