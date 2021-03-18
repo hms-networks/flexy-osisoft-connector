@@ -40,23 +40,23 @@ public class OSIsoftServer {
   /** The name appended to the end of all http(s) response files. */
   static final String RESPONSE_FILE_NAME = "Response.json";
 
-  /** save the response for initializing string OMF types */
+  /** Save the response for initializing string OMF types. */
   static final String STRING_RESPONSE_FILE_NAME =
       OsisoftJsonPayload.STRING_TAG_TYPE + RESPONSE_FILE_NAME;
 
-  /** save the response for initializing number OMF types */
+  /** Save the response for initializing number OMF types. */
   static final String NUMBER_RESPONSE_FILE_NAME =
       OsisoftJsonPayload.NUMBER_TAG_TYPE + RESPONSE_FILE_NAME;
 
-  /** save the response for initializing integer OMF types */
+  /** Save the response for initializing integer OMF types. */
   static final String INTEGER_RESPONSE_FILE_NAME =
       OsisoftJsonPayload.INTEGER_TAG_TYPE + RESPONSE_FILE_NAME;
 
-  /** save the response for initializing boolean OMF types */
+  /** Save the response for initializing boolean OMF types. */
   static final String BOOLEAN_RESPONSE_FILE_NAME =
       OsisoftJsonPayload.BOOLEAN_TAG_TYPE + RESPONSE_FILE_NAME;
 
-  /** save the response for initializing boolean OMF types */
+  /** Save the response for initializing boolean OMF types. */
   static final String DATA_RESPONSE_FILE_NAME = "dataMessage" + RESPONSE_FILE_NAME;
 
   /** Save the response for sending PI Web API batch messages. */
