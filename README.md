@@ -54,7 +54,7 @@ The ConnectorConfig.json file can be edited through the configuration webpage.  
 If you wish to manually edit your ConnectorConfig.json file or you have a saved ConnectorConfig.json file from another Flexy you can load your ConnectorConfig.json file on the flexy in the /usr/ directory via FTP.
 
 ### Flexy Configuration
-The Flexy must have a FTP user created to be used by the application in order to post accurate timestamps to OSIsoft. This can be done manually on the Flexy's websever under Setup->Users page through the "Add" button. The added user login should be specified in the EwonConfig section of the readme. By default, the credentials are "FtpUser" for the username and "FtpPassword" for the password. Check all global rights option check boxes when creating this user.
+The Flexy must have a FTP user created to be used by the application in order to post accurate timestamps to OSIsoft. This can be done manually on the Flexy's web page under Setup->Users page through the "Add" button. The added user login should be specified in the EwonConfig section of the readme. By default, the credentials are "FtpUser" for the username and "FtpPassword" for the password. Check all global rights option check boxes when creating this user.
 
 ### Installation
 
