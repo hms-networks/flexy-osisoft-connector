@@ -1,5 +1,14 @@
 # Flexy OSIsoft Changelog
 
+## V2.9
+### Major Changes
++ Fixed OMF issue with successful HTTPS requests shown as failed
++ Added FTP user to set Java local time offset
+### Minor Changes
++ Updated libraries
++ Refactored 'IP' to 'URL' in config file and README
++ Added default logging level
+
 ## V2.8
 ### Major Changes
 + None
