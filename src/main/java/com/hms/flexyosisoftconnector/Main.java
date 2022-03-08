@@ -5,10 +5,11 @@ import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.historicaldata.HistoricalDataQueueManager;
 import com.hms_networks.americas.sc.extensions.json.JSONException;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
-import com.hms_networks.americas.sc.extensions.system.time.LocalTimeOffsetCalculator;
+import com.hms_networks.americas.sc.extensions.system.time.SCTimeUtils;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Ewon Flexy java demo for OSIsoft Server
@@ -219,21 +220,25 @@ public class Main {
 
   /** Set the local time zone for use in all export block descriptor calls. */
   private static void setLocalTimeZone() {
-    // Configure local time offset username/password
-    LocalTimeOffsetCalculator.setDeviceUsername(OSIsoftConfig.getFtpUser());
-    LocalTimeOffsetCalculator.setDevicePassword(OSIsoftConfig.getFtpPassword());
-
-    // Calculate local time offset and configure queue
+    // Inject local time in to the JVM
     try {
-      LocalTimeOffsetCalculator.calculateLocalTimeOffsetMilliseconds();
+      SCTimeUtils.injectJvmLocalTime();
+
+      final Date currentTime = new Date();
+      final String currentLocalTime = SCTimeUtils.getIso8601LocalTimeFormat().format(currentTime);
+      final String currentUtcTime = SCTimeUtils.getIso8601UtcTimeFormat().format(currentTime);
+      Logger.LOG_DEBUG(
+          "The local time zone is "
+              + SCTimeUtils.getTimeZoneName()
+              + " with an identifier of "
+              + SCTimeUtils.getLocalTimeZoneDesignator()
+              + ". The current local time is "
+              + currentLocalTime
+              + ", and the current UTC time is "
+              + currentUtcTime
+              + ".");
     } catch (Exception e) {
-      Logger.LOG_SERIOUS("Unable to calculate offset between local time and UTC.");
-      Logger.LOG_EXCEPTION(e);
+      Logger.LOG_CRITICAL("Unable to inject local time in to the JVM!");
     }
-    final long calculatedTimeOffsetMilliseconds =
-        LocalTimeOffsetCalculator.getLocalTimeOffsetMilliseconds();
-    HistoricalDataQueueManager.setLocalTimeOffset(calculatedTimeOffsetMilliseconds);
-    Logger.LOG_DEBUG(
-        "The local time offset is " + calculatedTimeOffsetMilliseconds + " milliseconds.");
   }
 }
