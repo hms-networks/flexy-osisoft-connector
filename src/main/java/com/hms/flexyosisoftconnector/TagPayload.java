@@ -1,8 +1,8 @@
 package com.hms.flexyosisoftconnector;
 
-import com.hms_networks.americas.sc.datapoint.DataPoint;
-import com.hms_networks.americas.sc.logging.Logger;
-import com.hms_networks.americas.sc.string.PreAllocatedStringBuilder;
+import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
+import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.string.PreAllocatedStringBuilder;
 
 /**
  * This class holds the incomplete payload as well as one of the datapoint objects.
