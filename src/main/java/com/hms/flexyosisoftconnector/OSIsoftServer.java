@@ -2,14 +2,14 @@ package com.hms.flexyosisoftconnector;
 
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.ScheduledActionManager;
-import com.hms_networks.americas.sc.fileutils.FileAccessManager;
-import com.hms_networks.americas.sc.json.JSONArray;
-import com.hms_networks.americas.sc.json.JSONException;
-import com.hms_networks.americas.sc.json.JSONObject;
-import com.hms_networks.americas.sc.json.JSONTokener;
-import com.hms_networks.americas.sc.logging.Logger;
-import com.hms_networks.americas.sc.taginfo.TagInfo;
-import com.hms_networks.americas.sc.taginfo.TagInfoManager;
+import com.hms_networks.americas.sc.extensions.fileutils.FileAccessManager;
+import com.hms_networks.americas.sc.extensions.json.JSONArray;
+import com.hms_networks.americas.sc.extensions.json.JSONException;
+import com.hms_networks.americas.sc.extensions.json.JSONObject;
+import com.hms_networks.americas.sc.extensions.json.JSONTokener;
+import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.taginfo.TagInfo;
+import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
 import java.io.File;
 import java.io.IOException;
 

@@ -1,8 +1,7 @@
 package com.hms.flexyosisoftconnector;
 
-import com.hms_networks.americas.sc.datapoint.DataPoint;
-import com.hms_networks.americas.sc.logging.Logger;
-
+import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
+import com.hms_networks.americas.sc.extensions.logging.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
