@@ -1,12 +1,12 @@
 package com.hms.flexyosisoftconnector;
 
 import com.ewon.ewonitf.SysControlBlock;
-import com.hms_networks.americas.sc.datapoint.DataPoint;
-import com.hms_networks.americas.sc.historicaldata.HistoricalDataQueueManager;
-import com.hms_networks.americas.sc.json.JSONException;
-import com.hms_networks.americas.sc.logging.Logger;
-import com.hms_networks.americas.sc.taginfo.TagInfoManager;
-import com.hms_networks.americas.sc.time.LocalTimeOffsetCalculator;
+import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
+import com.hms_networks.americas.sc.extensions.historicaldata.HistoricalDataQueueManager;
+import com.hms_networks.americas.sc.extensions.json.JSONException;
+import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.system.time.LocalTimeOffsetCalculator;
+import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
 import java.io.IOException;
 import java.util.ArrayList;
 
