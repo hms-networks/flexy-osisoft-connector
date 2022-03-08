@@ -3,11 +3,11 @@ package com.hms.flexyosisoftconnector;
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.SysControlBlock;
 import com.ewon.ewonitf.TagControl;
-import com.hms_networks.americas.sc.fileutils.FileAccessManager;
-import com.hms_networks.americas.sc.json.JSONException;
-import com.hms_networks.americas.sc.json.JSONObject;
-import com.hms_networks.americas.sc.json.JSONTokener;
-import com.hms_networks.americas.sc.logging.Logger;
+import com.hms_networks.americas.sc.extensions.fileutils.FileAccessManager;
+import com.hms_networks.americas.sc.extensions.json.JSONException;
+import com.hms_networks.americas.sc.extensions.json.JSONObject;
+import com.hms_networks.americas.sc.extensions.json.JSONTokener;
+import com.hms_networks.americas.sc.extensions.logging.Logger;
 import java.io.IOException;
 
 /**
