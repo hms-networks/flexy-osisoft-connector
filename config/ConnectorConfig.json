@@ -5,9 +5,7 @@
       "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
    },
    "eWONConfig":{
-      "CertificatePath":"/usr/Certificates",
-      "FtpUser":"ftpUsernameExample",
-      "FtpPassword":"ftpPasswordExample"
+      "CertificatePath":"/usr/Certificates"
    },
    "AppConfig":{
       "CommunicationType":"omf"
