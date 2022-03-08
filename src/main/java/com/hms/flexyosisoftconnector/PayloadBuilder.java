@@ -1,13 +1,13 @@
 package com.hms.flexyosisoftconnector;
 
 import com.ewon.ewonitf.SysControlBlock;
-import com.hms_networks.americas.sc.datapoint.DataPoint;
-import com.hms_networks.americas.sc.datapoint.DataType;
-import com.hms_networks.americas.sc.logging.Logger;
-import com.hms_networks.americas.sc.string.PreAllocatedStringBuilder;
-import com.hms_networks.americas.sc.taginfo.TagInfo;
-import com.hms_networks.americas.sc.taginfo.TagInfoManager;
-import com.hms_networks.americas.sc.taginfo.TagType;
+import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
+import com.hms_networks.americas.sc.extensions.datapoint.DataType;
+import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.string.PreAllocatedStringBuilder;
+import com.hms_networks.americas.sc.extensions.taginfo.TagInfo;
+import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
+import com.hms_networks.americas.sc.extensions.taginfo.TagType;
 
 /**
  * Class to build up a JSON payload in segments of strings.
