@@ -1,6 +1,6 @@
 package com.hms.flexyosisoftconnector;
 
-import com.hms_networks.americas.sc.logging.Logger;
+import com.hms_networks.americas.sc.extensions.logging.Logger;
 
 public class DataPoster extends Thread {
 
