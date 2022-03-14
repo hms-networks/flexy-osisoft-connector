@@ -22,7 +22,7 @@ import java.util.Date;
  *
  * <p>HMS Networks Inc. Solution Center
  */
-public class Main {
+public class OSIsoftConnectorMain {
 
   /** Application Major Version Number */
   static final int MAJOR_VERSION = 2;
