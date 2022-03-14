@@ -2,7 +2,10 @@ package com.hms.flexyosisoftconnector;
 
 import com.ewon.ewonitf.SysControlBlock;
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
+import com.hms_networks.americas.sc.extensions.historicaldata.CircularizedFileException;
+import com.hms_networks.americas.sc.extensions.historicaldata.EbdTimeoutException;
 import com.hms_networks.americas.sc.extensions.historicaldata.HistoricalDataQueueManager;
+import com.hms_networks.americas.sc.extensions.historicaldata.TimeTrackerUnrecoverableException;
 import com.hms_networks.americas.sc.extensions.json.JSONException;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
 import com.hms_networks.americas.sc.extensions.system.time.SCTimeUtils;
@@ -125,15 +128,25 @@ public class Main {
       Logger.LOG_EXCEPTION(e);
       Logger.LOG_WARN(
           "Exception thrown when obtaining new batch of datapoints. The queue will retry.");
+    } catch (CircularizedFileException e) {
+      Logger.LOG_EXCEPTION(e);
+      Logger.LOG_WARN("Data in the historical log has been overwritten with newer data.");
+    } catch (EbdTimeoutException e) {
+      Logger.LOG_EXCEPTION(e);
+      Logger.LOG_WARN("EBD call has timed out while fetching data.");
+    } catch (JSONException e) {
+      Logger.LOG_EXCEPTION(e);
+      Logger.LOG_WARN("Invalid JSON received while fetching data.");
+    } catch (TimeTrackerUnrecoverableException e) {
+      Logger.LOG_EXCEPTION(e);
+      Logger.LOG_SERIOUS("Time tracker file has been corrupted.");
     }
 
     // if there are data points to send
     if (queuePoints.size() != 0) {
       // Check if queue is behind
       try {
-        long queueBehindMillis =
-            HistoricalDataQueueManager.getCurrentTimeWithOffset()
-                - HistoricalDataQueueManager.getCurrentTimeTrackerValue();
+        long queueBehindMillis = HistoricalDataQueueManager.getQueueTimeBehindMillis();
         long queueBehindSeconds = queueBehindMillis / 1000;
         if (queueBehindSeconds >= OSIsoftConfig.WARNING_LIMIT_QUEUE_BEHIND_SECONDS) {
           Logger.LOG_WARN(
@@ -141,6 +154,9 @@ public class Main {
         }
       } catch (IOException e) {
         Logger.LOG_SERIOUS("Unable to detect if historical data queue is running behind.");
+        Logger.LOG_EXCEPTION(e);
+      } catch (TimeTrackerUnrecoverableException e) {
+        Logger.LOG_SERIOUS("Time tracker file has been corrupted.");
         Logger.LOG_EXCEPTION(e);
       }
 
