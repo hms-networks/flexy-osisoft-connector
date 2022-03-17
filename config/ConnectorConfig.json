@@ -8,6 +8,7 @@
       "CertificatePath":"/usr/Certificates"
    },
    "AppConfig":{
-      "CommunicationType":"omf"
+      "CommunicationType":"omf",
+      "OSIsoftTagNamingScheme":"default"
    }
 }
