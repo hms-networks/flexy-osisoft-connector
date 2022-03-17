@@ -75,6 +75,9 @@ public class OSIsoftConfig {
   /** Unique name of this flexy */
   private static String flexyName;
 
+  /** OSIsoft tag name scheme configuration */
+  private static String parsedOSIsoftTagNameOptions;
+
   /** Flexy's serial number */
   private static String flexySerialNum;
 
@@ -163,6 +166,19 @@ public class OSIsoftConfig {
               + " and restart the connector.");
       Logger.LOG_SERIOUS("OSIsoft connector Shutting down.");
       System.exit(1);
+    }
+
+    final String OSIsoftTagNameKey = "OSIsoftTagNamingScheme";
+    if (appConfig.has(OSIsoftTagNameKey)) {
+      parsedOSIsoftTagNameOptions =
+          OSIsoftTagNamingScheme.tagNameFormatOptionParser(appConfig.getString(OSIsoftTagNameKey));
+      Logger.LOG_INFO("OSIsoft tag name option set to: " + parsedOSIsoftTagNameOptions);
+    } else {
+      Logger.LOG_SERIOUS(
+          "No \""
+              + OSIsoftTagNameKey
+              + "\" option was given. Please add one in to the AppConfig section of"
+              + " the connector configuration file.");
     }
 
     boolean res;

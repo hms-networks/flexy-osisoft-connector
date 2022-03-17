@@ -26,7 +26,7 @@ public class OSIsoftServer {
 
   /** Boolean to represent when the last sent message was succesfully sent. */
   private static boolean connected = true;
-  
+
   /** Ewon error code representing a send error */
   public static final int SEND_ERROR = 32603;
 
