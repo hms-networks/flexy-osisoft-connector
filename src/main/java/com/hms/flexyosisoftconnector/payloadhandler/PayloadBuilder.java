@@ -2,6 +2,7 @@ package com.hms.flexyosisoftconnector.payloadhandler;
 
 import com.ewon.ewonitf.SysControlBlock;
 import com.hms.flexyosisoftconnector.configuration.OSIsoftConfig;
+import com.hms.flexyosisoftconnector.configuration.OSIsoftTagNamingScheme;
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.datapoint.DataType;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
@@ -208,7 +209,8 @@ public class PayloadBuilder {
      * OSIsoft server under the same type declaration.
      * Types are treated as immutable and changing the type creates a new container.
      */
-    final String containerId = tagName + "-" + tagType + "-" + flexySerial;
+    final String containerId =
+        OSIsoftTagNamingScheme.extractTagNameFromComponents(tagName, tagType);
 
     // each tag's container id is set to the tag's name
     String payload = "{" + "\"containerid\": \"" + containerId + "\"" + "," + "\"values\": [";
@@ -444,7 +446,8 @@ public class PayloadBuilder {
          * OSIsoft server under the same Type declaration.
          * Types are treated as immutable and changing the type creates a new container.
          */
-        final String containerId = tagName + "-" + typeString + "-" + flexySerial;
+        final String containerId =
+            OSIsoftTagNamingScheme.extractTagNameFromComponents(tagName, typeString);
 
         payload.append(
             "{" + "\"id\": \"" + containerId + "\"," + "\"typeid\": \"" + typeID + "\"" + "}");
