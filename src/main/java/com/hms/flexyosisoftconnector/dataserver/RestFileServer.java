@@ -1,4 +1,4 @@
-package com.hms.flexyosisoftconnector;
+package com.hms.flexyosisoftconnector.dataserver;
 
 import com.hms_networks.americas.sc.extensions.logging.Logger;
 import java.io.BufferedReader;
