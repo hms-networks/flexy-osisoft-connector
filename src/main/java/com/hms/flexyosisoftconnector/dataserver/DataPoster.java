@@ -1,5 +1,7 @@
-package com.hms.flexyosisoftconnector;
+package com.hms.flexyosisoftconnector.dataserver;
 
+import com.hms.flexyosisoftconnector.configuration.OSIsoftConfig;
+import com.hms.flexyosisoftconnector.payloadhandler.PayloadManager;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
 
 public class DataPoster extends Thread {

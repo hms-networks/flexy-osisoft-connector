@@ -1,6 +1,7 @@
-package com.hms.flexyosisoftconnector;
+package com.hms.flexyosisoftconnector.payloadhandler;
 
 import com.ewon.ewonitf.SysControlBlock;
+import com.hms.flexyosisoftconnector.configuration.OSIsoftConfig;
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.datapoint.DataType;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
