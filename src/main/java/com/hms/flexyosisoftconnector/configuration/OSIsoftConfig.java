@@ -1,4 +1,4 @@
-package com.hms.flexyosisoftconnector;
+package com.hms.flexyosisoftconnector.configuration;
 
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.SysControlBlock;

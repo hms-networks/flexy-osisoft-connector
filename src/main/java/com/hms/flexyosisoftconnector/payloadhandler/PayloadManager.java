@@ -1,4 +1,4 @@
-package com.hms.flexyosisoftconnector;
+package com.hms.flexyosisoftconnector.payloadhandler;
 
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
