@@ -1,7 +1,10 @@
-package com.hms.flexyosisoftconnector;
+package com.hms.flexyosisoftconnector.dataserver;
 
 import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.ScheduledActionManager;
+import com.hms.flexyosisoftconnector.configuration.OSIsoftConfig;
+import com.hms.flexyosisoftconnector.payloadhandler.OsisoftJsonPayload;
+import com.hms.flexyosisoftconnector.payloadhandler.PayloadBuilder;
 import com.hms_networks.americas.sc.extensions.fileutils.FileAccessManager;
 import com.hms_networks.americas.sc.extensions.json.JSONArray;
 import com.hms_networks.americas.sc.extensions.json.JSONException;
