@@ -30,12 +30,6 @@ import java.util.Date;
  */
 public class OSIsoftConnectorMain {
 
-  /** Application Major Version Number */
-  static final int MAJOR_VERSION = 2;
-
-  /** Application Minor Version Number */
-  static final int MINOR_VERSION = 9;
-
   /** Default name of a new Ewon */
   static final String DEFAULT_EWON_NAME = "eWON";
 
@@ -50,7 +44,8 @@ public class OSIsoftConnectorMain {
 
   public static void main(String[] args) throws IOException, JSONException {
     // Indicate the version number and that the application is starting
-    Logger.LOG_CRITICAL("OSIsoft Connector v" + MAJOR_VERSION + "." + MINOR_VERSION + " starting");
+    Logger.LOG_CRITICAL(
+        OSIsoftConfig.CONNECTOR_NAME + " v" + OSIsoftConfig.CONNECTOR_VERSION + " starting");
 
     // Start the webserver to accept json file
     RestFileServer restServer = new RestFileServer();

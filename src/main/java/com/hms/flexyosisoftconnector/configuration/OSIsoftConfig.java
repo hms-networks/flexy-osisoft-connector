@@ -17,6 +17,14 @@ import java.io.IOException;
  */
 public class OSIsoftConfig {
 
+  /** Name of the OSIsoft connector application. */
+  public static final String CONNECTOR_NAME =
+      OSIsoftConfig.class.getPackage().getImplementationTitle();
+
+  /** Version of the OSIsoft connector application. */
+  public static final String CONNECTOR_VERSION =
+      OSIsoftConfig.class.getPackage().getImplementationVersion();
+
   /** Number of seconds queue can fall beind before warnings are logged. */
   public static final int WARNING_LIMIT_QUEUE_BEHIND_SECONDS = 15;
 
