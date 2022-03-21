@@ -1,5 +1,16 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.0-pre4
+### Major Changes
++ Removed FTP user for local time
++ Added Naming scheme options to config file
+### Minor Changes
++ Switched build tool to Maven
++ Refactored classes into new packages
++ Added LICENSE file
++ Added CONTRIBUTING.md
++ Added CODE_OF_CONDUCT.md
+
 ## Version 2.9.0
 ### Major Changes
 + Fixed OMF issue with successful HTTPS requests shown as failed
