@@ -44,7 +44,7 @@ public class PayloadManager {
    *
    * @param communicationType The communication type can be OMF or PIWebApi format.
    */
-  PayloadManager(int communicationType) {
+  public PayloadManager(int communicationType) {
 
     // The unfinished payload information is stored in this.
     osisoftPayload = new OsisoftJsonPayload(communicationType);
