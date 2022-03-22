@@ -32,8 +32,8 @@ public class OSIsoftServer {
   static final int NO_ERROR = 0;
   static final int EWON_ERROR = 1;
   static final int AUTH_ERROR = 2;
-  static final int WEB_ID_ERROR = 2;
-  static final int GENERIC_ERROR = 254;
+  public static final int WEB_ID_ERROR = 2;
+  public static final int GENERIC_ERROR = 254;
 
   static final String WEB_ID_ERROR_STRING = "Unknown or invalid WebID format:";
 
