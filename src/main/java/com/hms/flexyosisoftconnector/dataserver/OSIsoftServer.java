@@ -23,18 +23,27 @@ import java.io.IOException;
  */
 public class OSIsoftServer {
 
+  /** Boolean to represent when the last sent message was succesfully sent. */
   private static boolean connected = true;
 
   public static final int LINK_ERROR = 32601;
-  public static final int SEND_ERROR = 32603;
-  public static final int JSON_ERROR = -100;
 
+  /** Ewon error code representing a send error */
+  public static final int SEND_ERROR = 32603;
+
+  /** Ewon error code representing a JSON error */
+  public static final int JSON_ERROR = -100;
   static final int NO_ERROR = 0;
   static final int EWON_ERROR = 1;
   static final int AUTH_ERROR = 2;
+
+  /** Ewon error code representing a web ID error */
   public static final int WEB_ID_ERROR = 2;
+
+  /** Ewon error code representing a generic error */
   public static final int GENERIC_ERROR = 254;
 
+  /** String to display wheb the web ID error occurs */
   static final String WEB_ID_ERROR_STRING = "Unknown or invalid WebID format:";
 
   /** The directory where http(s) responses are stored. */
