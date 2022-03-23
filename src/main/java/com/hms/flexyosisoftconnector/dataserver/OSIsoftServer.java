@@ -11,6 +11,7 @@ import com.hms_networks.americas.sc.extensions.json.JSONException;
 import com.hms_networks.americas.sc.extensions.json.JSONObject;
 import com.hms_networks.americas.sc.extensions.json.JSONTokener;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpUtility;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfo;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
 import java.io.File;
@@ -25,20 +26,15 @@ public class OSIsoftServer {
 
   /** Boolean to represent when the last sent message was succesfully sent. */
   private static boolean connected = true;
-
-  public static final int LINK_ERROR = 32601;
-
+  
   /** Ewon error code representing a send error */
   public static final int SEND_ERROR = 32603;
 
   /** Ewon error code representing a JSON error */
   public static final int JSON_ERROR = -100;
-  static final int NO_ERROR = 0;
-  static final int EWON_ERROR = 1;
-  static final int AUTH_ERROR = 2;
 
   /** Ewon error code representing a web ID error */
-  public static final int WEB_ID_ERROR = 2;
+  public static final int WEB_ID_ERROR = SCHttpUtility.HTTPX_CODE_AUTH_ERROR;
 
   /** Ewon error code representing a generic error */
   public static final int GENERIC_ERROR = 254;
@@ -98,7 +94,7 @@ public class OSIsoftServer {
       String TextFields,
       String FileFields,
       String FileName) {
-    int res = NO_ERROR;
+    int res = SCHttpUtility.HTTPX_CODE_NO_ERROR;
     if (FileName.length() > 0) {
       FileName = RESPONSE_DIRECTORY + FileName;
     }
@@ -109,10 +105,10 @@ public class OSIsoftServer {
               CnxParam, Method, Headers, TextFields, FileFields, FileName);
     } catch (EWException e) {
       Logger.LOG_EXCEPTION(e);
-      res = EWON_ERROR;
+      res = SCHttpUtility.HTTPX_CODE_EWON_ERROR;
     }
 
-    if (!FileName.equals("") && res == NO_ERROR) {
+    if (!FileName.equals("") && res == SCHttpUtility.HTTPX_CODE_NO_ERROR) {
       String fileStr = null;
       try {
         fileStr = FileAccessManager.readFileToString(FileName);
@@ -136,7 +132,7 @@ public class OSIsoftServer {
         Logger.LOG_SERIOUS("The request " + CnxParam + " has a bad response file.");
       }
       if (response.has("Message")) {
-        res = AUTH_ERROR;
+        res = SCHttpUtility.HTTPX_CODE_AUTH_ERROR;
         Logger.LOG_SERIOUS("User Credentials are incorrect");
       }
       if (response.has("Errors")) {
@@ -167,7 +163,7 @@ public class OSIsoftServer {
           }
         }
       }
-    } else if (res == LINK_ERROR) {
+    } else if (res == SCHttpUtility.HTTPX_CODE_CONNECTION_ERROR) {
       if (connected == true) {
         Logger.LOG_SERIOUS("Could not connect to OSIsoft Server, link is down");
         connected = false;
@@ -177,17 +173,17 @@ public class OSIsoftServer {
         Logger.LOG_SERIOUS("Could not connect to OSIsoft Server, server is offine or unreachable");
         connected = false;
       }
-    } else if (res != NO_ERROR) {
+    } else if (res != SCHttpUtility.HTTPX_CODE_NO_ERROR) {
       Logger.LOG_SERIOUS("Sending Failed. Error #" + res);
     }
 
-    if (res == NO_ERROR && connected == false) {
+    if (res == SCHttpUtility.HTTPX_CODE_NO_ERROR && connected == false) {
       connected = true;
       Logger.LOG_SERIOUS("Connection restored");
     }
 
     boolean success = false;
-    if (res == NO_ERROR) {
+    if (res == SCHttpUtility.HTTPX_CODE_NO_ERROR) {
       success = true;
     }
     return success;
@@ -358,7 +354,7 @@ public class OSIsoftServer {
    * @return returns the HTTP response code
    */
   public int initTags() {
-    int retval = NO_ERROR;
+    int retval = SCHttpUtility.HTTPX_CODE_NO_ERROR;
 
     makeResponseDirectory();
 

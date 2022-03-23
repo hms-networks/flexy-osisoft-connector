@@ -13,6 +13,7 @@ import com.hms_networks.americas.sc.extensions.historicaldata.HistoricalDataQueu
 import com.hms_networks.americas.sc.extensions.historicaldata.TimeTrackerUnrecoverableException;
 import com.hms_networks.americas.sc.extensions.json.JSONException;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpUtility;
 import com.hms_networks.americas.sc.extensions.system.time.SCTimeUtils;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
 import java.io.IOException;
@@ -94,7 +95,7 @@ public class OSIsoftConnectorMain {
       Logger.LOG_INFO("Initializing tags");
       res = piServer.initTags();
 
-    } while (res != OSIsoftServer.NO_ERROR);
+    } while (res != SCHttpUtility.HTTPX_CODE_NO_ERROR);
 
     Logger.LOG_INFO("Finished initializing tags");
 
