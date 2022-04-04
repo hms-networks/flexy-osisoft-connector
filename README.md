@@ -114,7 +114,8 @@ static String eWONCertificatePath = "/usr/Certificates";
       "CertificatePath":"/usr/Certificates"
    },
    "AppConfig":{
-      "CommunicationType":"omf"
+      "CommunicationType":"omf",
+      "OSIsoftTagNamingScheme":"default"
    }
 }
 ```
@@ -175,6 +176,23 @@ This refers to if you are using OMF (OSIsoft message format). If you have PIWEBA
 
 #### httpTimeoutSeconds
 Optional field to override the default value used for HTTPS_TIMEOUT_S. If omitted the default value will be used. This field is only needed if https requests consistently take large amounts of time to complete.
+
+#### OSIsoftTagNamingScheme
+This field is to configure how OSIsoft tags will be named. The options are listed below:
+
+* default, which stands for TN-SN-TT
+* SN, which stands for serial number
+* TN, which stands for tag name
+* TT, which stands for tag type.
+
+If the value of "default" is given, tag naming scheme will be set to TN-SN-TT. tags would be named as (tag name)-(serial number)-(tag type).
+The following are rules to make a valid tag name scheme:
+
+* Tag name scheme must include the tag name
+* Tag name options must be separated by the "-" delimiter
+* There cannot be more than 3 tag name scheme options present
+* There cannot be less than 1 tag name scheme option present
+* There cannot be any options used other than the 4 listed values of "default", "SN", "TN", or "TT"
 
 ## Customizing the application
 
