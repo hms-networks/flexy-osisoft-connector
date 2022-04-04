@@ -53,7 +53,6 @@ To change configuration values, follow the below steps:
 * Transfer the ConnectorConfig.json file on the local machine to the Flexy in the /usr/ directory via FTP.
 
 ### Flexy Configuration
-The Flexy must have a FTP user created to be used by the application in order to post accurate timestamps to OSIsoft. This can be done manually on the Flexy's web page under Setup->Users page through the "Add" button. The added user login should be specified in the EwonConfig section of the readme. By default, the credentials are "FtpUser" for the username and "FtpPassword" for the password. Check all global rights option check boxes when creating this user.
 
 ### Installation
 
@@ -112,9 +111,7 @@ static String eWONCertificatePath = "/usr/Certificates";
       "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
    },
    "eWONConfig":{
-      "CertificatePath":"/usr/Certificates",
-      "FtpUser":"ftpUsernameExample",
-      "FtpPassword":"ftpPasswordExample"
+      "CertificatePath":"/usr/Certificates"
    },
    "AppConfig":{
       "CommunicationType":"omf"
