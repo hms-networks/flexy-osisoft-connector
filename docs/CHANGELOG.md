@@ -1,6 +1,6 @@
 # Flexy OSIsoft Changelog
 
-## V2.9
+## Version 2.9.0
 ### Major Changes
 + Fixed OMF issue with successful HTTPS requests shown as failed
 + Added FTP user to set Java local time offset
@@ -9,14 +9,14 @@
 + Refactored 'IP' to 'URL' in config file and README
 + Added default logging level
 
-## V2.8
+## Version 2.8.0
 ### Major Changes
 + None
 ### Minor Changes
 + Fixed malformed HTTPS requests for piwebapi calls
 + Updated libraries
 
-## V2.7
+## Version 2.7.0
 ### Major Changes
 + None
 ### Minor Changes
@@ -26,26 +26,26 @@
 + Fixed malformed post request using "Post" instead of "POST"
 + Fixed OMF logical error in setting type format field
 
-## v2.6
+## Version 2.6.0
 ### Major Changes
 + None
 ### Minor Changes
 + Add support for proxy URL
 + Updated libraries
 
-## v2.5
+## Version 2.5.0
 ### Major Changes
 + None
 ### Minor Changes
 + OMF container ID's are unique across devices
 
-## v2.4
+## Version 2.4.0
 ### Major Changes
 + Fixed integer type storage bug in OSIsoft AF server
 ### Minor Changes
 + Specified type format for OMF instead of using default type
 
-## v2.3
+## Version 2.3.0
 ### Major Changes
 + Supported storing tags as different data types in OSIsoft with OMF
 ### Minor Changes
@@ -56,19 +56,19 @@
 + Accounted for the new tag indexing that includes null points on tag gaps
 + Updated libraries
 
-## v2.2
+## Version 2.2.0
 ### Major Changes
 + Updated Solution Center libraries
 ### Minor Changes
 + Readme updated
 
-## v2.1
+## Version 2.1.0
 ### Major Changes
 + Added Support for OCS with OMF.
 ### Minor Changes
 + Connector Configuration file has new OCS specific additions
 
-## v2.0
+## Version 2.0.0
 ### Major Changes
 + Added new logic to add data points to a payload
 + Refactored mechanism to send data points to OSIsoft
@@ -83,21 +83,21 @@
 + Various adjustments to log messages.
 
 
-## v1.0
+## Version 1.0.0
 ### Major Changes
 + Added in support for OMF while retaining support for old versions of piwebapi
 + Communication type can be changed in json file through new config setting
 ### Minor Changes
 + None
 
-## v0.4
+## Version 0.4.0
 ### Major Changes
 + None
 ### Minor Changes
 + X-Requested-With header added to webapi calls
 + eWON Boolean tags now map to Digital types in OSIsoft
 
-## v0.3
+## Version 0.3.0
 ### Major Changes
 #### Configuration Webpage
 Connector configuration can now be done through a webpage hosted at **FLEXY-IP-ADDRESS**/usr/config.html
@@ -106,7 +106,7 @@ Connector configuration can now be done through a webpage hosted at **FLEXY-IP-A
 + eWON's unique name is appended to the osisoft tag name to designate the flexy the data is generated from
 + OSIsoft point source is now "HMS" instead of "l"
 
-## v0.2
+## Version 0.2.0
 ### Major Changes
 #### Offline Data Storage
 Volatile offline data storage has been added.  This will buffer ~250K datapoints with their timestamp when connection to the OSIsoft server has been interrupted.  If the application gets low on memory the oldest datapoints buffered will be removed to free space in memory.  Upon reconnection the application will post current data with a higher priority than buffered data.  It may take a significant amount of time to transfer all buffered data if the device has been offline for an extended period.
@@ -127,5 +127,5 @@ The "PostDuplicateTagValues" has been added to the configuration.  This option c
 + Improved logging performance when https connections fail or time out
 + Batch based datapoint posting
 
-## v0.1
+## Version 0.1.0
 Initial Release
