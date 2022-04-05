@@ -103,7 +103,7 @@ static String eWONCertificatePath = "/usr/Certificates";
 ## Configuration File
 
 ### Example ConnectorConfig.json
-```
+```json
 {
    "ServerConfig":{
       "URL":"192.168.0.124",
@@ -130,7 +130,7 @@ WebID – WebID of your OSIsoft Web API.  This value can be attained by pointing
 
 Adding the field "ProxyURL" under the server config section will change request endpoints to https://domain-name/proxy-path. This field is optional. 
 Below is an example config file with the optional proxy URL in use.
-   ```
+   ```json
    {
    "ServerConfig":{
       "URL":"192.168.1.1",
@@ -244,12 +244,12 @@ The Client ID and the Client Secret will be needed for the basic script you will
    1. Replace the xxx below with your namespace.
    1. Replace the yyy below with your tenant ID.
    1. Copy these into the ServerConfig portion of the json file.
-      ```
+      ```json
       "Namespace":"xxx",
       "TenantId":"yyy"
       ```
    1. Make sure that the JSON formatting is valid. Below is an example of a properly formatted configuration file.
-   ```
+   ```json
    {
    "ServerConfig":{
       "URL":"192.168.1.8",
@@ -317,7 +317,7 @@ LoggingLevel is an optional field in the configuration file and is not required 
 
 Below is an example of the configuration file set to log general application state information.
 See [Log Level](https://github.com/hms-networks/sc-flexy-logger-lib#log-level) for more information.
-   ```
+   ```json
    {
    "ServerConfig":{
       "IP":"192.168.1.1",
