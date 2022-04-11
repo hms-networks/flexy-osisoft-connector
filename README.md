@@ -124,12 +124,13 @@ The OSIsoft PI Database Web API must be installed for this connector to work.  T
 IP address or domain name of the system running the Web API (in this example assume the IP address is 192.168.0.124)
 
 #### WebID
-WebID of your OSIsoft Web API.  This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step.  (A security warning may occur when trying to access this page, this warning should be ignored)
+This field is only needed when the CommunicationType is set to "piwebapi". WebID is the web ID of your OSIsoft PI Web API.
+This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step. 
+(If the PIWEBAPI certificates are self-signed a security warning may occur when trying to access this page. This warning should be ignored)
 
 #### Proxy URL
 
-Adding the field "ProxyURL" under the server config section will change request endpoints to https://domain-name/proxy-path. This field is optional. 
-Below is an example config file with the optional proxy URL in use.
+Adding the field "ProxyURL" under the server config section will change request endpoints to https://domain-name/proxy-path. This field is optional. Below is an example config file with the optional proxy URL in use.
    ``` JSON
    {
    "ServerConfig":{
