@@ -116,7 +116,8 @@ static String eWONCertificatePath = "/usr/Certificates";
    },
    "AppConfig":{
       "CommunicationType":"omf",
-      "OSIsoftTagNamingScheme":"default"
+      "OSIsoftTagNamingScheme":"default",
+      "LoggingLevel": 4
    }
 }
 ```
@@ -187,6 +188,22 @@ The following are rules to make a valid tag name scheme:
 * There cannot be more than 3 tag name scheme options present
 * There cannot be less than 1 tag name scheme option present
 * There cannot be any options used other than the 4 listed values of "default", "SN", "TN", or "TT"
+
+#### LoggingLevel
+The OSIsoft connector uses the [HMS Solution Center logging library](https://github.com/hms-networks/sc-flexy-logger-lib) for application logging to the Ewon Flexy's realtime logs.
+
+To change the logging level in the configuration file, specify the logging level under the AppConfig object.
+LoggingLevel is an optional field in the configuration file and is not required by the application to properly run.
+
+Below is a partial example of the configuration file set to log general application state information.
+See [Log Level](https://github.com/hms-networks/sc-flexy-logger-lib#log-level) for more information.
+   ```json
+    {
+        "AppConfig": {
+            "LoggingLevel": 4
+        }
+    }
+   ```
 
 ## Customizing the application
 
@@ -328,31 +345,6 @@ The Client ID and the Client Secret will be needed for the basic script you will
    1. Click on the script execution slider that says "Stopped" to switch it to say "Running".
    
 You can now restart your Flexy to restart the Java application. Messages will be sent to your OCS endpoint.
-
-## JVM Logger
-The OSIsoft connector uses the [HMS Solution Center logging library](https://github.com/hms-networks/sc-flexy-logger-lib) for application logging to the Ewon Flexy's realtime logs.
-
-To change the logging level in the configuration file, specify the logging level under the AppConfig object.
-LoggingLevel is an optional field in the configuration file and is not required by the application to properly run.
-
-Below is an example of the configuration file set to log general application state information.
-See [Log Level](https://github.com/hms-networks/sc-flexy-logger-lib#log-level) for more information.
-   ```json
-   {
-   "ServerConfig":{
-      "IP":"192.168.1.1",
-      "WebID":"F2DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPdaswQ1MyUDFT",
-      "Credentials":"cGFzc3dvcmQ=",
-   },
-   "eWONConfig":{
-      "CertificatePath":"/usr"
-   },
-   "AppConfig": {
-       "LoggingLevel": 4,
-       "CommunicationType": "omf"
-       }
-   }
-   ```
 
 ## Troubleshooting common issues
 
