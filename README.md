@@ -108,7 +108,8 @@ static String eWONCertificatePath = "/usr/Certificates";
    "ServerConfig":{
       "URL":"192.168.0.124",
       "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
-      "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
+      "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh",
+      "ProxyURL":"long/proxy/example/omf"
    },
    "eWONConfig":{
       "CertificatePath":"/usr/Certificates"
@@ -132,23 +133,15 @@ This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (ht
 (If the PIWEBAPI certificates are self-signed a security warning may occur when trying to access this page. This warning should be ignored.)
 
 #### Proxy URL
-Adding the field "ProxyURL" under the server config section will change request endpoints to https://domain-name/proxy-path. This field is optional. 
-Below is an example config file with the optional proxy URL in use.
+This optional field is only needed when using a non-default endpoint of https://HOSTNAME/piwebapi. Adding the field "ProxyURL" under the server config section will change request endpoints to https://HOSTNAME/proxy-path. HOSTNAME will be retrieved from the URL field in the configuration file. 
+
+Below is a partial config file with the optional proxy URL in use. Its endpoint is set to https://192.168.1.1/long/proxy/example/omf.
    ```json
    {
    "ServerConfig":{
       "URL":"192.168.1.1",
-      "WebID":"F2DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPdaswQ1MyUDFT",
-      "Credentials":"cGFzc3dvcmQ=",
       "ProxyURL":"long/proxy/example/omf"
-   },
-   "eWONConfig":{
-      "CertificatePath":"/usr"
-   },
-   "AppConfig": {
-       "LoggingLevel": 4,
-       "CommunicationType": "omf"
-       }
+      }
    }
    ```
 
