@@ -117,7 +117,8 @@ static String eWONCertificatePath = "/usr/Certificates";
    "AppConfig":{
       "CommunicationType":"omf",
       "OSIsoftTagNamingScheme":"default",
-      "LoggingLevel": 4
+      "LoggingLevel": 4,
+      "httpTimeoutSeconds": 2
    }
 }
 ```
@@ -170,7 +171,8 @@ Controls when datapoints are logged.  If set to true, datapoints will always be 
 This refers to if you are using OMF (OSIsoft message format). If you have PIWEBAPI 2019 or later, and you have OMF enabled, set this string to "omf". If you are using an older version of PIWEBAPI set the string to "piwebapi". Any other values will result in an error. For more information on OMF read the section here:  [OMF](#OMF-Support)
 
 #### httpTimeoutSeconds
-Optional field to override the default value used for HTTPS_TIMEOUT_S. If omitted the default value will be used. This field is only needed if https requests consistently take large amounts of time to complete.
+Optional field to override the default value used for HTTPS_TIMEOUT_S. If omitted the default value of 2 will be used.
+This field is only needed if https requests consistently take large amounts of time to complete.
 
 #### OSIsoftTagNamingScheme
 This field is to configure how OSIsoft tags will be named. The options are listed below:
