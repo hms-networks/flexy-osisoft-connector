@@ -119,9 +119,11 @@ static String eWONCertificatePath = "/usr/Certificates";
 
 The OSIsoft PI Database Web API must be installed for this connector to work.  The connector requires three items to connect to the OSIsoft PI Web API they are the URL of the server running the PI Web API, WebID of the PI Web API and a valid user name and password for the system running the PI Web API software.
 
-URL – IP address or domain name of the system running the Web API (in this example assume the IP address is 192.168.0.124)
+#### URL
+IP address or domain name of the system running the Web API (in this example assume the IP address is 192.168.0.124)
 
-WebID – WebID of your OSIsoft Web API.  This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step.  (A security warning may occur when trying to access this page, this warning should be ignored)
+#### WebID
+WebID of your OSIsoft Web API.  This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step.  (A security warning may occur when trying to access this page, this warning should be ignored)
 
 #### Proxy URL
 
@@ -145,7 +147,8 @@ Below is an example config file with the optional proxy URL in use.
    }
    ```
 
-### Credentials - Base64 encoded user credentials for basic authentication
+#### Credentials
+Base64 encoded user credentials for basic authentication
 
 To generate your Base64 encoded user credentials visit https://www.base64encode.org/ and encode "username:password"
 
@@ -153,17 +156,22 @@ Example: If your username is 'username' and your password is 'password' you woul
 
 ### eWONConfig
 
-CertificatePath - Path to the directory containing your server's certificate.  For more information see the Certificates section
+#### CertificatePath
+Path to the directory containing your server's certificate.  For more information see the Certificates section
 
 ### AppConfig
 
-CycleTimeMs - Cycle time of the application.  All tags will be posted at this specified interval
+#### CycleTimeMs 
+Cycle time of the application.  All tags will be posted at this specified interval
 
-PostDuplicateTagValues - Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
+#### PostDuplicateTagValues
+Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
 
-CommunicationType - This refers to if you are using OMF (OSIsoft message format). If you have PIWEBAPI 2019 or later, and you have OMF enabled, set this string to "omf". If you are using an older version of PIWEBAPI set the string to "piwebapi". Any other values will result in an error. For more information on OMF read the section here:  [OMF](#OMF-Support)
+#### CommunicationType
+This refers to if you are using OMF (OSIsoft message format). If you have PIWEBAPI 2019 or later, and you have OMF enabled, set this string to "omf". If you are using an older version of PIWEBAPI set the string to "piwebapi". Any other values will result in an error. For more information on OMF read the section here:  [OMF](#OMF-Support)
 
-httpTimeoutSeconds - Optional field to override the default value used for HTTPS_TIMEOUT_S. If omitted the default value will be used. This field is only needed if https requests consistently take large amounts of time to complete.
+#### httpTimeoutSeconds
+Optional field to override the default value used for HTTPS_TIMEOUT_S. If omitted the default value will be used. This field is only needed if https requests consistently take large amounts of time to complete.
 
 ## Customizing the application
 
