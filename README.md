@@ -166,7 +166,12 @@ Cycle time of the application.  All tags will be posted at this specified interv
 Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
 
 #### CommunicationType
-This refers to if you are using OMF (OSIsoft message format). If you have PIWEBAPI 2019 or later, and you have OMF enabled, set this string to "omf". If you are using an older version of PIWEBAPI set the string to "piwebapi". Any other values will result in an error. For more information on OMF read the section here:  [OMF](#OMF-Support)
+This refers to if you are using OMF (OSIsoft message format) or PIWEBAPI. OMF is the recommended setting. 
+The valid values are as follows:
+* "omf" 
+* "piwebapi" 
+
+For more information on OMF read the section here:  [OMF](#OMF-Support)
 
 #### httpTimeoutSeconds
 Optional field to override the default value used for HTTPS_TIMEOUT_S. If omitted the default value of 2 will be used.
