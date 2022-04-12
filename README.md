@@ -44,8 +44,6 @@ More information can be found here: [Ewon Historical Logging](https://developer.
 
 User configuration of the application parameters is done through the ConnectorConfig.json file.  This file must be modified to match your configuration.
 
-#### Web Configuration
-
 #### FTP Configuration
 To change configuration values, follow the below steps:
 * Transfer the ConnectorConfig.json file on the Flexy in the /usr/ directory to a local machine via FTP if one exists, otherwise skip this step.
@@ -160,12 +158,6 @@ Example: If your username is 'username' and your password is 'password' you woul
 Path to the directory containing your server's certificate.  For more information see the Certificates section
 
 ### AppConfig
-
-#### CycleTimeMs 
-Cycle time of the application.  All tags will be posted at this specified interval
-
-#### PostDuplicateTagValues
-Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
 
 #### CommunicationType
 This refers to if you are using OMF (OSIsoft Message Format) or PIWEBAPI. OMF is the recommended setting.
