@@ -18,10 +18,11 @@ This application is supported by HMS' North American offices.
 
 1. [General Information](#General-Information)
 2. [Getting Started](#Getting-Started)
-   1. [Configuration](#Configuration)
-   2. [Flexy Configuration](#Flexy-Configuration)
-   3. [Installation](#Installation)
-   4. [Running](#Running)
+   1. [Basic Authentication](#basic-authentication)
+   2. [Configuration](#Configuration)
+   3. [Flexy Configuration](#Flexy-Configuration)
+   4. [Installation](#Installation)
+   5. [Running](#Running)
 3. [Certificates](#Certificates)
    1. [Generate The Certificate](#generate-the-certificate)
    2. [Install The Certificate On Server](#install-the-certificate-on-server)
@@ -52,6 +53,10 @@ The OSIsoft connector makes use of the Flexy's historical logging functionality 
 More information can be found here: [Ewon Historical Logging](https://developer.ewon.biz/content/historical-logging)
 
 ## Getting Started
+
+### Basic Authentication
+
+This connector uses basic authentication (RFC7617) to communicate with OSIsoft and requires basic authentication to be enabled.
 
 ### Configuration
 
