@@ -159,12 +159,6 @@ Path to the directory containing your server's certificate.  For more informatio
 
 ### AppConfig
 
-#### CycleTimeMs 
-Cycle time of the application.  All tags will be posted at this specified interval
-
-#### PostDuplicateTagValues
-Controls when datapoints are logged.  If set to true, datapoints will always be cyclicly logged. If set to false, datapoints will only be logged on change of value.
-
 #### CommunicationType
 This refers to if you are using OMF (OSIsoft message format) or PIWEBAPI. OMF is the recommended setting. 
 The valid values are as follows:
