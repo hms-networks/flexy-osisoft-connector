@@ -130,12 +130,18 @@ public class OSIsoftTagNamingScheme {
     String parsedTagName = "";
     final int lengthOfSingleOption = 2;
 
-    if (shortHandOSIsoftNameOptionSelected.length() <= lengthOfSingleOption) {
+    if (shortHandOSIsoftNameOptionSelected.length() >= lengthOfSingleOption) {
       // loop through every option present
       for (int index = 0;
           index < shortHandOSIsoftNameOptionSelected.length();
           index += lengthOfSingleOption) {
-        String shortHandOption = shortHandOSIsoftNameOptionSelected.substring(index, index + 1);
+
+        // add an optionNameDeliminator between name components in the OSIsoft tag name
+        if (index > 0) {
+          parsedTagName += optionNameDeliminator;
+        }
+        String shortHandOption =
+            shortHandOSIsoftNameOptionSelected.substring(index, index + lengthOfSingleOption);
         if (shortHandOption.compareToIgnoreCase(serialNumberOptionName) == 0) {
           parsedTagName += OSIsoftConfig.getFlexySerial();
         } else if (shortHandOption.compareToIgnoreCase(tagTypeOptionName) == 0) {
