@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.1-pre1
+### Major Changes
++ None
+### Minor Changes
++ Fixed bug in naming scheme options
+
 ## Version 3.0.0
 ### Major Changes
 + Removed FTP user for local time
