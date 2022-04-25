@@ -120,23 +120,23 @@ static String eWONCertificatePath = "/usr/Certificates";
 
 ### Example ConnectorConfig.json
 ```json
-{
-   "ServerConfig":{
-      "URL":"192.168.0.124",
-      "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
-      "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh",
-      "ProxyURL":"long/proxy/example/omf"
-   },
-   "eWONConfig":{
-      "CertificatePath":"/usr/Certificates"
-   },
-   "AppConfig":{
-      "CommunicationType":"omf",
-      "OSIsoftTagNamingScheme":"default",
-      "LoggingLevel": 4,
-      "httpTimeoutSeconds": 2
-   }
-}
+    {
+        "ServerConfig":{
+            "URL":"192.168.0.124",
+            "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
+            "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh",
+            "ProxyURL":"long/proxy/example/omf"
+        },
+        "eWONConfig":{
+            "CertificatePath":"/usr/Certificates"
+        },
+        "AppConfig":{
+            "CommunicationType":"omf",
+           "OSIsoftTagNamingScheme":"default",
+           "LoggingLevel": 4,
+           "httpTimeoutSeconds": 2
+        }
+    }
 ```
 ### ServerConfig
 
@@ -154,14 +154,14 @@ This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (ht
 This optional field is only needed when using a non-default endpoint of https://HOSTNAME/piwebapi. Adding the field "ProxyURL" under the server config section will change request endpoints to https://HOSTNAME/proxy-path. HOSTNAME will be retrieved from the URL field in the configuration file. 
 
 Below is a partial config file with the optional proxy URL in use. Its endpoint is set to https://192.168.1.1/long/proxy/example/omf.
-   ```json
-   {
-   "ServerConfig":{
-      "URL":"192.168.1.1",
-      "ProxyURL":"long/proxy/example/omf"
-      }
-   }
-   ```
+```json
+    {
+        "ServerConfig":{
+            "URL":"192.168.1.1",
+            "ProxyURL":"long/proxy/example/omf"
+        }
+    }
+```
 
 #### Credentials
 Base64 encoded user credentials for basic authentication
@@ -214,13 +214,13 @@ LoggingLevel is an optional field in the configuration file and is not required 
 
 Below is a partial example of the configuration file set to log general application state information.
 See [Log Level](https://github.com/hms-networks/sc-flexy-logger-lib#log-level) for more information.
-   ```json
+```json
     {
         "AppConfig": {
             "LoggingLevel": 4
         }
     }
-   ```
+```
 
 ## Customizing the application
 
@@ -303,24 +303,24 @@ The Client ID and the Client Secret will be needed for the basic script you will
       "TenantId":"yyy"
       ```
    1. Make sure that the JSON formatting is valid. Below is an example of a properly formatted configuration file.
-   ```json
-   {
-   "ServerConfig":{
-      "URL":"192.168.1.8",
-      "WebID":"F1DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPUC0wQ1MyUDFT",
-      "Credentials":"dsZtOnBfdsjklfh==",
-      "Namespace":"testNameSpace1",
-      "TenantId":"4da89f7d-b3ce-48a6-b906-b96c367000a9"
-   },
-   "eWONConfig":{
-      "CertificatePath":"/usr"
-   },
-   "AppConfig": {
-       "LoggingLevel": 4,
-       "CommunicationType": "omfOcs"
-       }
-   }
-   ```
+```json
+    {
+        "ServerConfig":{
+            "URL":"192.168.1.8",
+            "WebID":"F1DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPUC0wQ1MyUDFT",
+            "Credentials":"dsZtOnBfdsjklfh==",
+            "Namespace":"testNameSpace1",
+            "TenantId":"4da89f7d-b3ce-48a6-b906-b96c367000a9"
+        },
+        "eWONConfig":{
+            "CertificatePath":"/usr"
+        },
+        "AppConfig": {
+            "LoggingLevel": 4,
+            "CommunicationType": "omfOcs"
+        }
+    }
+```
    1. Upload the updated ConnectorConfig.json file to the /usr directory of the Flexy.
 
 ### Flexy OCS BASIC Script
