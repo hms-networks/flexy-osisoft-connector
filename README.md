@@ -60,7 +60,7 @@ This connector uses basic authentication (RFC7617) to communicate with OSIsoft a
 
 ### Configuration
 
-User configuration of the application parameters is done through the ConnectorConfig.json file.  This file must be modified to match your configuration.
+User configuration of the application parameters is done through the ConnectorConfig.json file.  This file must be modified to match the OSIsoft configuration.
 
 #### FTP Configuration
 To change configuration values, follow the below steps:
@@ -72,7 +72,7 @@ To change configuration values, follow the below steps:
 
 ### Installation
 
-Using FTP transfer the contents of the osisoft_connector directory to the /usr/ directory of your eWON via FTP.  If successful you should have a css directory, js directory, config.html, ConnectorConfig.json, flexy-osisoft-connector.jar, and jvmrun located in the /usr/ directory of the Flexy.  You must also follow all steps in the Certificates section below.
+Using FTP transfer the contents of the osisoft_connector directory to the /usr/ directory of the eWON via FTP.  If successful you should have a css directory, js directory, config.html, ConnectorConfig.json, flexy-osisoft-connector.jar, and jvmrun located in the /usr/ directory of the Flexy.  You must also follow all steps in the Certificates section below.
 
 ### Running
 
@@ -90,7 +90,7 @@ Generate a certificate and a private key good for 5 years.
 ```console
 openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 1825 -out certificate.crt
 ```
-Answer the prompts, making sure that your set the "Common Name" to the IP Address of your server.
+Answer the prompts, making sure that the "Common Name" is set to the IP Address of the OSIsoft server.
 
 Combine the certificate and private key into a .p12 file
 ```console
@@ -100,11 +100,11 @@ openssl pkcs12 -inkey key.pem -in certificate.crt -export -out certificate.p12
 You will be prompted to enter an export password, the again to verify.  Remember this password.
 
 ### Install the certificate on server
-These installation instructions are specific to Windows 7.  If your server is running on a different OS the process may differ.
+These installation instructions are specific to Windows 7.  If the OSIsoft server is running on a different OS the process may differ.
 
-In Windows, right click on your certificate.crt file and click Install Certificate.  Follow the prompts and place the certificate in the "Trusted Root Certification Authorities" store.  When you click finish a security prompt will warn you that it cannot validate the certificate's origin and ask if you want to install this certificate, click yes.
+In Windows, right click on the certificate.crt file and click Install Certificate.  Follow the prompts and place the certificate in the "Trusted Root Certification Authorities" store.  When you click finish a security prompt will warn you that it cannot validate the certificate's origin and ask if you want to install this certificate, click yes.
 
-Run mmc.exe.  Click "File"->"Add/Remove Snap-in...".  From the "Available snap-ins" add "Certificates" to the "Selected snap-ins", set the permissions to "Computer account" when prompted, then select your local computer.  Click "Finish", then "Ok".  Expand "Certificates (Local Computer)", then expand "Personal", then expand and select "Certificates". Click "Action"->"All Tasks"->"Import". Click "Next" then "Browse".  The the file open window select the file extension to be "Personal Information Exchange (*.pfx;*.p12)".  Find and select your "certificate.p12" file, then click open then next.  You will now be prompted to enter in your export password from when you created your certificate.p12 file, after doing so click next.  Place the certificate in the "Personal" certificate store, then click "Next" then "Finish".  You should be prompted that the import was successful, click "OK".
+Run mmc.exe.  Click "File"->"Add/Remove Snap-in...".  From the "Available snap-ins" add "Certificates" to the "Selected snap-ins", set the permissions to "Computer account" when prompted, then select the local computer.  Click "Finish", then "Ok".  Expand "Certificates (Local Computer)", then expand "Personal", then expand and select "Certificates". Click "Action"->"All Tasks"->"Import". Click "Next" then "Browse".  The the file open window select the file extension to be "Personal Information Exchange (*.pfx;*.p12)".  Find and select the "certificate.p12" file, then click open then next.  There will be a prompt to enter the export password from when the certificate.p12 file was created, after doing so click next.  Place the certificate in the "Personal" certificate store, then click "Next" then "Finish".  You should be prompted that the import was successful, click "OK".
 
 Run "PI Web API Admin Utility". Configure the server normally.  When you get to the "Certificate" setup page click "Change".  You may be prompted that a certificate binding is already configured, click "Yes" to "Do you still want to change the certificate?".  Select the certificate you created from the list and click "OK".  Continue with the rest of the configuration normally.
 
@@ -112,7 +112,7 @@ Run "PI Web API Admin Utility". Configure the server normally.  When you get to 
 
 The file certificate.crt must be placed somewhere in the /usr directory of the Flexy. The certificate can be transferred to the Flexy using FTP. The "CertificatePath" in ConnectorConfig.json must be updated with the path to where you store the certificate file.
 ```
-// Path to the directory containing your OSIsoft server's certificate
+// Path to the directory containing the OSIsoft server's certificate
 static String eWONCertificatePath = "/usr/Certificates";
 ```
 
@@ -166,14 +166,14 @@ Below is a partial config file with the optional proxy URL in use. Its endpoint 
 #### Credentials
 Base64 encoded user credentials for basic authentication
 
-To generate your Base64 encoded user credentials visit https://www.base64encode.org/ and encode "username:password"
+To generate the Base64 encoded user credentials visit https://www.base64encode.org/ and encode "username:password"
 
-Example: If your username is 'username' and your password is 'password' you would encode "username:password" and should get "dXNlcm5hbWU6cGFzc3dvcmQ="
+Example: If the username is 'username' and the password is 'password' you would encode "username:password" and should get "dXNlcm5hbWU6cGFzc3dvcmQ="
 
 ### eWONConfig
 
 #### CertificatePath
-Path to the directory containing your server's certificate.  For more information see the Certificates section
+Path to the directory containing the OSIsoft server's certificate.  For more information see the Certificates section
 
 ### AppConfig
 
@@ -224,7 +224,7 @@ See [Log Level](https://github.com/hms-networks/sc-flexy-logger-lib#log-level) f
 
 ## Customizing the application
 
-If you wish to modify, debug, or rebuild the application the toolkit and documentation is available here https://developer.ewon.biz/content/java-0. The instructions for setting up your development environment are here  https://developer.ewon.biz/system/files_force/AUG-072-0-EN-%28JAVA%20J2SE%20Toolkit%20for%20eWON%20Flexy%29.pdf?download=1
+If you wish to modify, debug, or rebuild the application the toolkit and documentation is available here https://developer.ewon.biz/content/java-0. The instructions for setting up the development environment are here  https://developer.ewon.biz/system/files_force/AUG-072-0-EN-%28JAVA%20J2SE%20Toolkit%20for%20eWON%20Flexy%29.pdf?download=1
 
 ## Tag Configuration
 To have a tag's historical data sent to OSIsoft, the tag needs to have historical logging enabled and needs to be assigned to a group. Follow the steps below for each tag.
@@ -263,7 +263,7 @@ The OSIsoft connector now has the ability to support OMF. To enable OMF follow t
 ### OCS Account Setup
 The OSIsoft connector supports an OCS connection. To make use of this feature, follow the below steps.
 1. First create an OCS account.
-1. Under the namespace tab, create an OCS namespace of your choosing.
+1. Under the namespace tab, create an OCS namespace.
    1. Save the namespace for later use. It will be needed in another step.
 1. Under the client tab, create a client.
    1. Select "Client-Credentials" as the client type.
@@ -271,7 +271,7 @@ The OSIsoft connector supports an OCS connection. To make use of this feature, f
    1. Give the client a name. NOTE: the client will be the Flexy device.
    1. Select the "Account Administrator" role which will check all the role selection boxes.
    1. Make sure the token lifetime is set to 3600 seconds.
-   1. Add a secret decription of your choosing.
+   1. Add a secret decription.
    1. Check the box that says "Never Expires".
    1. Click "Add".
    1. Copy both the client ID and client secret to use later.
@@ -283,20 +283,20 @@ The OSIsoft connector supports an OCS connection. To make use of this feature, f
    1. Select the namespace you created and hit next.
    1. Click the "Save" button.
    1. Expand the dropdown menu that now shows up under the list of clients.
-   1. Click on your new client, more details will be available on the right hand panel.
+   1. Click on the new client, more details will be available on the right hand panel.
 1. Obtain the Client ID.
    1. Navigate to the namespace tab.
-   1. Select your namespace.
+   1. Select the namespace.
    1. Click the "Display Details" button.
-   1. Copy the Account id for later use. This is your tenant ID.
+   1. Copy the Account id for later use. This is the tenant ID.
    
 The namespace and tenantId will need to be added to the ConnectorConfig file and uploaded to the Flexy.
 The Client ID and the Client Secret will be needed for the basic script you will have running on the Flexy.
 
 ### Flexy OCS Configuration File Changes
 1. Add OCS information to the ConnectorConfig.json file.
-   1. Replace the xxx below with your namespace.
-   1. Replace the yyy below with your tenant ID.
+   1. Replace the xxx below with the namespace.
+   1. Replace the yyy below with the tenant ID.
    1. Copy these into the ServerConfig portion of the json file.
       ```json
       "Namespace":"xxx",
@@ -321,10 +321,10 @@ The Client ID and the Client Secret will be needed for the basic script you will
        }
    }
    ```
-   1. Upload the updated ConnectorConfig.json file to the /usr directory of your Flexy.
+   1. Upload the updated ConnectorConfig.json file to the /usr directory of the Flexy.
 
 ### Flexy OCS BASIC Script
-1. Create a tag in your Flexy for the Basic script to store information.
+1. Create a tag in the Flexy for the Basic script to store information.
    1. On the Flexy's web page, click to expand the "Tags" section.
    1. Click the "Values" tab.
    1. Click the "MODE" slider to say "setup".
@@ -335,16 +335,16 @@ The Client ID and the Client Secret will be needed for the basic script you will
 
 1. Obtain URL encoded client Id and client secret.
    1. In a web browser such as Internet Explorer or Chrome, navigate to the website https://www.urlencoder.org/
-   1. Copy your client ID into the encoder section of that website.
+   1. Copy the client ID into the encoder section of that website.
    1. Leave the destination character set as UTF-8.
    1. Leave the destination newline seperator as LF (Unix).
    1. Hit Encode.
    1. Copy out the encoded client id and save for later use.
-   1. Copy your client secret into the encoder section of that website.
+   1. Copy the client secret into the encoder section of that website.
    1. Leave the destination character set as UTF-8.
    1. Leave the destination newline seperator as LF (Unix).
    1. Hit Encode.
-   1. Copy out your encoded client secret for later use.
+   1. Copy out the encoded client secret for later use.
 
 
 1. Import the below basic script to the Flexy Basic IDE.
@@ -355,13 +355,13 @@ The Client ID and the Client Secret will be needed for the basic script you will
    1. Click "Select".
    1. Navigate to the unzipped directory of the OSIsoft Connector and select the file "OcsBasicScript.txt"
    1. Click "Import".
-   1. Change the xxxxxx for client ID to be your URL encoded client id that you saved previously.
-   1. Change the yyyyyy for client secret your URL encoded client secret you saved previously.
+   1. Change the xxxxxx for client ID to be the URL encoded client id that you saved previously.
+   1. Change the yyyyyy for client secret the URL encoded client secret you saved previously.
    1. Click on "File".
    1. Click on "Save".
    1. Click on the script execution slider that says "Stopped" to switch it to say "Running".
    
-You can now restart your Flexy to restart the Java application. Messages will be sent to your OCS endpoint.
+You can now restart the Flexy to restart the Java application. Messages will be sent to the OCS endpoint.
 
 ## Troubleshooting common issues
 
@@ -369,7 +369,7 @@ Commonly encountered issues:
 
 * Certificates
     * You will not be able to connect to the server if the certificate is incorrect.
-    * The first thing to check is the 'common name' of the certificate. This needs to match the ip address or domain name of your OSIsoft server's machine.
+    * The first thing to check is the 'common name' of the certificate. This needs to match the ip address or domain name of the OSIsoft server's machine.
 * Not connecting when OMF support is enabled.
     * We have found that you may need to rerun the PI Web API Admin Utility to ensure that PI data archive is connected. This is especially true if the connector was working properly and then stopped working after restarting the OSIsoft server machine.
 
