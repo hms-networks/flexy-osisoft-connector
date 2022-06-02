@@ -40,6 +40,7 @@ This application is supported by HMS' North American offices.
       2. [HTTP Timeout Seconds](#httptimeoutseconds)
       3. [OSIsoft Tag Naming Scheme](#osisofttagnamingscheme)
       4. [LoggingLevel](#logginglevel)
+      5. [Auto Restart](#AutoRestart)
 5. [Customizing The Application](#Customizing-the-application)
 6. [Tag Configuration](#Tag-Configuration)
 7. [OMF Support](#OMF-Support)
@@ -132,7 +133,8 @@ static String eWONCertificatePath = "/usr/Certificates";
             "CommunicationType":"omf",
            "OSIsoftTagNamingScheme":"default",
            "LoggingLevel": 4,
-           "httpTimeoutSeconds": 2
+           "httpTimeoutSeconds": 2,
+           "AutoRestart": true
         }
     }
 ```
@@ -232,6 +234,12 @@ See [Log Level](https://github.com/hms-networks/sc-flexy-logger-lib#log-level) f
         }
     }
 ```
+#### AutoRestart
+Enable or disable to auto restart functionality. 
+Setting the AutoRestart value to "true" configures the Flexy to launch the application again in the event the application crashes or
+ends. This requires a jvmrun file to exist on the Flexy usr directory.
+
+Setting the AutoRestart value to 'false' prevents the application from restarting on reboots and crashes.
 
 ## Customizing the application
 

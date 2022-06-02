@@ -11,6 +11,7 @@
     "CommunicationType":"omf",
     "OSIsoftTagNamingScheme":"default",
     "LoggingLevel": 4,
-    "httpTimeoutSeconds": 2
+    "httpTimeoutSeconds": 2,
+    "AutoRestart": true
   }
 }
