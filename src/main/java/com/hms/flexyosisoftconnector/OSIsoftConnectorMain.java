@@ -4,7 +4,6 @@ import com.ewon.ewonitf.SysControlBlock;
 import com.hms.flexyosisoftconnector.configuration.OSIsoftConfig;
 import com.hms.flexyosisoftconnector.dataserver.DataPoster;
 import com.hms.flexyosisoftconnector.dataserver.OSIsoftServer;
-import com.hms.flexyosisoftconnector.dataserver.RestFileServer;
 import com.hms.flexyosisoftconnector.payloadhandler.PayloadManager;
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.historicaldata.CircularizedFileException;
@@ -47,10 +46,6 @@ public class OSIsoftConnectorMain {
     // Indicate the version number and that the application is starting
     Logger.LOG_CRITICAL(
         OSIsoftConfig.CONNECTOR_NAME + " v" + OSIsoftConfig.CONNECTOR_VERSION + " starting");
-
-    // Start the webserver to accept json file
-    RestFileServer restServer = new RestFileServer();
-    restServer.start();
 
     OSIsoftConfig.initConfig(CONNECTOR_CONFIG_FILENAME);
 
