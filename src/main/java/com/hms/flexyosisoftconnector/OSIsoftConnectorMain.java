@@ -13,6 +13,7 @@ import com.hms_networks.americas.sc.extensions.historicaldata.HistoricalDataQueu
 import com.hms_networks.americas.sc.extensions.historicaldata.TimeTrackerUnrecoverableException;
 import com.hms_networks.americas.sc.extensions.json.JSONException;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.system.application.SCAppManagement;
 import com.hms_networks.americas.sc.extensions.system.http.SCHttpUtility;
 import com.hms_networks.americas.sc.extensions.system.time.SCTimeUtils;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
@@ -48,6 +49,12 @@ public class OSIsoftConnectorMain {
         OSIsoftConfig.CONNECTOR_NAME + " v" + OSIsoftConfig.CONNECTOR_VERSION + " starting");
 
     OSIsoftConfig.initConfig(CONNECTOR_CONFIG_FILENAME);
+
+    if (OSIsoftConfig.getAutoRestart()) {
+      SCAppManagement.enableAppAutoRestart();
+    } else {
+      SCAppManagement.disableAppAutoRestart();
+    }
 
     setLocalTimeZone();
 

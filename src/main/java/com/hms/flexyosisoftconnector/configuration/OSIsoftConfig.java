@@ -110,6 +110,12 @@ public class OSIsoftConfig {
   /** Access token for OCS OMF. The token expires every hour. */
   private static String ocsOmfToken;
 
+  /** Key to access the auto restart configuration setting. */
+  private static boolean autoRestart;
+
+  /** Key to access auto restart setting from config file JSON. */
+  private static final String AUTO_RESTART_KEY = "AutoRestart";
+
   /**
    * Initializes the configuration class and all required information.
    *
@@ -197,6 +203,8 @@ public class OSIsoftConfig {
     } else {
       httpTimeoutSeconds = HTTP_TIMEOUT_SECONDS_DEFAULT;
     }
+
+    autoRestart = appConfig.getBoolean(AUTO_RESTART_KEY);
 
     typeID = "HMS-type-" + flexyName;
     postHeaders =
@@ -432,6 +440,15 @@ public class OSIsoftConfig {
    */
   public static String getPostHeaders() {
     return postHeaders;
+  }
+
+  /**
+   * Get the auto restart configuration setting.
+   *
+   * @return the auto restart configuration setting
+   */
+  public static boolean getAutoRestart() {
+    return autoRestart;
   }
 
   /**
