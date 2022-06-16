@@ -118,10 +118,20 @@ public class OSIsoftServer {
       }
 
       if (fileStr.charAt(0) != '[' && fileStr.charAt(0) != '{') {
+
         // json has odd characters at the front, trim them to make valid json
-        int i = fileStr.indexOf("{");
-        fileStr = fileStr.substring(i);
+        int notFoundIndex = -1;
+        int jsonStartIndex = fileStr.indexOf("{");
+
+        if (jsonStartIndex == notFoundIndex) {
+          connected = true;
+          Logger.LOG_SERIOUS("Response received from OSIsoft server was not valid!");
+          return connected;
+        }
+
+        fileStr = fileStr.substring(jsonStartIndex);
       }
+
       JSONTokener JsonT = new JSONTokener(fileStr);
       JSONObject response = null;
       try {
