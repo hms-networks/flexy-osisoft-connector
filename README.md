@@ -32,8 +32,7 @@ This application is supported by HMS' North American offices.
    2. [Server Config](#serverconfig)
       1. [URL](#url)
       2. [Web ID](#webid)
-      3. [Proxy URL](#proxy-url)
-      4. [Credentials](#credentials)
+      3. [Credentials](#credentials)
    3. [Ewon Config](#ewonconfig)
       1. [Certificate Path](#certificatepath)
    4. [App Config](#appconfig)
@@ -122,10 +121,9 @@ static String eWONCertificatePath = "/usr/Certificates";
 ```json
     {
         "ServerConfig":{
-            "URL":"192.168.0.124",
+            "URL":"https://192.168.0.124/piwebapi/omf",
             "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
-            "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh",
-            "ProxyURL":"long/proxy/example/omf"
+            "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
         },
         "eWONConfig":{
             "CertificatePath":"/usr/Certificates"
@@ -145,23 +143,36 @@ The OSIsoft PI Database Web API must be installed for this connector to work.  T
 #### URL
 IP address or domain name of the system running the Web API (in this example assume the IP address is 192.168.0.124)
 
+Below is a partial config file with the OMF protocol in use.
+```json
+    {
+        "ServerConfig":{
+            "URL":"https://192.168.0.124/piwebapi/omf"
+        }
+    }
+```
+Below is a partial config file with the PIWEBAPI protocol in use.
+```json
+    {
+        "ServerConfig":{
+            "URL":"https://192.168.0.124/piwebapi"
+        }
+    }
+```
+
+Specifying a port is possible with the following method.
+```json
+    {
+        "ServerConfig":{
+            "URL":"https://192.168.0.124:8080/piwebapi/omf"
+        }
+    }
+```
+
 #### WebID
 This field is only needed when the CommunicationType is set to "piwebapi". WebID is the web ID of the OSIsoft PI Web API instance.
 This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step. 
 (If the PIWEBAPI certificates are self-signed a security warning may occur when trying to access this page. This warning should be ignored.)
-
-#### Proxy URL
-This optional field is only needed when using a non-default endpoint of https://HOSTNAME/piwebapi. Adding the field "ProxyURL" under the server config section will change request endpoints to https://HOSTNAME/proxy-path. HOSTNAME will be retrieved from the URL field in the configuration file. 
-
-Below is a partial config file with the optional proxy URL in use. Its endpoint is set to https://192.168.1.1/long/proxy/example/omf.
-```json
-    {
-        "ServerConfig":{
-            "URL":"192.168.1.1",
-            "ProxyURL":"long/proxy/example/omf"
-        }
-    }
-```
 
 #### Credentials
 Base64 encoded user credentials for basic authentication
@@ -295,22 +306,15 @@ The Client ID and the Client Secret will be needed for the basic script you will
 
 ### Flexy OCS Configuration File Changes
 1. Add OCS information to the ConnectorConfig.json file.
-   1. Replace the xxx below with the namespace.
-   1. Replace the yyy below with the tenant ID.
-   1. Copy these into the ServerConfig portion of the json file.
-      ```json
-      "Namespace":"xxx",
-      "TenantId":"yyy"
-      ```
+   1. Replace the {tenantId} below with the namespace of the OCS account.
+   1. Replace the{tenantId} below with the tenant ID of the OCS account.
    1. Make sure that the JSON formatting is valid. Below is an example of a properly formatted configuration file.
 ```json
     {
         "ServerConfig":{
-            "URL":"192.168.1.8",
+            "URL": "https://dat-b.osisoft.com/api/v1/Tenants/{tenantId}/Namespaces/{namespace}/omf";
             "WebID":"F1DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPUC0wQ1MyUDFT",
-            "Credentials":"dsZtOnBfdsjklfh==",
-            "Namespace":"testNameSpace1",
-            "TenantId":"4da89f7d-b3ce-48a6-b906-b96c367000a9"
+            "Credentials":"dsZtOnBfdsjklfh=="
         },
         "eWONConfig":{
             "CertificatePath":"/usr"
