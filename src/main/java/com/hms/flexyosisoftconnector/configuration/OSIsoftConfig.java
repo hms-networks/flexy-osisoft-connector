@@ -74,12 +74,6 @@ public class OSIsoftConfig {
   /** Error message to be displayed on invalid communication type */
   public static final String COM_ERR_MSG = "Error: Communication type is not valid.";
 
-  /** URL for the OSIsoft Server */
-  private static String targetURL;
-
-  /** URL for the OMF endpoint */
-  private static String omfUrl;
-
   /** Unique name of this flexy */
   private static String flexyName;
 
@@ -115,12 +109,6 @@ public class OSIsoftConfig {
 
   /** Access token for OCS OMF. The token expires every hour. */
   private static String ocsOmfToken;
-
-  /** OCS OMF URL for making requests to OCS. */
-  private static String ocsUrl;
-
-  /** Proxy URL to replace pi endpoint when needed */
-  private static String proxyURL;
 
   /**
    * Initializes the configuration class and all required information.
@@ -208,33 +196,6 @@ public class OSIsoftConfig {
           "HTTP timeout of " + httpTimeoutSeconds + " seconds retrieved from configuration file.");
     } else {
       httpTimeoutSeconds = HTTP_TIMEOUT_SECONDS_DEFAULT;
-    }
-
-    if (communicationType == OCS) {
-      // grab OCS specific information from config file
-      String namespace = "";
-      String tenantId = "";
-
-      namespace = serverConfig.getString("Namespace");
-      tenantId = serverConfig.getString("TenantId");
-
-      ocsUrl =
-          "https://dat-b.osisoft.com/api/v1/Tenants/"
-              + tenantId
-              + "/Namespaces/"
-              + namespace
-              + "/omf";
-    }
-
-    if (serverConfig.has("ProxyURL")) {
-      proxyURL = serverConfig.getString("ProxyURL");
-      // if a proxy URL is present user defines endpoints
-      targetURL = "https://" + piServerUrl + "/" + proxyURL;
-      omfUrl = targetURL;
-    } else {
-      // there is not proxy in use
-      targetURL = "https://" + piServerUrl + "/piwebapi/";
-      omfUrl = targetURL + "omf";
     }
 
     typeID = "HMS-type-" + flexyName;
@@ -337,7 +298,7 @@ public class OSIsoftConfig {
    * @return the OCS URL
    */
   public static String getOcsUrl() {
-    return ocsUrl;
+    return getServerUrl();
   }
 
   /**
@@ -400,7 +361,7 @@ public class OSIsoftConfig {
    * @return the target URL
    */
   public static String getTargetURL() {
-    return targetURL;
+    return getServerUrl();
   }
 
   /**
@@ -479,7 +440,7 @@ public class OSIsoftConfig {
    * @return the OMF URL
    */
   public static String getOmfUrl() {
-    return omfUrl;
+    return getServerUrl();
   }
 
   /**
