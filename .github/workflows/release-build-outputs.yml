@@ -15,7 +15,7 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CHANGELOG_FILE_NAME: ./docs/CHANGELOG.md
-  RELEASE_INCLUDED: $CHANGELOG_FILE_NAME README.md LICENSE src .classpath .project pom.xml build.xml ./scripts/jvmrun ./config/ConnectorConfig.json
+  RELEASE_INCLUDED: $CHANGELOG_FILE_NAME README.md LICENSE starting-files
   RELEASE_JAR_NAME_REGEX: '*-full.jar'
   RELEASE_JAVADOCS_NAME_REGEX: '*-javadoc.jar'
   RELEASE_BODY_FILE: RELEASE-BODY.md
@@ -110,7 +110,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./scripts/jvmrun
+          asset_path: ./starting-files/jvmrun
           asset_name: jvmrun
           asset_content_type: text/plain
 
@@ -146,7 +146,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_pre_release.outputs.upload_url }}
-          asset_path: ./scripts/jvmrun
+          asset_path: ./starting-files/jvmrun
           asset_name: jvmrun
           asset_content_type: text/plain
 
