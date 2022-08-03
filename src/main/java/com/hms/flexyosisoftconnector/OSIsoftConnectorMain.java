@@ -8,6 +8,7 @@ import com.hms.flexyosisoftconnector.dataserver.RestFileServer;
 import com.hms.flexyosisoftconnector.payloadhandler.PayloadManager;
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.historicaldata.CircularizedFileException;
+import com.hms_networks.americas.sc.extensions.historicaldata.CorruptedTimeTrackerException;
 import com.hms_networks.americas.sc.extensions.historicaldata.EbdTimeoutException;
 import com.hms_networks.americas.sc.extensions.historicaldata.HistoricalDataQueueManager;
 import com.hms_networks.americas.sc.extensions.historicaldata.TimeTrackerUnrecoverableException;
@@ -140,7 +141,13 @@ public class OSIsoftConnectorMain {
       Logger.LOG_WARN("Invalid JSON received while fetching data.");
     } catch (TimeTrackerUnrecoverableException e) {
       Logger.LOG_EXCEPTION(e);
-      Logger.LOG_SERIOUS("Time tracker file has been corrupted.");
+      Logger.LOG_WARN("Time tracker file is not recoverable.");
+    } catch (CorruptedTimeTrackerException e) {
+      Logger.LOG_EXCEPTION(e);
+      Logger.LOG_WARN("Time tracker file has been corrupted.");
+    } catch (Exception e) {
+      Logger.LOG_EXCEPTION(e);
+      Logger.LOG_WARN("There was an unknown error collecting data points!");
     }
 
     // if there are data points to send
