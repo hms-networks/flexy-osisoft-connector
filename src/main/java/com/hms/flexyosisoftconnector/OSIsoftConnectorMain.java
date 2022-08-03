@@ -125,22 +125,22 @@ public class OSIsoftConnectorMain {
         // Get the data points for current time period in time tracker
         queuePoints = HistoricalDataQueueManager.getFifoNextSpanDataAllGroups(false);
       }
-    } catch (IOException e) {
+    } catch (Exception e) {
+      String errorMessage = "There was an unknown error collecting data points!";
+      if (e instanceof IOException) {
+        errorMessage =
+            "Exception thrown when obtaining new batch of datapoints. The queue will retry.";
+      } else if (e instanceof CircularizedFileException) {
+        errorMessage = "Data in the historical log has been overwritten with newer data.";
+      } else if (e instanceof EbdTimeoutException) {
+        errorMessage = "EBD call has timed out while fetching data.";
+      } else if (e instanceof JSONException) {
+        errorMessage = "Invalid JSON received while fetching data.";
+      } else if (e instanceof TimeTrackerUnrecoverableException) {
+        errorMessage = "Time tracker file has been corrupted.";
+      }
+      Logger.LOG_WARN(errorMessage);
       Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN(
-          "Exception thrown when obtaining new batch of datapoints. The queue will retry.");
-    } catch (CircularizedFileException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN("Data in the historical log has been overwritten with newer data.");
-    } catch (EbdTimeoutException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN("EBD call has timed out while fetching data.");
-    } catch (JSONException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN("Invalid JSON received while fetching data.");
-    } catch (TimeTrackerUnrecoverableException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_SERIOUS("Time tracker file has been corrupted.");
     }
 
     // if there are data points to send
