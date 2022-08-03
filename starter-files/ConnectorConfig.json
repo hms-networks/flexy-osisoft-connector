@@ -1,0 +1,16 @@
+{
+  "ServerConfig":{
+    "URL":"https://192.168.0.124/piwebapi/omf",
+    "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
+    "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh",
+  },
+  "eWONConfig":{
+    "CertificatePath":"/usr/Certificates"
+  },
+  "AppConfig":{
+    "CommunicationType":"omf",
+    "OSIsoftTagNamingScheme":"default",
+    "LoggingLevel": 4,
+    "httpTimeoutSeconds": 2
+  }
+}
