@@ -1,5 +1,12 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.2-pre3
+### Major Changes
++ None
+### Minor Changes
++ Simplified URL options
++ Fixed bug in time tracker logic
+
 ## Version 3.0.1
 ### Major Changes
 + None
