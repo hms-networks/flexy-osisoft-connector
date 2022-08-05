@@ -122,9 +122,9 @@ static String eWONCertificatePath = "/usr/Certificates";
 ```json
     {
         "ServerConfig":{
-            "URL":"192.168.0.124",
-            "WebID":"s0U1IjG6kMOEW7mxyHCuX2mAUEktU0VSVkVSLVBD",
-            "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh",
+            "URL":"<USER-DOMAIN>",
+            "WebID":"<USER-WEB-ID>",
+            "Credentials":"<USER-CREDENTIALS>",
             "ProxyURL":"long/proxy/example/omf"
         },
         "eWONConfig":{
@@ -143,11 +143,11 @@ static String eWONCertificatePath = "/usr/Certificates";
 The OSIsoft PI Database Web API must be installed for this connector to work.  The connector requires three items to connect to the OSIsoft PI Web API they are the URL of the server running the PI Web API, WebID of the PI Web API and a valid user name and password for the system running the PI Web API software.
 
 #### URL
-IP address or domain name of the system running the Web API (in this example assume the IP address is 192.168.0.124)
+IP address or domain name of the system running the Web API (in this example replace <USER-DOMAIN> with the correct domain or IP).
 
 #### WebID
 This field is only needed when the CommunicationType is set to "piwebapi". WebID is the web ID of the OSIsoft PI Web API instance.
-This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (https://192.168.0.124/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step. 
+This value can be attained by pointing a browser to the OSIsoft PIWEBAPI URL (https://<USER-DOMAIN>/piwebapi/dataservers).  The WebID is one of several parameters returned.  A username and password will be required to access the page.  If a username is not required it may be cached.  Try clearing the cache to verify the username and password.  The same username and password will be used to create the credentials in the next step. 
 (If the PIWEBAPI certificates are self-signed a security warning may occur when trying to access this page. This warning should be ignored.)
 
 #### Proxy URL
@@ -306,9 +306,9 @@ The Client ID and the Client Secret will be needed for the basic script you will
 ```json
     {
         "ServerConfig":{
-            "URL":"192.168.1.8",
-            "WebID":"F1DS4knnwtuIDUC1RLy6XJGV4QREVTS1RPUC0wQ1MyUDFT",
-            "Credentials":"dsZtOnBfdsjklfh==",
+            "URL":"<USER-DOMAIN>",
+            "WebID":"<USER-WEB-ID>",
+            "Credentials":"<USER-CREDENTIALS>",
             "Namespace":"testNameSpace1",
             "TenantId":"4da89f7d-b3ce-48a6-b906-b96c367000a9"
         },
