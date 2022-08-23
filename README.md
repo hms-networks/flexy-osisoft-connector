@@ -17,17 +17,18 @@ This application is supported by HMS' North American offices.
 ## [Table of Contents](#table-of-contents)
 
 1. [General Information](#General-Information)
-2. [Getting Started](#Getting-Started)
+2. [Starting Files](#Starting-Files)
+3. [Getting Started](#Getting-Started)
    1. [Basic Authentication](#basic-authentication)
    2. [Configuration](#Configuration)
    3. [Flexy Configuration](#Flexy-Configuration)
    4. [Installation](#Installation)
    5. [Running](#Running)
-3. [Certificates](#Certificates)
+4. [Certificates](#Certificates)
    1. [Generate The Certificate](#generate-the-certificate)
    2. [Install The Certificate On Server](#install-the-certificate-on-server)
    3. [Transfer Certificate To Flexy](#transfer-certificate-to-flexy)
-4. [Configuration File](#Configuration-File)
+5. [Configuration File](#Configuration-File)
    1. [Example ConnectorConfig.json](#example-connectorconfigjson)
    2. [Server Config](#serverconfig)
       1. [URL](#url)
@@ -41,12 +42,12 @@ This application is supported by HMS' North American offices.
       3. [OSIsoft Tag Naming Scheme](#osisofttagnamingscheme)
       4. [LoggingLevel](#logginglevel)
       5. [Auto Restart](#AutoRestart)
-5. [Customizing The Application](#Customizing-the-application)
-6. [Tag Configuration](#Tag-Configuration)
-7. [OMF Support](#OMF-Support)
-8. [OSIsoft Cloud Service](#OSIsoft-Cloud-Service)
-9. [JVM Logger](#JVM-Logger)
-10. [Troubleshooting Common Issues](#Troubleshooting-common-issues)
+6. [Customizing The Application](#Customizing-the-application)
+7. [Tag Configuration](#Tag-Configuration)
+8. [OMF Support](#OMF-Support)
+9. [OSIsoft Cloud Service](#OSIsoft-Cloud-Service)
+10. [JVM Logger](#JVM-Logger)
+11. [Troubleshooting Common Issues](#Troubleshooting-common-issues)
 
 ## General Information
 The OSIsoft connector makes use of the Flexy's historical logging functionality to send historical data points from a Flexy to OSIsoft PIWebApi. The connector utilizes this functionality to buffer up to 900,000 data points when connection to PIWebApi is lost.
@@ -57,6 +58,10 @@ More information can be found here: [Ewon Historical Logging](https://developer.
 ### Basic Authentication
 
 This connector uses basic authentication (RFC7617) to communicate with OSIsoft and requires basic authentication to be enabled.
+
+### Starting Files
+
+The connector release zip has a starting files directory included in it. This starting files directory contains JVMRUN file and connector configuration file, as well as an OCS specific basic script.
 
 ### Configuration
 
@@ -72,11 +77,15 @@ To change configuration values, follow the below steps:
 
 ### Installation
 
-Using FTP transfer the contents of the osisoft_connector directory to the /usr/ directory of the eWON via FTP.  If successful you should have a css directory, js directory, config.html, ConnectorConfig.json, flexy-osisoft-connector.jar, and jvmrun located in the /usr/ directory of the Flexy.  You must also follow all steps in the Certificates section below.
+Using FTP transfer the following files to the /usr/ directory of the Ewon via FTP. 
+* ConnectorConfig.json, an example file is provided in the starting-files directory of the release zip.
+* flexy-osisoft-connector-x-x-x.jar, the latest version can be downloaded from the github releases.
+* jvmrun, this file is provided in the starting-files directory of the release zip.
+* You must also follow all steps in the Certificates section below and transfer the resulting certificates to the correct location on the Flexy.
 
 ### Running
 
-The application will start automatically on startup
+The application will start automatically on power on if the jvmrun file has been transferred to the /usr/ directory of the Ewon via FTP and the AutoRestart configuration setting is enabled.
 
 ## Certificates
 
