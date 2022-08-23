@@ -111,11 +111,28 @@ You will be prompted to enter an export password, the again to verify.  Remember
 ### Install the certificate on server
 These installation instructions are specific to Windows 7.  If the OSIsoft server is running on a different OS the process may differ.
 
-In Windows, right click on the certificate.crt file and click Install Certificate.  Follow the prompts and place the certificate in the "Trusted Root Certification Authorities" store.  When you click finish a security prompt will warn you that it cannot validate the certificate's origin and ask if you want to install this certificate, click yes.
+* In Windows, right click on the certificate.crt file and click "Install Certificate" to the current user.
+* Follow the prompts and place the certificate in the "Trusted Root Certification Authorities" store.
+* When you click finish a security prompt will warn you that it cannot validate the certificate's origin and ask if you want to install this certificate, click yes.
+* Hold down Windows key and press R on your keyboard to open the 'run' command.
+* Type "certmgr.msc" into the run command and click "OK".
+* Expand "Certificates (Current User)", then expand "Personal", then expand and select "Certificates".
+* Click "Action"->"All Tasks"->"Import".
+* Click "Next" then "Browse".
+* In the file open window select the file extension to be "Personal Information Exchange (*.pfx;*.p12)".
+* Find and select the "certificate.p12" file, then click open then next.
+* There will be a prompt to enter the export password from when the certificate.p12 file was created, after doing so click next.
+* Place the certificate in the "Personal" certificate store, then click "Next" then "Finish".
+* You should be prompted that the import was successful, click "OK".
 
-Run mmc.exe.  Click "File"->"Add/Remove Snap-in...".  From the "Available snap-ins" add "Certificates" to the "Selected snap-ins", set the permissions to "Computer account" when prompted, then select the local computer.  Click "Finish", then "Ok".  Expand "Certificates (Local Computer)", then expand "Personal", then expand and select "Certificates". Click "Action"->"All Tasks"->"Import". Click "Next" then "Browse".  The the file open window select the file extension to be "Personal Information Exchange (*.pfx;*.p12)".  Find and select the "certificate.p12" file, then click open then next.  There will be a prompt to enter the export password from when the certificate.p12 file was created, after doing so click next.  Place the certificate in the "Personal" certificate store, then click "Next" then "Finish".  You should be prompted that the import was successful, click "OK".
+The next steps take place in the PI Web API Admin Utility tool.
 
-Run "PI Web API Admin Utility". Configure the server normally.  When you get to the "Certificate" setup page click "Change".  You may be prompted that a certificate binding is already configured, click "Yes" to "Do you still want to change the certificate?".  Select the certificate you created from the list and click "OK".  Continue with the rest of the configuration normally.
+* Run "PI Web API Admin Utility".
+* Configure the server normally.
+* When you get to the "Certificate" setup page click "Change".
+* You may be prompted that a certificate binding is already configured, click "Yes" to "Do you still want to change the certificate?".
+* Select the certificate you created from the list and click "OK".
+* Continue with the rest of the configuration normally.
 
 ### Transfer certificate to Flexy
 
