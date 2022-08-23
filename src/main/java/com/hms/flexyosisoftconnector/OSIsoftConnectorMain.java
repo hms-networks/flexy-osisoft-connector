@@ -74,6 +74,15 @@ public class OSIsoftConnectorMain {
     // update tag info to use later
     TagInfoManager.refreshTagList();
 
+    if (TagInfoManager.getTagInfoList().size() == 0) {
+      Logger.LOG_SERIOUS(
+          "There are currently no tags configured to be monitored for OSIsoft telemetry data.");
+      Logger.LOG_SERIOUS(
+          "Add 1 or more tags to telemetry data and restart the connector. Connector application"
+              + " exiting.");
+      System.exit(1);
+    }
+
     payloadMngr = new PayloadManager(OSIsoftConfig.getCommunicationType());
 
     piServer = new OSIsoftServer();
