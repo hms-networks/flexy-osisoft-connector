@@ -1,5 +1,12 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.3
+### Major Changes
++ None
+### Minor Changes
++ Fixed bug when no tags are added to queue
++ Fixed bug when invalid response body received
+
 ## Version 3.0.2
 ### Major Changes
 + None
