@@ -13,6 +13,7 @@ import com.hms_networks.americas.sc.extensions.historicaldata.HistoricalDataQueu
 import com.hms_networks.americas.sc.extensions.historicaldata.TimeTrackerUnrecoverableException;
 import com.hms_networks.americas.sc.extensions.json.JSONException;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.system.application.SCAppArgsParser;
 import com.hms_networks.americas.sc.extensions.system.application.SCAppManagement;
 import com.hms_networks.americas.sc.extensions.system.http.SCHttpUtility;
 import com.hms_networks.americas.sc.extensions.system.time.SCTimeUtils;
@@ -50,10 +51,21 @@ public class OSIsoftConnectorMain {
 
     OSIsoftConfig.initConfig(CONNECTOR_CONFIG_FILENAME);
 
-    if (OSIsoftConfig.getAutoRestart()) {
-      SCAppManagement.enableAppAutoRestart();
+    // Parse arguments
+    SCAppArgsParser argsParser = new SCAppArgsParser(args);
+
+    // Configure auto-restart if not started by multi-loader
+    if (!argsParser.getStartedByMultiLoader()) {
+      if (OSIsoftConfig.getAutoRestart()) {
+        SCAppManagement.enableAppAutoRestart();
+      } else {
+        SCAppManagement.disableAppAutoRestart();
+      }
     } else {
-      SCAppManagement.disableAppAutoRestart();
+      Logger.LOG_DEBUG(
+          OSIsoftConfig.CONNECTOR_NAME
+              + " was started by the multi-loader application. Skipping auto-restart "
+              + "configuration.");
     }
 
     setLocalTimeZone();
