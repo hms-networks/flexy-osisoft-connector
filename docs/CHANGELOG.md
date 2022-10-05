@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.4
+### Major Changes
++ None
+### Minor Changes
++ Added support for application argument(s) to disable auto-restart
+
 ## Version 3.0.3
 ### Major Changes
 + None
