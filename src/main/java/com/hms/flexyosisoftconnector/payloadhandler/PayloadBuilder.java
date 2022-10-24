@@ -399,7 +399,7 @@ public class PayloadBuilder {
   public static String getContainerSettingJson(int startTagIndex, int numToProccess) {
     String typeID = "";
 
-    final int perTagSize = 60;
+    final int perTagSize = 128;
     final int containerMessageSize = numToProccess * perTagSize;
     PreAllocatedStringBuilder payload = new PreAllocatedStringBuilder(containerMessageSize);
 
