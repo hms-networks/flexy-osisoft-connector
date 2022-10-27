@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.5
+### Major Changes
++ None
+### Minor Changes
++ Increased tag name length limit from 60 characters to 128 characters
+
 ## Version 3.0.4
 ### Major Changes
 + None
