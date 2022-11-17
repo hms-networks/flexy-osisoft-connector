@@ -178,10 +178,10 @@ public class OSIsoftConnectorMain {
       // Check if queue is behind
       try {
         long queueBehindMillis = HistoricalDataQueueManager.getQueueTimeBehindMillis();
-        long queueBehindSeconds = queueBehindMillis / 1000;
-        if (queueBehindSeconds >= OSIsoftConfig.WARNING_LIMIT_QUEUE_BEHIND_SECONDS) {
+        if (queueBehindMillis >= OSIsoftConfig.WARNING_LIMIT_QUEUE_BEHIND_MILLISECONDS) {
           Logger.LOG_WARN(
-              "The historical data queue is running behind by " + queueBehindSeconds + " seconds.");
+              "The historical data queue is running behind by "
+                  + SCTimeUtils.getDayHourMinSecsForMillis(queueBehindMillis));
         }
       } catch (IOException e) {
         Logger.LOG_SERIOUS("Unable to detect if historical data queue is running behind.");
