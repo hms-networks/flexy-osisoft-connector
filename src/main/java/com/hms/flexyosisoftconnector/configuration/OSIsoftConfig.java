@@ -25,8 +25,8 @@ public class OSIsoftConfig {
   public static final String CONNECTOR_VERSION =
       OSIsoftConfig.class.getPackage().getImplementationVersion();
 
-  /** Number of seconds queue can fall beind before warnings are logged. */
-  public static final int WARNING_LIMIT_QUEUE_BEHIND_SECONDS = 15;
+  /** Number of milliseconds queue can fall beind before warnings are logged. */
+  public static final int WARNING_LIMIT_QUEUE_BEHIND_MILLISECONDS = 15000;
 
   /** IP address of OSIsoft PI Server */
   private static String piServerUrl;
