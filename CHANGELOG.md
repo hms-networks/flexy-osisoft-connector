@@ -1,5 +1,17 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.6
+### Major Changes
++ Updated project structure to better match sc-java-maven-starter-project template
+  + Moved CHANGELOG.md to root of repository
+  + Moved images folder to root of repository
++ Updated now-deprecated PreAllocatedStringBuilder.java usage to StringBuffer.java
+  + Resolved bugs related to hard-coded buffer sizes
+### Minor Changes
++ Updated GitHub actions to use the latest versions from sc-java-maven-starter-project
++ Updated com.hms_networks.americas.sc:extensions library to v1.12.1
++ Cleaned up remnants of previous libraries
+
 ## Version 3.0.5
 ### Major Changes
 + None
