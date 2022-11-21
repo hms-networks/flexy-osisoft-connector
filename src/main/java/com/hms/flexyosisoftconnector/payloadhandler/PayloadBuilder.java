@@ -202,8 +202,6 @@ public class PayloadBuilder {
    */
   public static String addContainerStartToOMFDataMessage(String tagName, String tagType) {
 
-    final String flexySerial = OSIsoftConfig.getFlexySerial();
-
     /* Ensure the container is uniquely identified across devices communicating to the same
      * OSIsoft server under the same type declaration.
      * Types are treated as immutable and changing the type creates a new container.
@@ -416,7 +414,6 @@ public class PayloadBuilder {
         String typeString = "";
 
         if (currentTag.getType() == TagType.FLOAT) {
-          typeID = "HMS-number-type-" + getFlexyName();
           typeString = OsisoftJsonPayload.NUMBER_TAG_TYPE;
         } else if (currentTag.getType() == TagType.INTEGER) {
           typeString = OsisoftJsonPayload.INTEGER_TAG_TYPE;
@@ -438,8 +435,6 @@ public class PayloadBuilder {
         if (i > startTagIndex) {
           payload.append(",");
         }
-
-        final String flexySerial = OSIsoftConfig.getFlexySerial();
 
         /* Ensure the container is uniquely identified across devices communicating to the same
          * OSIsoft server under the same Type declaration.
