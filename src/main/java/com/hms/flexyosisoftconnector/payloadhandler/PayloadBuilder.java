@@ -6,7 +6,6 @@ import com.hms.flexyosisoftconnector.configuration.OSIsoftTagNamingScheme;
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.datapoint.DataType;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
-import com.hms_networks.americas.sc.extensions.string.PreAllocatedStringBuilder;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfo;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
 import com.hms_networks.americas.sc.extensions.taginfo.TagType;
@@ -401,7 +400,7 @@ public class PayloadBuilder {
 
     final int perTagSize = 128;
     final int containerMessageSize = numToProccess * perTagSize;
-    PreAllocatedStringBuilder payload = new PreAllocatedStringBuilder(containerMessageSize);
+    StringBuffer payload = new StringBuffer(containerMessageSize);
 
     payload.append(startOMFDataMessage());
     int endTagIndex;
@@ -449,8 +448,14 @@ public class PayloadBuilder {
         final String containerId =
             OSIsoftTagNamingScheme.extractTagNameFromComponents(tagName, typeString);
 
-        payload.append(
-            "{" + "\"id\": \"" + containerId + "\"," + "\"typeid\": \"" + typeID + "\"" + "}");
+        payload
+            .append("{" + "\"id\": \"")
+            .append(containerId)
+            .append("\",")
+            .append("\"typeid\": \"")
+            .append(typeID)
+            .append("\"")
+            .append("}");
       }
     }
 
