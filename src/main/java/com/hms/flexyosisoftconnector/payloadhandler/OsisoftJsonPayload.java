@@ -4,7 +4,6 @@ import com.hms.flexyosisoftconnector.configuration.OSIsoftConfig;
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.datapoint.DataType;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
-import com.hms_networks.americas.sc.extensions.string.PreAllocatedStringBuilder;
 import com.hms_networks.americas.sc.extensions.taginfo.TagConstants;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
 import java.text.SimpleDateFormat;
@@ -24,7 +23,7 @@ public class OsisoftJsonPayload {
   int status;
 
   /** String builder for payload */
-  final PreAllocatedStringBuilder payload;
+  final StringBuffer payload;
 
   /** Constant representing payload not started */
   static final int PAYLOAD_NOT_STARTED = 0;
@@ -121,7 +120,7 @@ public class OsisoftJsonPayload {
     final int byteSizePerDataPoint = 110;
     final int byteSizeForStartAndEnd = 200;
     MAX_PAYLOAD_NUM_CHARACTERS = (MAX_DATA_POINTS * byteSizePerDataPoint) + byteSizeForStartAndEnd;
-    payload = new PreAllocatedStringBuilder(MAX_PAYLOAD_NUM_CHARACTERS);
+    payload = new StringBuffer(MAX_PAYLOAD_NUM_CHARACTERS);
     status = PAYLOAD_NOT_STARTED;
     communicationType = comType;
 
@@ -182,7 +181,7 @@ public class OsisoftJsonPayload {
    */
   public void startPayload() {
 
-    payload.clearString();
+    payload.setLength(0);
     tagNamesEncountered = new boolean[tagsEncounteredArraySize];
     tagPayloadArr = new TagPayload[tagsEncounteredArraySize];
     payloadStartTimestamp = 0;
@@ -202,7 +201,8 @@ public class OsisoftJsonPayload {
         break;
     }
 
-    boolean didAppendToPayload = payload.append(startOfPayload);
+    int originalPayloadLength = payload.length();
+    boolean didAppendToPayload = payload.append(startOfPayload).length() > originalPayloadLength;
     if (didAppendToPayload) {
       status = PAYLOAD_HEADER_COMPLETE;
     } else {
@@ -396,12 +396,15 @@ public class OsisoftJsonPayload {
       }
 
       boolean allAppended = false;
+      int originalPayloadLength = payload.length();
       switch (communicationType) {
         case OSIsoftConfig.OMF:
-          allAppended = payload.append(PayloadBuilder.endOMFDataMessage());
+          allAppended =
+              payload.append(PayloadBuilder.endOMFDataMessage()).length() > originalPayloadLength;
           break;
         case OSIsoftConfig.PI_WEB_API:
-          allAppended = payload.append(PayloadBuilder.endBatchOldFormat());
+          allAppended =
+              payload.append(PayloadBuilder.endBatchOldFormat()).length() > originalPayloadLength;
           break;
         default:
           Logger.LOG_SERIOUS(comsErrMsg);

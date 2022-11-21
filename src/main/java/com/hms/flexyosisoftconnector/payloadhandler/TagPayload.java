@@ -2,7 +2,6 @@ package com.hms.flexyosisoftconnector.payloadhandler;
 
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
-import com.hms_networks.americas.sc.extensions.string.PreAllocatedStringBuilder;
 
 /**
  * This class holds the incomplete payload as well as one of the datapoint objects.
@@ -12,7 +11,7 @@ import com.hms_networks.americas.sc.extensions.string.PreAllocatedStringBuilder;
 public class TagPayload {
 
   /** Holds the JSON payload. */
-  private PreAllocatedStringBuilder payload;
+  private StringBuffer payload;
 
   /** Holds the tag information associated with the payload. */
   private DataPoint dataPoint;
@@ -23,7 +22,7 @@ public class TagPayload {
       Logger.LOG_SERIOUS("The OSIsoftJSONPayload class has not been initialized.");
       Logger.LOG_SERIOUS("Unable to allocate space for a new PreAllocatedStringBuilder object.");
     } else {
-      payload = new PreAllocatedStringBuilder(OsisoftJsonPayload.MAX_PAYLOAD_NUM_CHARACTERS);
+      payload = new StringBuffer(OsisoftJsonPayload.MAX_PAYLOAD_NUM_CHARACTERS);
     }
   }
 
