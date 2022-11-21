@@ -17,4 +17,3 @@ cp ./mini_css/*min.css "$RELEASE_CSS"
 cp ./mini_js/*min.js "$RELEASE_JS"
 cp ./build/*.jar "$RELEASE_DIR"
 cp ./scripts/* "$RELEASE_DIR"
-mv ./docs/CHANGELOG.md ./
