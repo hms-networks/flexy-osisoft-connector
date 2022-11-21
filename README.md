@@ -276,16 +276,16 @@ To have a tag's historical data sent to OSIsoft, the tag needs to have historica
 
 >Navigate to the tag values page. If the "mode" slider on the top left of the screen is set to "view", click on it to set it to "setup".
 
-![osisoft tag configuration step 1](docs/images/step1.PNG)
+![osisoft tag configuration step 1](images/step1.PNG)
 
 >Double click on a tag to open the tag configuration page.
 >Enable historical logging for each tag you want recorded in OSIsoft by clicking the "Historical Logging Enabled" checkbox. 
 
-![osisoft tag configuration step 2](docs/images/step2.PNG)
+![osisoft tag configuration step 2](images/step2.PNG)
 
 >Ensure the tag is added to a group. If it is not, no the tag data will not be sent to OSIsoft.
 
-![osisoft tag configuration step 3](docs/images/step3.PNG)
+![osisoft tag configuration step 3](images/step3.PNG)
 
 ## OMF Support
 
