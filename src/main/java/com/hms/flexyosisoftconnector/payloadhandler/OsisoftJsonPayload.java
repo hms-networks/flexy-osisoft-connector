@@ -86,12 +86,6 @@ public class OsisoftJsonPayload {
   /** Error message to display on unknown communication type. */
   String comsErrMsg = "Unknown communication type given. Unable to build payload.";
 
-  /** Constant for error handling */
-  public static final int UNINITIALIZED_INTEGER = -1;
-
-  /** Maximum number of characters in a payload */
-  public static int MAX_PAYLOAD_NUM_CHARACTERS = UNINITIALIZED_INTEGER;
-
   /** The OSIsoft tag type identifier stored as a string for integers. */
   public static final String INTEGER_TAG_TYPE = "integer";
 
@@ -117,10 +111,7 @@ public class OsisoftJsonPayload {
       Logger.LOG_SERIOUS("Invalid communication type set. Please check the config file settings.");
     }
 
-    final int byteSizePerDataPoint = 110;
-    final int byteSizeForStartAndEnd = 200;
-    MAX_PAYLOAD_NUM_CHARACTERS = (MAX_DATA_POINTS * byteSizePerDataPoint) + byteSizeForStartAndEnd;
-    payload = new StringBuffer(MAX_PAYLOAD_NUM_CHARACTERS);
+    payload = new StringBuffer();
     status = PAYLOAD_NOT_STARTED;
     communicationType = comType;
 

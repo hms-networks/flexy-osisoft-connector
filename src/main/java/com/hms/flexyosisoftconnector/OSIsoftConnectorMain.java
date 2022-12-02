@@ -38,6 +38,12 @@ public class OSIsoftConnectorMain {
   /** Filename of connector config file */
   static final String CONNECTOR_CONFIG_FILENAME = "/usr/ConnectorConfig.json";
 
+  /** The minimum memory (in bytes) required to perform a poll of the data queue. */
+  public static final int QUEUE_DATA_POLL_MIN_MEMORY_BYTES = 5000000;
+
+  /** Boolean flag indicating if the application is running out of memory */
+  private static boolean isMemoryCurrentlyLow;
+
   /** PI Server management object */
   static OSIsoftServer piServer;
 
@@ -139,75 +145,102 @@ public class OSIsoftConnectorMain {
    * Grabs a new set of data points from the top of the queue and feeds each on to payload manager.
    */
   private static void getNewPayloadToSend() {
-    Logger.LOG_DEBUG("Getting next section of datapoints");
-    ArrayList queuePoints = new ArrayList();
-    try {
-      if (!HistoricalDataQueueManager.doesTimeTrackerExist()) {
-        // Start a new time tracker file at current time
-        HistoricalDataQueueManager.getFifoNextSpanDataAllGroups(true);
-      } else {
-        // Get the data points for current time period in time tracker
-        queuePoints = HistoricalDataQueueManager.getFifoNextSpanDataAllGroups(false);
-      }
-    } catch (IOException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN(
-          "Exception thrown when obtaining new batch of datapoints. The queue will retry.");
-    } catch (CircularizedFileException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN("Data in the historical log has been overwritten with newer data.");
-    } catch (EbdTimeoutException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN("EBD call has timed out while fetching data.");
-    } catch (JSONException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN("Invalid JSON received while fetching data.");
-    } catch (TimeTrackerUnrecoverableException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN("Time tracker file is not recoverable.");
-    } catch (CorruptedTimeTrackerException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN("Time tracker file has been corrupted.");
-    } catch (Exception e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_WARN("There was an unknown error collecting data points!");
-    }
+    // Update available memory variable
+    long availableMemoryBytes = Runtime.getRuntime().freeMemory();
 
-    // if there are data points to send
-    if (queuePoints.size() != 0) {
-      // Check if queue is behind
+    // Check if memory is within permissible range to poll data queue
+    if (availableMemoryBytes < QUEUE_DATA_POLL_MIN_MEMORY_BYTES) {
+      // Show low memory warning
+      Logger.LOG_WARN(
+          "Low memory on device, "
+              + (availableMemoryBytes / 1000)
+              + " MB left! Data polling paused to prevent out of memory error.");
+
+      // If low memory flag not set, set it and request garbage collection
+      if (!isMemoryCurrentlyLow) {
+        // Set low memory flag
+        isMemoryCurrentlyLow = true;
+
+        // Tell the JVM that it should garbage collect soon
+        System.gc();
+      }
+    } else {
+      // There is enough memory to run, reset memory state variable.
+      if (isMemoryCurrentlyLow) {
+        isMemoryCurrentlyLow = false;
+      }
+
+      // Process datapoints from queue
+      Logger.LOG_DEBUG("Getting next section of datapoints");
+      ArrayList queuePoints = new ArrayList();
       try {
-        long queueBehindMillis = HistoricalDataQueueManager.getQueueTimeBehindMillis();
-        if (queueBehindMillis >= OSIsoftConfig.WARNING_LIMIT_QUEUE_BEHIND_MILLISECONDS) {
-          Logger.LOG_WARN(
-              "The historical data queue is running behind by "
-                  + SCTimeUtils.getDayHourMinSecsForMillis(queueBehindMillis));
+        if (!HistoricalDataQueueManager.doesTimeTrackerExist()) {
+          // Start a new time tracker file at current time
+          HistoricalDataQueueManager.getFifoNextSpanDataAllGroups(true);
+        } else {
+          // Get the data points for current time period in time tracker
+          queuePoints = HistoricalDataQueueManager.getFifoNextSpanDataAllGroups(false);
         }
       } catch (IOException e) {
-        Logger.LOG_SERIOUS("Unable to detect if historical data queue is running behind.");
         Logger.LOG_EXCEPTION(e);
+        Logger.LOG_WARN(
+            "Exception thrown when obtaining new batch of datapoints. The queue will retry.");
+      } catch (CircularizedFileException e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_WARN("Data in the historical log has been overwritten with newer data.");
+      } catch (EbdTimeoutException e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_WARN("EBD call has timed out while fetching data.");
+      } catch (JSONException e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_WARN("Invalid JSON received while fetching data.");
       } catch (TimeTrackerUnrecoverableException e) {
-        Logger.LOG_SERIOUS("Time tracker file has been corrupted.");
         Logger.LOG_EXCEPTION(e);
+        Logger.LOG_WARN("Time tracker file is not recoverable.");
+      } catch (CorruptedTimeTrackerException e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_WARN("Time tracker file has been corrupted.");
+      } catch (Exception e) {
+        Logger.LOG_EXCEPTION(e);
+        Logger.LOG_WARN("There was an unknown error collecting data points!");
       }
 
-      Logger.LOG_DEBUG("Grabbed " + queuePoints.size() + " datapoints for proccessing.");
-      for (int i = 0; i < queuePoints.size(); i++) {
-        DataPoint data = ((DataPoint) queuePoints.get(i));
-
-        // build a payload out of data points
-        if (data != null) {
-          payloadMngr.appendDataPointToPayLoad(data);
+      // if there are data points to send
+      if (queuePoints.size() != 0) {
+        // Check if queue is behind
+        try {
+          long queueBehindMillis = HistoricalDataQueueManager.getQueueTimeBehindMillis();
+          if (queueBehindMillis >= OSIsoftConfig.WARNING_LIMIT_QUEUE_BEHIND_MILLISECONDS) {
+            Logger.LOG_WARN(
+                "The historical data queue is running behind by "
+                    + SCTimeUtils.getDayHourMinSecsForMillis(queueBehindMillis));
+          }
+        } catch (IOException e) {
+          Logger.LOG_SERIOUS("Unable to detect if historical data queue is running behind.");
+          Logger.LOG_EXCEPTION(e);
+        } catch (TimeTrackerUnrecoverableException e) {
+          Logger.LOG_SERIOUS("Time tracker file has been corrupted.");
+          Logger.LOG_EXCEPTION(e);
         }
 
-        // Sleep between datapoints to significantly increase Flexy performance.
-        Thread.yield();
-        try {
-          final int threadWaitMS = 5;
-          Thread.sleep(threadWaitMS);
-        } catch (InterruptedException e) {
-          Logger.LOG_EXCEPTION(e);
-          Logger.LOG_SERIOUS("Exception thrown while sleeping thread.");
+        Logger.LOG_DEBUG("Grabbed " + queuePoints.size() + " datapoints for proccessing.");
+        for (int i = 0; i < queuePoints.size(); i++) {
+          DataPoint data = ((DataPoint) queuePoints.get(i));
+
+          // build a payload out of data points
+          if (data != null) {
+            payloadMngr.appendDataPointToPayLoad(data);
+          }
+
+          // Sleep between datapoints to significantly increase Flexy performance.
+          Thread.yield();
+          try {
+            final int threadWaitMS = 5;
+            Thread.sleep(threadWaitMS);
+          } catch (InterruptedException e) {
+            Logger.LOG_EXCEPTION(e);
+            Logger.LOG_SERIOUS("Exception thrown while sleeping thread.");
+          }
         }
       }
     }
