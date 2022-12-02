@@ -396,9 +396,7 @@ public class PayloadBuilder {
   public static String getContainerSettingJson(int startTagIndex, int numToProccess) {
     String typeID = "";
 
-    final int perTagSize = 128;
-    final int containerMessageSize = numToProccess * perTagSize;
-    StringBuffer payload = new StringBuffer(containerMessageSize);
+    StringBuffer payload = new StringBuffer();
 
     payload.append(startOMFDataMessage());
     int endTagIndex;
