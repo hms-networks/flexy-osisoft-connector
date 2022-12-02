@@ -1,5 +1,12 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.7
+### Major Changes
++ None
+### Minor Changes
++ Release to Solution Center Maven Repository
+  + Added automation to release to Solution Center Maven Repository
+
 ## Version 3.0.6
 ### Major Changes
 + Updated project structure to better match sc-java-maven-starter-project template
