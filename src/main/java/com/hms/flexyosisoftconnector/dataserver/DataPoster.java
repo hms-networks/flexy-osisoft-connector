@@ -56,7 +56,7 @@ public class DataPoster extends Thread {
       // thread finished
       Thread.yield();
       try {
-        final int sleepTimeMs = 100;
+        final int sleepTimeMs = OSIsoftConfig.getDataPostRateMs();
         Thread.sleep(sleepTimeMs);
       } catch (InterruptedException e) {
         Logger.LOG_SERIOUS("Unable to sleep connected DataPoster thread.");

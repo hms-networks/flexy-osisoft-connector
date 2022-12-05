@@ -116,6 +116,36 @@ public class OSIsoftConfig {
   /** Key to access auto restart setting from config file JSON. */
   private static final String AUTO_RESTART_KEY = "AutoRestart";
 
+  /** Key to access the data poll rate (in milliseconds) setting from config file JSON. */
+  private static final String DATA_POLL_RATE_MS_KEY = "DataPollRateMs";
+
+  /**
+   * The default value for the data poll rate (in milliseconds) setting. This value is used if the
+   * setting is not present in the config file.
+   */
+  private static final int DATA_POLL_RATE_MS_DEFAULT = 5000;
+
+  /**
+   * The data poll rate (in milliseconds) setting. This is the rate at which the connector will poll
+   * the Flexy historical data queue for data points.
+   */
+  private static int dataPollRateMs;
+
+  /** Key to access the data post rate (in milliseconds) setting from config file JSON. */
+  private static final String DATA_POST_RATE_MS_KEY = "DataPostRateMs";
+
+  /**
+   * The default value for the data post rate (in milliseconds) setting. This value is used if the
+   * setting is not present in the config file.
+   */
+  private static final int DATA_POST_RATE_MS_DEFAULT = 5000;
+
+  /**
+   * The data post rate (in milliseconds) setting. This is the rate at which the connector will post
+   * data points to the OSIsoft server.
+   */
+  private static int dataPostRateMs;
+
   /**
    * Initializes the configuration class and all required information.
    *
@@ -205,6 +235,32 @@ public class OSIsoftConfig {
     }
 
     autoRestart = appConfig.getBoolean(AUTO_RESTART_KEY);
+
+    // Load data poll rate (ms)
+    if (appConfig.has(DATA_POLL_RATE_MS_KEY)) {
+      dataPollRateMs = appConfig.getInt(DATA_POLL_RATE_MS_KEY);
+      Logger.LOG_INFO(
+          "Data poll rate of " + dataPollRateMs + " ms retrieved from configuration file.");
+    } else {
+      dataPollRateMs = DATA_POLL_RATE_MS_DEFAULT;
+      Logger.LOG_INFO(
+          "Data poll rate not set in configuration file. Using default value of "
+              + dataPollRateMs
+              + " ms.");
+    }
+
+    // Load data post rate (ms)
+    if (appConfig.has(DATA_POST_RATE_MS_KEY)) {
+      dataPostRateMs = appConfig.getInt(DATA_POST_RATE_MS_KEY);
+      Logger.LOG_INFO(
+          "Data post rate of " + dataPostRateMs + " ms retrieved from configuration file.");
+    } else {
+      dataPostRateMs = DATA_POST_RATE_MS_DEFAULT;
+      Logger.LOG_INFO(
+          "Data post rate not set in configuration file. Using default value of "
+              + dataPostRateMs
+              + " ms.");
+    }
 
     typeID = "HMS-type-" + flexyName;
     postHeaders =
@@ -449,6 +505,26 @@ public class OSIsoftConfig {
    */
   public static boolean getAutoRestart() {
     return autoRestart;
+  }
+
+  /**
+   * Get the data poll rate (in milliseconds) setting. This is the rate at which the connector will
+   * poll the Flexy historical data queue for data points.
+   *
+   * @return the data poll rate (in milliseconds) setting
+   */
+  public static int getDataPollRateMs() {
+    return dataPollRateMs;
+  }
+
+  /**
+   * Get the data post rate (in milliseconds) setting. This is the rate at which the connector will
+   * post data points to the OSIsoft server.
+   *
+   * @return the data post rate (in milliseconds) setting
+   */
+  public static int getDataPostRateMs() {
+    return dataPostRateMs;
   }
 
   /**
