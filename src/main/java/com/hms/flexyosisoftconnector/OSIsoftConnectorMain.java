@@ -110,7 +110,7 @@ public class OSIsoftConnectorMain {
       // Sleep between initialization attempts to increase Flexy performance.
       Thread.yield();
       try {
-        final int threadWaitMS = 5;
+        final int threadWaitMS = 1000;
         Thread.sleep(threadWaitMS);
       } catch (InterruptedException e) {
         Logger.LOG_EXCEPTION(e);
@@ -133,7 +133,7 @@ public class OSIsoftConnectorMain {
       // pause to help the flexy with the infinite loop
       Thread.yield();
       try {
-        final int threadWaitMS = 500;
+        final int threadWaitMS = 2500;
         Thread.sleep(threadWaitMS);
       } catch (InterruptedException e) {
         Logger.LOG_EXCEPTION(e);
