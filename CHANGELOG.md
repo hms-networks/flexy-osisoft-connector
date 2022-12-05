@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.8-pre1
+### Major Changes
++ None
+### Minor Changes
++ Increased sleep times in threads and loops to reduce Ewon CPU usage
+
 ## Version 3.0.7
 ### Major Changes
 + None
