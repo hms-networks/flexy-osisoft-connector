@@ -105,22 +105,22 @@ public class OSIsoftConnectorMain {
 
     piServer = new OSIsoftServer();
 
-    int res;
-    do {
+    Logger.LOG_INFO("Initializing tags");
+    int res = piServer.initTags();
+    while (res != SCHttpUtility.HTTPX_CODE_NO_ERROR) {
       // Sleep between initialization attempts to increase Flexy performance.
       Thread.yield();
       try {
-        final int threadWaitMS = 5;
+        final int threadWaitMS = 2000;
         Thread.sleep(threadWaitMS);
       } catch (InterruptedException e) {
         Logger.LOG_EXCEPTION(e);
         Logger.LOG_SERIOUS("Exception thrown while sleeping thread.");
       }
 
-      Logger.LOG_INFO("Initializing tags");
+      Logger.LOG_INFO("Retrying initializing tags");
       res = piServer.initTags();
-
-    } while (res != SCHttpUtility.HTTPX_CODE_NO_ERROR);
+    }
 
     Logger.LOG_INFO("Finished initializing tags");
 
