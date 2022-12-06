@@ -12,6 +12,8 @@
     "OSIsoftTagNamingScheme":"default",
     "LoggingLevel": 4,
     "httpTimeoutSeconds": 2,
-    "AutoRestart": true
+    "AutoRestart": true,
+    "DataPollRateMs": 5000,
+    "DataPostRateMs": 5000
   }
 }

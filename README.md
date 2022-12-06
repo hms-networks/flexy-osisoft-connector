@@ -42,6 +42,8 @@ This application is supported by HMS' North American offices.
       3. [OSIsoft Tag Naming Scheme](#osisofttagnamingscheme)
       4. [LoggingLevel](#logginglevel)
       5. [Auto Restart](#AutoRestart)
+      6. [Data Poll Rate \(MS\)](#datapollratems)
+      7. [Data Post Rate \(MS\)](#datapostratems)
 6. [Customizing The Application](#Customizing-the-application)
 7. [Tag Configuration](#Tag-Configuration)
 8. [OMF Support](#OMF-Support)
@@ -160,7 +162,9 @@ static String eWONCertificatePath = "/usr/Certificates";
            "OSIsoftTagNamingScheme":"default",
            "LoggingLevel": 4,
            "httpTimeoutSeconds": 2,
-           "AutoRestart": true
+           "AutoRestart": true,
+           "DataPollRateMs": 5000,
+           "DataPostRateMs": 5000
         }
     }
 ```
@@ -266,6 +270,12 @@ Setting the AutoRestart value to "true" configures the Flexy to launch the appli
 ends. This requires a jvmrun file to exist on the Flexy usr directory.
 
 Setting the AutoRestart value to 'false' prevents the application from restarting on reboots and crashes.
+
+#### DataPollRateMs
+This field is used to set the rate (in milliseconds) at which the connector will poll the Flexy historical data queue for data points. The default value is 5000ms (5 seconds).
+
+#### DataPostRateMs
+This field is used to set the rate at which the connector will post data points to the OSIsoft server. The default value is 5000ms (5 seconds).
 
 ## Customizing the application
 
