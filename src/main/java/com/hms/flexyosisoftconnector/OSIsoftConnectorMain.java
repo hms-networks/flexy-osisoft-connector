@@ -133,7 +133,7 @@ public class OSIsoftConnectorMain {
       // pause to help the flexy with the infinite loop
       Thread.yield();
       try {
-        final int threadWaitMS = 500;
+        final int threadWaitMS = OSIsoftConfig.getDataPollRateMs();
         Thread.sleep(threadWaitMS);
       } catch (InterruptedException e) {
         Logger.LOG_EXCEPTION(e);
