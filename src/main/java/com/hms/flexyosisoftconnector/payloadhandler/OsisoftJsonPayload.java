@@ -4,11 +4,9 @@ import com.hms.flexyosisoftconnector.configuration.OSIsoftConfig;
 import com.hms_networks.americas.sc.extensions.datapoint.DataPoint;
 import com.hms_networks.americas.sc.extensions.datapoint.DataType;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.system.time.SCTimeUtils;
 import com.hms_networks.americas.sc.extensions.taginfo.TagConstants;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * This class will hold a payload string and a status
@@ -250,7 +248,19 @@ public class OsisoftJsonPayload {
     String newPayloadPart = "";
     int index = tagIdToIndex(dataPoint.getTagId());
 
-    String timestamp = getFormattedStartTime(Long.parseLong(dataPoint.getTimeStamp()));
+    String timestamp;
+    try {
+      timestamp = SCTimeUtils.getIso8601FormattedTimestampForDataPoint(dataPoint);
+    } catch (Exception e) {
+      timestamp = dataPoint.getTimeStamp();
+      Logger.LOG_SERIOUS(
+          "Unable to format data point timestamp for tag: "
+              + dataPoint.getTagName()
+              + " with value: "
+              + dataPoint.getValueString()
+              + ". Using raw timestamp.");
+      Logger.LOG_EXCEPTION(e);
+    }
     boolean isFirstPoint;
 
     // if we have not seen that tag before, init it
@@ -303,21 +313,6 @@ public class OsisoftJsonPayload {
   }
 
   /**
-   * Convert payload start timestamp from epoch seconds to ISO 8601 date format in UTC.
-   *
-   * @param time the epoch time to get converted
-   * @return formatted payload start timestamp
-   */
-  private String getFormattedStartTime(long time) {
-    final int timeMillisPerSec = 1000;
-    Date d = new Date(time * timeMillisPerSec);
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss");
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    String timestamp = dateFormat.format(d);
-    return timestamp;
-  }
-
-  /**
    * Get the index of the {@link #tagNamesEncountered} from the tag ID.
    *
    * @param tagId ID of the tag
@@ -332,8 +327,6 @@ public class OsisoftJsonPayload {
   public void completePayloadAttempt() {
     if (status == PAYLOAD_VALUES_COMPLETE) {
       // Payload has values, end the payload
-      String batchTimeStamp = getFormattedStartTime(payloadStartTimestamp);
-
       boolean firstPayload = true;
 
       // add all the tag's info to the payload
