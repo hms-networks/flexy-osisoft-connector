@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.9
+### Major Changes
++ None
+### Minor Changes
++ Fixed a bug causing data point timestamps to use the incorrect time zone information
+
 ## Version 3.0.8
 ### Major Changes
 + None
