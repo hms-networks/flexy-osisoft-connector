@@ -423,7 +423,7 @@ Commonly encountered issues:
     * We have found that you may need to rerun the PI Web API Admin Utility to ensure that PI data archive is connected. This is especially true if the connector was working properly and then stopped working after restarting the OSIsoft server machine.
 
 ## OMF response logs
-OMF request responses will be logged in the /usr directory of the Flexy.
+OMF request responses will be logged in the /usr directory of the Flexy, and contained messages (such as warnings or errors) will be relayed to the Ewon's Realtime logs.
 Type initialization response logs are stored with the filename format {data type} + "Response.json"
 Container initialization response logs are stored with the filename format {container} + {container batch number} + "Response.json"
 Data message response logs are stored with the file name "dataMessage.json". Only the latest response is retained.
