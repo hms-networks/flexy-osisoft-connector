@@ -246,8 +246,7 @@ public class PayloadBuilder {
       tagValue = dataPoint.getValueString();
     }
 
-    payload +=
-        "{" + " \"timestamp\": \"" + timestamp + ".000Z\"," + " \"tagValue\": " + tagValue + "}";
+    payload += "{" + " \"timestamp\": \"" + timestamp + "\"," + " \"tagValue\": " + tagValue + "}";
 
     return payload;
   }
