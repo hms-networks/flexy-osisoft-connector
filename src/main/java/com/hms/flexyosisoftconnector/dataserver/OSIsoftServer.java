@@ -108,72 +108,36 @@ public class OSIsoftServer {
       res = SCHttpUtility.HTTPX_CODE_EWON_ERROR;
     }
 
-    if (!FileName.equals("") && res == SCHttpUtility.HTTPX_CODE_NO_ERROR) {
-      String fileStr = null;
-      try {
-        fileStr = FileAccessManager.readFileToString(FileName);
-      } catch (IOException e) {
-        Logger.LOG_EXCEPTION(e);
-        Logger.LOG_SERIOUS("Unable to read HTTPS response file from previous request.");
-      }
+    // Read response file to string
+    String responseFileString = null;
+    try {
+      responseFileString = FileAccessManager.readFileToString(FileName);
+    } catch (IOException e) {
+      Logger.LOG_EXCEPTION(e);
+      Logger.LOG_SERIOUS("Unable to read HTTPS response file from previous request.");
+    }
 
-      if (fileStr.charAt(0) != '[' && fileStr.charAt(0) != '{') {
+    // Remove random characters before start of JSON in response file
+    final int indexNotFound = -1;
+    final String jsonStart = "{";
+    if (responseFileString != null
+        && !responseFileString.startsWith(jsonStart)
+        && responseFileString.indexOf(jsonStart) != indexNotFound) {
+      responseFileString = responseFileString.substring(responseFileString.indexOf(jsonStart));
+    }
 
-        // json has odd characters at the front, trim them to make valid json
-        int notFoundIndex = -1;
-        int jsonStartIndex = fileStr.indexOf("{");
+    // Parse response file to JSON object
+    JSONTokener jsonTokener = new JSONTokener(responseFileString);
+    JSONObject response = null;
+    try {
+      response = new JSONObject(jsonTokener);
+    } catch (JSONException e) {
+      Logger.LOG_EXCEPTION(e);
+      Logger.LOG_SERIOUS("Unable to generate new JSON object from request's response file.");
+      Logger.LOG_SERIOUS("The request " + CnxParam + " has an improperly formatted response.");
+    }
 
-        if (jsonStartIndex == notFoundIndex) {
-          connected = true;
-          Logger.LOG_SERIOUS("Response received from OSIsoft server was not valid!");
-          return connected;
-        }
-
-        fileStr = fileStr.substring(jsonStartIndex);
-      }
-
-      JSONTokener JsonT = new JSONTokener(fileStr);
-      JSONObject response = null;
-      try {
-        response = new JSONObject(JsonT);
-      } catch (JSONException e) {
-        Logger.LOG_EXCEPTION(e);
-        Logger.LOG_SERIOUS("Unable to generate new JSON object from request's response file.");
-        Logger.LOG_SERIOUS("The request " + CnxParam + " has a bad response file.");
-      }
-      if (response.has("Message")) {
-        res = SCHttpUtility.HTTPX_CODE_AUTH_ERROR;
-        Logger.LOG_SERIOUS("User Credentials are incorrect");
-      }
-      if (response.has("Errors")) {
-        JSONArray errors = null;
-        try {
-          errors = response.getJSONArray("Errors");
-        } catch (JSONException e) {
-          Logger.LOG_EXCEPTION(e);
-          Logger.LOG_SERIOUS("Unable to parse JSON array from request's response file.");
-          Logger.LOG_SERIOUS("The request " + CnxParam + " has a bad response file.");
-        }
-        for (int i = 0; i < errors.length(); i++) {
-          String error = null;
-          try {
-            error = errors.getString(i);
-          } catch (JSONException e) {
-            Logger.LOG_EXCEPTION(e);
-            Logger.LOG_SERIOUS("Unable to parse JSON string from request's response file.");
-            Logger.LOG_SERIOUS("The request " + CnxParam + " has a bad response file.");
-          }
-          if (error.substring(0, WEB_ID_ERROR_STRING.length()).equals(WEB_ID_ERROR_STRING)) {
-            res = WEB_ID_ERROR;
-            Logger.LOG_SERIOUS("WEB ID: \"" + OSIsoftConfig.getServerWebID() + "\"");
-            Logger.LOG_SERIOUS("WEB ID Error: Supplied Web ID does not exist on this server");
-          } else {
-            res = GENERIC_ERROR;
-            Logger.LOG_SERIOUS(error);
-          }
-        }
-      }
-    } else if (res == SCHttpUtility.HTTPX_CODE_CONNECTION_ERROR) {
+    if (res == SCHttpUtility.HTTPX_CODE_CONNECTION_ERROR) {
       if (connected == true) {
         Logger.LOG_SERIOUS("Could not connect to OSIsoft Server, link is down");
         connected = false;
@@ -194,7 +158,7 @@ public class OSIsoftServer {
 
     boolean success = false;
     if (res == SCHttpUtility.HTTPX_CODE_NO_ERROR) {
-      success = true;
+      success = OSIsoftServerResponseUtil.checkForMessages(response, CnxParam, FileName);
     }
     return success;
   }
