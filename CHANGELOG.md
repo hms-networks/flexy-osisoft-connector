@@ -1,5 +1,13 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.10
+### Major Changes
++ Improved message response handling for OMF requests
+  + Added support for parsing OMF response messages for warning/error messages
+  + Added support for outputting OMF warning/error messages to Ewon realtime logs
+### Minor Changes
++ Fixed a bug causing data point timestamps to contain duplicate time zone information
+
 ## Version 3.0.9
 ### Major Changes
 + None
