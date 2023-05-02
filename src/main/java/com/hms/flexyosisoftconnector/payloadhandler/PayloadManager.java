@@ -97,7 +97,7 @@ public class PayloadManager {
   }
 
   /**
-   * Gets the next payload from the top of the payload queue.
+   * Gets the next payload from the top of the payload queue without removing.
    *
    * @return next payload
    */
@@ -106,7 +106,7 @@ public class PayloadManager {
 
     synchronized (payloads) {
       if (!payloads.isEmpty()) {
-        payload = (String) payloads.remove(TOP_OF_QUEUE);
+        payload = (String) payloads.get(TOP_OF_QUEUE);
         if (status == STATUS_STOP) {
           status = STATUS_OKAY;
         }
