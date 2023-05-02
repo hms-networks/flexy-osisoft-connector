@@ -50,6 +50,9 @@ public class DataPoster extends Thread {
 
         if (!retval) {
           Logger.LOG_WARN("Unable to send payload to OSIsoft");
+        } else {
+          // retval indicates that message was sent successfully, remove payload from queue
+          payloadHolder.popNextPayload();
         }
       }
 
