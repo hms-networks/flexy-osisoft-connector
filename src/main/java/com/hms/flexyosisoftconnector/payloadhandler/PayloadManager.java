@@ -116,6 +116,26 @@ public class PayloadManager {
     return payload;
   }
 
+  /**
+   * Remove payload from the top of the payload queue.
+   *
+   * @return next payload or empty string for an empty queue
+   */
+  public String popNextPayload() {
+    String payload = "";
+
+    synchronized (payloads) {
+      if (!payloads.isEmpty()) {
+        payload = (String) payloads.remove(TOP_OF_QUEUE_INDEX);
+        if (status == STATUS_STOP) {
+          status = STATUS_OKAY;
+        }
+      }
+    }
+
+    return payload;
+  }
+
   /** Clear the contents of the payload queue. */
   public void clearQueue() {
     synchronized (payloads) {
