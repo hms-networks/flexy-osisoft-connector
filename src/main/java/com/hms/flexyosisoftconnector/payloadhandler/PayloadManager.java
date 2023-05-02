@@ -39,6 +39,9 @@ public class PayloadManager {
   /** Current payload manager status */
   private int status = STATUS_OKAY;
 
+  /** Index of the top of the payload queue */
+  static final int TOP_OF_QUEUE = 0;
+
   /**
    * Constructor for the Payload Manager.
    *
@@ -100,11 +103,10 @@ public class PayloadManager {
    */
   public String getNextPayload() {
     String payload = "";
-    int topOfQueue = 0;
 
     synchronized (payloads) {
       if (!payloads.isEmpty()) {
-        payload = (String) payloads.remove(topOfQueue);
+        payload = (String) payloads.remove(TOP_OF_QUEUE);
         if (status == STATUS_STOP) {
           status = STATUS_OKAY;
         }
