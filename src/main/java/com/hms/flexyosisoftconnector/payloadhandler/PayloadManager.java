@@ -162,4 +162,20 @@ public class PayloadManager {
       }
     }
   }
+
+  /**
+   * Check if the payload queue is full.
+   *
+   * @return true/false queue is full
+   */
+  public boolean isQueueFull() {
+    boolean isFull = false;
+
+    synchronized (payloads) {
+      if (payloads.size() >= MAX_PAYLOADS) {
+        isFull = true;
+      }
+    }
+    return isFull;
+  }
 }
