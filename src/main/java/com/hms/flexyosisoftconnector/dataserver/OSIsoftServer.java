@@ -1,7 +1,6 @@
 package com.hms.flexyosisoftconnector.dataserver;
 
 import com.ewon.ewonitf.EWException;
-import com.ewon.ewonitf.ScheduledActionManager;
 import com.hms.flexyosisoftconnector.configuration.OSIsoftConfig;
 import com.hms.flexyosisoftconnector.payloadhandler.OsisoftJsonPayload;
 import com.hms.flexyosisoftconnector.payloadhandler.PayloadBuilder;
@@ -11,6 +10,10 @@ import com.hms_networks.americas.sc.extensions.json.JSONException;
 import com.hms_networks.americas.sc.extensions.json.JSONObject;
 import com.hms_networks.americas.sc.extensions.json.JSONTokener;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpAuthException;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpConnectionException;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpEwonException;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpUnknownException;
 import com.hms_networks.americas.sc.extensions.system.http.SCHttpUtility;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfo;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
@@ -76,6 +79,25 @@ public class OSIsoftServer {
   /** Constructs the OSIsoftServer object. */
   public OSIsoftServer() {}
 
+  /** HTTP Method strings */
+  static final String HTTP_METHOD_POST = "POST";
+
+  static final String HTTP_METHOD_GET = "GET";
+
+  /** 
+   * Repeated Exception handling code for HTTP requests
+   * 
+   * @param e Exception
+   * @param ErrorMessage Specific message to log
+   * @return error code 
+   */
+  private static int RequestHTTPSError(Exception e, String ErrorMessage) {
+    connected = false;
+    Logger.LOG_CRITICAL(ErrorMessage);
+    Logger.LOG_EXCEPTION(e);
+    return SCHttpUtility.HTTPX_CODE_EWON_ERROR;
+  }
+
   /**
    * Makes an HTTPS request against the OSIsoft server and validates the response code.
    *
@@ -84,35 +106,42 @@ public class OSIsoftServer {
    * @param Headers Request headers
    * @param TextFields Request Payload
    * @param FileName File name for response
-   * @return The HTTP response code
+   * @return True/False message was successfully sent
    */
   public static boolean RequestHTTPS(
-      String CnxParam,
-      String Method,
-      String Headers,
-      String TextFields,
-      String FileName) {
-    int res = SCHttpUtility.HTTPX_CODE_NO_ERROR;
+      String CnxParam, String Method, String Headers, String TextFields, String FileName) {
+    int res = SCHttpUtility.HTTPX_CODE_EWON_ERROR;
+    String responseFileString = null;
     if (FileName.length() > 0) {
       FileName = RESPONSE_DIRECTORY + FileName;
     }
     try {
       Logger.LOG_DEBUG("HTTPS request is: " + CnxParam);
-      res =
-          ScheduledActionManager.RequestHttpX(
-              CnxParam, Method, Headers, TextFields, FileFields, FileName);
+      if (Method == HTTP_METHOD_GET) {
+        responseFileString = SCHttpUtility.httpGet(CnxParam, Headers, TextFields, FileName);
+        res = SCHttpUtility.HTTPX_CODE_NO_ERROR;
+      } else if (Method == HTTP_METHOD_POST) {
+        responseFileString = SCHttpUtility.httpPost(CnxParam, Headers, TextFields, FileName);
+        res = SCHttpUtility.HTTPX_CODE_NO_ERROR;
+      }
+      connected = true;
     } catch (EWException e) {
-      Logger.LOG_EXCEPTION(e);
-      res = SCHttpUtility.HTTPX_CODE_EWON_ERROR;
+      res = RequestHTTPSError(e, "Ewon exception during HTTP request to" + CnxParam + ".");
+    } catch (IOException e) {
+      res = RequestHTTPSError(e, "IO exception during HTTP request to" + CnxParam + ".");
+    } catch (SCHttpEwonException e) {
+      res = RequestHTTPSError(e, "Ewon exception during the HTTP request to" + CnxParam + ".");
+    } catch (SCHttpAuthException e) {
+      res = RequestHTTPSError(e, "Auth exception during the HTTP request to" + CnxParam + ".");
+    } catch (SCHttpConnectionException e) {
+      res = RequestHTTPSError(e,"Connection error during the HTTP request to" + CnxParam + ".");
+    } catch (SCHttpUnknownException e) {
+      res = RequestHTTPSError(e,"Unknown exception during the HTTP request to" + CnxParam + ".");
     }
 
-    // Read response file to string
-    String responseFileString = null;
-    try {
-      responseFileString = FileAccessManager.readFileToString(FileName);
-    } catch (IOException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_SERIOUS("Unable to read HTTPS response file from previous request.");
+    // There is no point trying to parse or check 
+    if(!connected){
+      return false;
     }
 
     // Remove random characters before start of JSON in response file
@@ -133,25 +162,6 @@ public class OSIsoftServer {
       Logger.LOG_EXCEPTION(e);
       Logger.LOG_SERIOUS("Unable to generate new JSON object from request's response file.");
       Logger.LOG_SERIOUS("The request " + CnxParam + " has an improperly formatted response.");
-    }
-
-    if (res == SCHttpUtility.HTTPX_CODE_CONNECTION_ERROR) {
-      if (connected == true) {
-        Logger.LOG_SERIOUS("Could not connect to OSIsoft Server, link is down");
-        connected = false;
-      }
-    } else if (res == SEND_ERROR) {
-      if (connected == true) {
-        Logger.LOG_SERIOUS("Could not connect to OSIsoft Server, server is offine or unreachable");
-        connected = false;
-      }
-    } else if (res != SCHttpUtility.HTTPX_CODE_NO_ERROR) {
-      Logger.LOG_SERIOUS("Sending Failed. Error #" + res);
-    }
-
-    if (res == SCHttpUtility.HTTPX_CODE_NO_ERROR && connected == false) {
-      connected = true;
-      Logger.LOG_SERIOUS("Connection restored");
     }
 
     boolean success = false;
@@ -235,8 +245,7 @@ public class OSIsoftServer {
         // tag does not exist and must be created
         String payload = PayloadBuilder.buildNewPointBody(tag);
         requestSuccess =
-            RequestHTTPS(
-                url, "POST", OSIsoftConfig.getPostHeaders(), payload, responseFilename);
+            RequestHTTPS(url, "POST", OSIsoftConfig.getPostHeaders(), payload, responseFilename);
 
         if (requestSuccess) {
           /* The WebID is sent back in the headers of the previous post
