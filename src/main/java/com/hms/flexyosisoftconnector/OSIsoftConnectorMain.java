@@ -262,7 +262,7 @@ public class OSIsoftConnectorMain {
         payloadQueueFullCount += 1;
 
         if (payloadQueueFullCount >= payloadQueueFullWarnThresh) {
-          payloadQueueFullCount += 0;
+          payloadQueueFullCount = 0;
           Logger.LOG_DEBUG("Reading historical data skipped due to full payload queue.");
 
           // after warning increase the threshold, but avoid roll over
