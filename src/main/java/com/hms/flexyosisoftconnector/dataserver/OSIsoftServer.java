@@ -1,7 +1,6 @@
 package com.hms.flexyosisoftconnector.dataserver;
 
 import com.ewon.ewonitf.EWException;
-import com.ewon.ewonitf.ScheduledActionManager;
 import com.hms.flexyosisoftconnector.configuration.OSIsoftConfig;
 import com.hms.flexyosisoftconnector.payloadhandler.OsisoftJsonPayload;
 import com.hms.flexyosisoftconnector.payloadhandler.PayloadBuilder;
@@ -11,6 +10,10 @@ import com.hms_networks.americas.sc.extensions.json.JSONException;
 import com.hms_networks.americas.sc.extensions.json.JSONObject;
 import com.hms_networks.americas.sc.extensions.json.JSONTokener;
 import com.hms_networks.americas.sc.extensions.logging.Logger;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpAuthException;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpConnectionException;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpEwonException;
+import com.hms_networks.americas.sc.extensions.system.http.SCHttpUnknownException;
 import com.hms_networks.americas.sc.extensions.system.http.SCHttpUtility;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfo;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
@@ -76,56 +79,83 @@ public class OSIsoftServer {
   /** Constructs the OSIsoftServer object. */
   public OSIsoftServer() {}
 
+  /** HTTP Method string for Post requests */
+  static final String HTTP_METHOD_POST = "POST";
+
+  /** HTTP Method string for Get requests */
+  static final String HTTP_METHOD_GET = "GET";
+
+  /**
+   * Repeated Exception handling code for HTTP requests
+   *
+   * @param e Exception
+   * @param ErrorMessage Specific message to log
+   */
+  private static void RequestHttpsError(Exception e, String ErrorMessage) {
+    connected = false;
+    Logger.LOG_CRITICAL(ErrorMessage);
+    Logger.LOG_EXCEPTION(e);
+  }
+
   /**
    * Makes an HTTPS request against the OSIsoft server and validates the response code.
    *
-   * @param CnxParam Request parameters
+   * @param CnxParam Request parameters: GET or POST
    * @param Method Request method
    * @param Headers Request headers
    * @param TextFields Request Payload
    * @param FileName File name for response
-   * @return The HTTP response code
+   * @return True/False message was successfully sent
+   * @throws IllegalArgumentException if the specified parameter, {@code CnxParam}, is not an
+   *     allowed value
    */
-  public static boolean RequestHTTPS(
-      String CnxParam,
-      String Method,
-      String Headers,
-      String TextFields,
-      String FileName) {
-    int res = SCHttpUtility.HTTPX_CODE_NO_ERROR;
+  public static boolean RequestHttps(
+      String CnxParam, String Method, String Headers, String TextFields, String FileName) {
+    String responseBodyString = null;
     if (FileName.length() > 0) {
       FileName = RESPONSE_DIRECTORY + FileName;
     }
     try {
       Logger.LOG_DEBUG("HTTPS request is: " + CnxParam);
-      res =
-          ScheduledActionManager.RequestHttpX(
-              CnxParam, Method, Headers, TextFields, FileFields, FileName);
+      if (Method == HTTP_METHOD_GET) {
+        responseBodyString = SCHttpUtility.httpGet(CnxParam, Headers, TextFields, FileName);
+      } else if (Method == HTTP_METHOD_POST) {
+        responseBodyString = SCHttpUtility.httpPost(CnxParam, Headers, TextFields, FileName);
+      } else {
+        throw new IllegalArgumentException("CnxParam method not supported");
+      }
+
+      connected = true;
     } catch (EWException e) {
-      Logger.LOG_EXCEPTION(e);
-      res = SCHttpUtility.HTTPX_CODE_EWON_ERROR;
+      RequestHttpsError(e, "Ewon exception during HTTP request to" + CnxParam + ".");
+    } catch (IOException e) {
+      RequestHttpsError(e, "IO exception during HTTP request to" + CnxParam + ".");
+    } catch (SCHttpEwonException e) {
+      RequestHttpsError(e, "Ewon exception during the HTTP request to" + CnxParam + ".");
+    } catch (SCHttpAuthException e) {
+      RequestHttpsError(e, "Auth exception during the HTTP request to" + CnxParam + ".");
+    } catch (SCHttpConnectionException e) {
+      RequestHttpsError(e, "Connection error during the HTTP request to" + CnxParam + ".");
+    } catch (SCHttpUnknownException e) {
+      RequestHttpsError(e, "Unknown exception during the HTTP request to" + CnxParam + ".");
     }
 
-    // Read response file to string
-    String responseFileString = null;
-    try {
-      responseFileString = FileAccessManager.readFileToString(FileName);
-    } catch (IOException e) {
-      Logger.LOG_EXCEPTION(e);
-      Logger.LOG_SERIOUS("Unable to read HTTPS response file from previous request.");
+    // There is no point trying to parse or check
+    if (!connected) {
+      return false;
     }
 
     // Remove random characters before start of JSON in response file
     final int indexNotFound = -1;
     final String jsonStart = "{";
-    if (responseFileString != null
-        && !responseFileString.startsWith(jsonStart)
-        && responseFileString.indexOf(jsonStart) != indexNotFound) {
-      responseFileString = responseFileString.substring(responseFileString.indexOf(jsonStart));
+    if (responseBodyString != null
+        && !responseBodyString.startsWith(jsonStart)
+        && responseBodyString.indexOf(jsonStart) != indexNotFound) {
+      responseBodyString = responseBodyString.substring(responseBodyString.indexOf(jsonStart));
     }
 
     // Parse response file to JSON object
-    JSONTokener jsonTokener = new JSONTokener(responseFileString);
+    JSONTokener jsonTokener = new JSONTokener(responseBodyString);
     JSONObject response = null;
     try {
       response = new JSONObject(jsonTokener);
@@ -135,27 +165,8 @@ public class OSIsoftServer {
       Logger.LOG_SERIOUS("The request " + CnxParam + " has an improperly formatted response.");
     }
 
-    if (res == SCHttpUtility.HTTPX_CODE_CONNECTION_ERROR) {
-      if (connected == true) {
-        Logger.LOG_SERIOUS("Could not connect to OSIsoft Server, link is down");
-        connected = false;
-      }
-    } else if (res == SEND_ERROR) {
-      if (connected == true) {
-        Logger.LOG_SERIOUS("Could not connect to OSIsoft Server, server is offine or unreachable");
-        connected = false;
-      }
-    } else if (res != SCHttpUtility.HTTPX_CODE_NO_ERROR) {
-      Logger.LOG_SERIOUS("Sending Failed. Error #" + res);
-    }
-
-    if (res == SCHttpUtility.HTTPX_CODE_NO_ERROR && connected == false) {
-      connected = true;
-      Logger.LOG_SERIOUS("Connection restored");
-    }
-
     boolean success = false;
-    if (res == SCHttpUtility.HTTPX_CODE_NO_ERROR) {
+    if (connected) {
       success = OSIsoftServerResponseUtil.checkForMessages(response, CnxParam, FileName);
     }
     return success;
@@ -189,7 +200,7 @@ public class OSIsoftServer {
 
     // Check if the tag already exists in the dataserver
     requestSuccess =
-        RequestHTTPS(
+        RequestHttps(
             url + "?nameFilter=" + tagName,
             "GET",
             OSIsoftConfig.getPostHeaders(),
@@ -235,15 +246,14 @@ public class OSIsoftServer {
         // tag does not exist and must be created
         String payload = PayloadBuilder.buildNewPointBody(tag);
         requestSuccess =
-            RequestHTTPS(
-                url, "POST", OSIsoftConfig.getPostHeaders(), payload, responseFilename);
+            RequestHttps(url, "POST", OSIsoftConfig.getPostHeaders(), payload, responseFilename);
 
         if (requestSuccess) {
           /* The WebID is sent back in the headers of the previous post
           however, there is no mechanism currently to retrieve it so
           another request must be issued.*/
           requestSuccess =
-              RequestHTTPS(
+              RequestHttps(
                   url + "?nameFilter=" + tagName,
                   "GET",
                   OSIsoftConfig.getPostHeaders(),
@@ -282,7 +292,7 @@ public class OSIsoftServer {
                 Logger.LOG_SERIOUS("Unable to parse JSON string from request's response file.");
               }
               requestSuccess =
-                  RequestHTTPS(
+                  RequestHttps(
                       OSIsoftConfig.getTargetURL()
                           + "points/"
                           + tagWebID
@@ -361,28 +371,28 @@ public class OSIsoftServer {
     // setup type
     String messageTypeHeader = "&messagetype=type";
 
-    RequestHTTPS(
+    RequestHttps(
         OSIsoftConfig.getOmfUrl(),
         "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
         STRING_RESPONSE_FILE_NAME);
 
-    RequestHTTPS(
+    RequestHttps(
         OSIsoftConfig.getOmfUrl(),
         "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getNumberTypeBody(),
         NUMBER_RESPONSE_FILE_NAME);
 
-    RequestHTTPS(
+    RequestHttps(
         OSIsoftConfig.getOmfUrl(),
         "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getIntegerTypeBody(),
         INTEGER_RESPONSE_FILE_NAME);
 
-    RequestHTTPS(
+    RequestHttps(
         OSIsoftConfig.getOmfUrl(),
         "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
@@ -400,7 +410,7 @@ public class OSIsoftServer {
         currentTagIndex += numTagsInitializing) {
       String payload = PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
 
-      RequestHTTPS(
+      RequestHttps(
           OSIsoftConfig.getOmfUrl(),
           "POST",
           OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
@@ -436,35 +446,35 @@ public class OSIsoftServer {
     // setup type
     final String ocsMessageTypeHeader = "&messagetype=type";
 
-    RequestHTTPS(
+    RequestHttps(
         OSIsoftConfig.getOcsUrl(),
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
         responseFilename);
 
-    RequestHTTPS(
+    RequestHttps(
         OSIsoftConfig.getOcsUrl(),
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
         responseFilename);
 
-    RequestHTTPS(
+    RequestHttps(
         OSIsoftConfig.getOcsUrl(),
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getIntegerTypeBody(),
         responseFilename);
 
-    RequestHTTPS(
+    RequestHttps(
         OSIsoftConfig.getOcsUrl(),
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getNumberTypeBody(),
         responseFilename);
 
-    RequestHTTPS(
+    RequestHttps(
         OSIsoftConfig.getOcsUrl(),
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
@@ -483,7 +493,7 @@ public class OSIsoftServer {
         currentTagIndex += numTagsInitializing) {
       String payload = PayloadBuilder.getContainerSettingJson(currentTagIndex, numTagsInitializing);
 
-      RequestHTTPS(
+      RequestHttps(
           OSIsoftConfig.getOcsUrl(),
           "POST",
           OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
@@ -506,7 +516,7 @@ public class OSIsoftServer {
 
     // posting OMF batch
     boolean requestSuccess =
-        RequestHTTPS(
+        RequestHttps(
             OSIsoftConfig.getOmfUrl(),
             "POST",
             OSIsoftConfig.getOmfPostHeaders() + postHeaderType,
@@ -532,7 +542,7 @@ public class OSIsoftServer {
 
     // posting OMF batch
     boolean requestSuccess =
-        RequestHTTPS(
+        RequestHttps(
             OSIsoftConfig.getOcsUrl(),
             "POST",
             OSIsoftConfig.getOcsPostHeaders() + postHeaderType,
@@ -552,7 +562,7 @@ public class OSIsoftServer {
    */
   public static boolean postBatch(String payload) {
     boolean requestSuccess =
-        RequestHTTPS(
+        RequestHttps(
             OSIsoftConfig.getTargetURL() + "batch/",
             "POST",
             OSIsoftConfig.getPostHeaders(),
