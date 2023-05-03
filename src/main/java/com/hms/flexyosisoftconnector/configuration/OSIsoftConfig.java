@@ -66,8 +66,10 @@ public class OSIsoftConfig {
 
   /** PIWebAPI comminucation type */
   public static final int PI_WEB_API = 0;
+
   /** OMF communication type */
   public static final int OMF = 1;
+
   /** OCS communication type */
   public static final int OCS = 2;
 
