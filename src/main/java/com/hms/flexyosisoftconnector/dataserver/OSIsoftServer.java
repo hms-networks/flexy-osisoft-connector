@@ -83,7 +83,6 @@ public class OSIsoftServer {
    * @param Method Request method
    * @param Headers Request headers
    * @param TextFields Request Payload
-   * @param FileFields File location for response
    * @param FileName File name for response
    * @return The HTTP response code
    */
@@ -92,7 +91,6 @@ public class OSIsoftServer {
       String Method,
       String Headers,
       String TextFields,
-      String FileFields,
       String FileName) {
     int res = SCHttpUtility.HTTPX_CODE_NO_ERROR;
     if (FileName.length() > 0) {
@@ -196,7 +194,6 @@ public class OSIsoftServer {
             "GET",
             OSIsoftConfig.getPostHeaders(),
             "",
-            "",
             responseFilename);
     if (requestSuccess) {
       // Parse the JSON response and retrieve the JSON Array of items
@@ -239,7 +236,7 @@ public class OSIsoftServer {
         String payload = PayloadBuilder.buildNewPointBody(tag);
         requestSuccess =
             RequestHTTPS(
-                url, "POST", OSIsoftConfig.getPostHeaders(), payload, "", responseFilename);
+                url, "POST", OSIsoftConfig.getPostHeaders(), payload, responseFilename);
 
         if (requestSuccess) {
           /* The WebID is sent back in the headers of the previous post
@@ -250,7 +247,6 @@ public class OSIsoftServer {
                   url + "?nameFilter=" + tagName,
                   "GET",
                   OSIsoftConfig.getPostHeaders(),
-                  "",
                   "",
                   responseFilename);
           if (requestSuccess) {
@@ -294,7 +290,6 @@ public class OSIsoftServer {
                       "PUT",
                       OSIsoftConfig.getPostHeaders(),
                       "\"HMS\"",
-                      "",
                       "");
               if (!requestSuccess) {
                 Logger.LOG_SERIOUS("Could not set point source of " + tag.getName() + ".");
@@ -371,7 +366,6 @@ public class OSIsoftServer {
         "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
-        "",
         STRING_RESPONSE_FILE_NAME);
 
     RequestHTTPS(
@@ -379,7 +373,6 @@ public class OSIsoftServer {
         "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getNumberTypeBody(),
-        "",
         NUMBER_RESPONSE_FILE_NAME);
 
     RequestHTTPS(
@@ -387,7 +380,6 @@ public class OSIsoftServer {
         "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getIntegerTypeBody(),
-        "",
         INTEGER_RESPONSE_FILE_NAME);
 
     RequestHTTPS(
@@ -395,7 +387,6 @@ public class OSIsoftServer {
         "POST",
         OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
         PayloadBuilder.getBooleanTypeBody(),
-        "",
         BOOLEAN_RESPONSE_FILE_NAME);
 
     // setup containers
@@ -414,7 +405,6 @@ public class OSIsoftServer {
           "POST",
           OSIsoftConfig.getOmfPostHeaders() + messageTypeHeader,
           payload,
-          "",
           "containers" + currentTagIndex + RESPONSE_FILE_NAME);
     }
   }
@@ -451,7 +441,6 @@ public class OSIsoftServer {
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
-        "",
         responseFilename);
 
     RequestHTTPS(
@@ -459,7 +448,6 @@ public class OSIsoftServer {
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getStringTypeBody(),
-        "",
         responseFilename);
 
     RequestHTTPS(
@@ -467,7 +455,6 @@ public class OSIsoftServer {
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getIntegerTypeBody(),
-        "",
         responseFilename);
 
     RequestHTTPS(
@@ -475,7 +462,6 @@ public class OSIsoftServer {
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getNumberTypeBody(),
-        "",
         responseFilename);
 
     RequestHTTPS(
@@ -483,7 +469,6 @@ public class OSIsoftServer {
         "POST",
         OSIsoftConfig.getOcsPostHeaders() + ocsMessageTypeHeader,
         PayloadBuilder.getBooleanTypeBody(),
-        "",
         responseFilename);
 
     // setup containers
@@ -503,7 +488,6 @@ public class OSIsoftServer {
           "POST",
           OSIsoftConfig.getOcsPostHeaders() + messageTypeHeader,
           payload,
-          "",
           responseFilename);
     }
   }
@@ -527,7 +511,6 @@ public class OSIsoftServer {
             "POST",
             OSIsoftConfig.getOmfPostHeaders() + postHeaderType,
             payload,
-            "",
             DATA_RESPONSE_FILE_NAME);
     if (!requestSuccess) {
       Logger.LOG_SERIOUS("Could not post batch of OMF data points to OSIsoft.");
@@ -554,7 +537,6 @@ public class OSIsoftServer {
             "POST",
             OSIsoftConfig.getOcsPostHeaders() + postHeaderType,
             payload,
-            "",
             OCS_RESPONSE_FILE_NAME);
     if (!requestSuccess) {
       Logger.LOG_SERIOUS("Could not post batch of data point to OCS.");
@@ -575,7 +557,6 @@ public class OSIsoftServer {
             "POST",
             OSIsoftConfig.getPostHeaders(),
             payload,
-            "",
             PI_WEB_API_RESPONSE_FILE_NAME);
 
     if (!requestSuccess) {
