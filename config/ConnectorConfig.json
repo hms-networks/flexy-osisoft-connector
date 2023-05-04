@@ -5,7 +5,8 @@
       "Credentials":"UEktU2VydmVyOk1hbmNoZXN0ZXIxMjMh"
    },
    "eWONConfig":{
-      "CertificatePath":"/usr/Certificates"
+      "CertificatePath":"/usr/Certificates",
+      "QueueDataPollMaxBehindTimeMins": -1
    },
    "AppConfig":{
       "CommunicationType":"omf",

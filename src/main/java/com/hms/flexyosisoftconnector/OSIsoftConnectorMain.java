@@ -95,6 +95,24 @@ public class OSIsoftConnectorMain {
     setCertificatePath(OSIsoftConfig.getCertificatePath());
     setHttpTimeouts(OSIsoftConfig.getHttpTimeoutSeconds());
 
+    try {
+      long queueDataPollMaxBehindTimeMinutes = OSIsoftConfig.getQueueDataPollMaxBehindTimeMinutes();
+      if (queueDataPollMaxBehindTimeMinutes
+          == HistoricalDataQueueManager.DISABLED_MAX_HIST_FIFO_GET_BEHIND_MINS) {
+        Logger.LOG_WARN("Queue maximum fall behind time (minutes) option is not enabled!");
+      } else {
+        Logger.LOG_DEBUG(
+            "Setting the queue maximum fall behind time (minutes) option to "
+                + queueDataPollMaxBehindTimeMinutes
+                + ".");
+      }
+      HistoricalDataQueueManager.setQueueMaxBehindMins(queueDataPollMaxBehindTimeMinutes);
+    } catch (Exception e) {
+      Logger.LOG_CRITICAL(
+          "Failed to configure the queue data poll maximum fall behind time (minutes) option!");
+      Logger.LOG_EXCEPTION(e);
+    }
+
     // update tag info to use later
     TagInfoManager.refreshTagList();
 

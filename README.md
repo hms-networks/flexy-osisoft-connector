@@ -36,6 +36,7 @@ This application is supported by HMS' North American offices.
       3. [Credentials](#credentials)
    3. [Ewon Config](#ewonconfig)
       1. [Certificate Path](#certificatepath)
+      1. [Queue Data Poll Max Behind Time](#queue-data-poll-max-behind-time-queuedatapollmaxbehindtimemins)
    4. [App Config](#appconfig)
       1. [Communication Type](#communicationtype)
       2. [HTTP Timeout Seconds](#httptimeoutseconds)
@@ -217,6 +218,12 @@ Example: If the username is 'username' and the password is 'password' you would 
 
 #### CertificatePath
 Path to the directory containing the OSIsoft server's certificate.  For more information see the Certificates section
+
+####  Queue Data Poll Max Behind Time (QueueDataPollMaxBehindTimeMins)
+
+Parameter to configure the data poll maximum behind time (in minutes). Changing this will
+modify the maximum number of minutes which the historical queue data polling may be running behind
+by. For example, a setting of 30 will ensure the Flexy never tries to sync data that is older than 30 minutes from current time. A value of `-1` disables this functionality. 
 
 ### AppConfig
 
