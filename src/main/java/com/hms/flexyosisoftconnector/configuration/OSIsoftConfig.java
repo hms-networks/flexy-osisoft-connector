@@ -4,6 +4,7 @@ import com.ewon.ewonitf.EWException;
 import com.ewon.ewonitf.SysControlBlock;
 import com.ewon.ewonitf.TagControl;
 import com.hms_networks.americas.sc.extensions.fileutils.FileAccessManager;
+import com.hms_networks.americas.sc.extensions.historicaldata.HistoricalDataQueueManager;
 import com.hms_networks.americas.sc.extensions.json.JSONException;
 import com.hms_networks.americas.sc.extensions.json.JSONObject;
 import com.hms_networks.americas.sc.extensions.json.JSONTokener;
@@ -148,6 +149,27 @@ public class OSIsoftConfig {
    */
   private static int dataPostRateMs;
 
+  /** Key for accessing the 'QueueDataPollMaxBehindTimeMins' object in the configuration file. */
+  private static final String CONFIG_FILE_QUEUE_DATA_POLL_MAX_BEHIND_TIME_MINS_KEY =
+      "QueueDataPollMaxBehindTimeMins";
+
+  /**
+   * The default maximum time (in mins) which data polling may run behind. Changing this will modify
+   * the amount of time which data polling may run behind by. By default, this functionality is
+   * disabled. The value {@link HistoricalDataQueueManager#DISABLED_MAX_HIST_FIFO_GET_BEHIND_MINS}
+   * indicates that the functionality is disabled.
+   */
+  private static final long QUEUE_DATA_POLL_MAX_BEHIND_TIME_MINS_DEFAULT =
+      HistoricalDataQueueManager.DISABLED_MAX_HIST_FIFO_GET_BEHIND_MINS;
+
+  /*
+   * The maximum time (in mins) which data polling may run behind. Is set to
+   * {@link HistoricalDataQueueManager#DISABLED_MAX_HIST_FIFO_GET_BEHIND_MINS} as a default, but
+   * this can be overwritten by the configuration file.
+   */
+  private static long historicalDataQueueMaxFallBehindMin =
+      QUEUE_DATA_POLL_MAX_BEHIND_TIME_MINS_DEFAULT;
+
   /**
    * Initializes the configuration class and all required information.
    *
@@ -174,6 +196,21 @@ public class OSIsoftConfig {
     // Build a JSON Object containing the "eWONConfig"
     JSONObject ewonConfig = configJSON.getJSONObject("eWONConfig");
     ewonCertificatePath = ewonConfig.getString("CertificatePath");
+    try {
+      if (ewonConfig.has(CONFIG_FILE_QUEUE_DATA_POLL_MAX_BEHIND_TIME_MINS_KEY)) {
+        historicalDataQueueMaxFallBehindMin =
+            ewonConfig.getLong(CONFIG_FILE_QUEUE_DATA_POLL_MAX_BEHIND_TIME_MINS_KEY);
+      }
+
+    } catch (Exception e) {
+      String defaultQueueDataPollMaxBehindTimeMinsStr =
+          String.valueOf(QUEUE_DATA_POLL_MAX_BEHIND_TIME_MINS_DEFAULT);
+      Logger.LOG_WARN(
+          "The queue maximum data polling run behind time setting was not set. "
+              + "Using default value of "
+              + defaultQueueDataPollMaxBehindTimeMinsStr
+              + " minutes.");
+    }
 
     // Build a JSON Object containing the "AppConfig"
     JSONObject appConfig = configJSON.getJSONObject("AppConfig");
@@ -554,5 +591,14 @@ public class OSIsoftConfig {
    */
   public static String getOcsPostHeaders() {
     return ocsPostHeaders;
+  }
+
+  /**
+   * Get the max time in minutes to poll historical data.
+   *
+   * @return Queue data poll Max behind minutes.
+   */
+  public static long getQueueDataPollMaxBehindTimeMinutes() {
+    return historicalDataQueueMaxFallBehindMin;
   }
 }
