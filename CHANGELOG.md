@@ -1,5 +1,13 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.11
+### Major Changes
++ Avoid advancing historical tracking time when server responds with errror
++ Updated http request to use Flexy Extension library methods 
++ Implemented configurable max historical data poll behind limit
+### Minor Changes
++ None
+
 ## Version 3.0.10
 ### Major Changes
 + Improved message response handling for OMF requests
