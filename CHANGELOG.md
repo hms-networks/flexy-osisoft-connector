@@ -1,5 +1,12 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.12
+### Major Changes
++ Updated com.hms_networks.americas.sc:extensions library to v1.13.11
+  + Resolves a bug causing the connector to fail when encountering a tag with Infinity, -Infinity, or NaN value. 
+### Minor Changes
++ None
+
 ## Version 3.0.11
 ### Major Changes
 + Avoid advancing historical tracking time when server responds with errror
