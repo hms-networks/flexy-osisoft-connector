@@ -157,7 +157,8 @@ static String eWONCertificatePath = "/usr/Certificates";
    },
    "eWONConfig":{
       "CertificatePath":"/usr/Certificates",
-      "QueueDataPollMaxBehindTimeMins": -1
+      "QueueDataPollMaxBehindTimeMins": -1,
+      "QueueDiagnosticTagsEnabled": false
    },
    "AppConfig":{
       "CommunicationType":"omf",

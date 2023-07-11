@@ -16,6 +16,7 @@ import com.hms_networks.americas.sc.extensions.logging.Logger;
 import com.hms_networks.americas.sc.extensions.system.application.SCAppArgsParser;
 import com.hms_networks.americas.sc.extensions.system.application.SCAppManagement;
 import com.hms_networks.americas.sc.extensions.system.http.SCHttpUtility;
+import com.hms_networks.americas.sc.extensions.system.time.SCTimeUnit;
 import com.hms_networks.americas.sc.extensions.system.time.SCTimeUtils;
 import com.hms_networks.americas.sc.extensions.taginfo.TagInfoManager;
 import java.io.IOException;
@@ -112,6 +113,11 @@ public class OSIsoftConnectorMain {
           "Failed to configure the queue data poll maximum fall behind time (minutes) option!");
       Logger.LOG_EXCEPTION(e);
     }
+
+    // Configure queue diagnostic tags enabled setting
+    HistoricalDataQueueManager.setEnableDiagnosticTags(
+        OSIsoftConfig.getQueueDiagnosticTagsEnabled(),
+        SCTimeUnit.MILLISECONDS.toSeconds(OSIsoftConfig.WARNING_LIMIT_QUEUE_BEHIND_MILLISECONDS));
 
     // update tag info to use later
     TagInfoManager.refreshTagList();
