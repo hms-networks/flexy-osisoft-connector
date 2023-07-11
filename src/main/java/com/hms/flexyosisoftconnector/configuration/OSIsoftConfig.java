@@ -170,6 +170,20 @@ public class OSIsoftConfig {
   private static long historicalDataQueueMaxFallBehindMin =
       QUEUE_DATA_POLL_MAX_BEHIND_TIME_MINS_DEFAULT;
 
+  /** Key for accessing the 'QueueDiagnosticTagsEnabled' object in the configuration file. */
+  private static final String CONFIG_FILE_QUEUE_DIAGNOSTIC_TAGS_ENABLED_KEY =
+      "QueueDiagnosticTagsEnabled";
+
+  /** The default value for the 'QueueDiagnosticTagsEnabled' object in the configuration file. */
+  private static final boolean QUEUE_DIAGNOSTIC_TAGS_ENABLED_DEFAULT = false;
+
+  /**
+   * The value for the 'QueueDiagnosticTagsEnabled' object in the configuration file. This is the
+   * value which determines whether diagnostic tags are enabled for the historical data queue.
+   */
+  private static boolean historicalDataQueueDiagnosticTagsEnabled =
+      QUEUE_DIAGNOSTIC_TAGS_ENABLED_DEFAULT;
+
   /**
    * Initializes the configuration class and all required information.
    *
@@ -210,6 +224,19 @@ public class OSIsoftConfig {
               + "Using default value of "
               + defaultQueueDataPollMaxBehindTimeMinsStr
               + " minutes.");
+    }
+    try {
+      if (ewonConfig.has(CONFIG_FILE_QUEUE_DIAGNOSTIC_TAGS_ENABLED_KEY)) {
+        historicalDataQueueDiagnosticTagsEnabled =
+            ewonConfig.getBoolean(CONFIG_FILE_QUEUE_DIAGNOSTIC_TAGS_ENABLED_KEY);
+      }
+    } catch (Exception e) {
+      historicalDataQueueDiagnosticTagsEnabled = QUEUE_DIAGNOSTIC_TAGS_ENABLED_DEFAULT;
+      Logger.LOG_WARN(
+          "The queue diagnostic tags enabled setting could not be read. "
+              + "Using default value of "
+              + QUEUE_DIAGNOSTIC_TAGS_ENABLED_DEFAULT
+              + ".");
     }
 
     // Build a JSON Object containing the "AppConfig"
@@ -600,5 +627,15 @@ public class OSIsoftConfig {
    */
   public static long getQueueDataPollMaxBehindTimeMinutes() {
     return historicalDataQueueMaxFallBehindMin;
+  }
+
+  /**
+   * Get the boolean value indicating whether historical data queue diagnostic tags should be
+   * enabled.
+   *
+   * @return true if historical data queue diagnostic tags should be enabled, false otherwise.
+   */
+  public static boolean getQueueDiagnosticTagsEnabled() {
+    return historicalDataQueueDiagnosticTagsEnabled;
   }
 }
