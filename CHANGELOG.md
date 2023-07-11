@@ -1,5 +1,13 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.13
+### Major Changes
++ Updated com.hms_networks.americas.sc:extensions library to v1.14.2
+  + Added support for enabled historical queue diagnostic tags
+  + Added support for historical queue rapid catch up functionality
+### Minor Changes
++ None
+
 ## Version 3.0.12
 ### Major Changes
 + Updated com.hms_networks.americas.sc:extensions library to v1.13.11
