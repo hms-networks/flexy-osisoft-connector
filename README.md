@@ -149,25 +149,26 @@ static String eWONCertificatePath = "/usr/Certificates";
 
 ### Example ConnectorConfig.json
 ```json
-    {
-        "ServerConfig":{
-            "URL":"https://<USER-DOMAIN>/piwebapi/omf",
-            "WebID":"<USER-WEB-ID>",
-            "Credentials":"<USER-CREDENTIALS>"
-        },
-        "eWONConfig":{
-            "CertificatePath":"/usr/Certificates"
-        },
-        "AppConfig":{
-            "CommunicationType":"omf",
-           "OSIsoftTagNamingScheme":"default",
-           "LoggingLevel": 4,
-           "httpTimeoutSeconds": 2,
-           "AutoRestart": true,
-           "DataPollRateMs": 5000,
-           "DataPostRateMs": 5000
-        }
-    }
+{
+   "ServerConfig":{
+      "URL":"https://<USER-DOMAIN>/piwebapi/omf",
+      "WebID":"<USER-WEB-ID>",
+      "Credentials":"<USER-CREDENTIALS>"
+   },
+   "eWONConfig":{
+      "CertificatePath":"/usr/Certificates",
+      "QueueDataPollMaxBehindTimeMins": -1
+   },
+   "AppConfig":{
+      "CommunicationType":"omf",
+      "OSIsoftTagNamingScheme":"default",
+      "LoggingLevel": 4,
+      "httpTimeoutSeconds": 2,
+      "AutoRestart": true,
+      "DataPollRateMs": 5000,
+      "DataPostRateMs": 5000
+   }
+}
 ```
 ### ServerConfig
 
