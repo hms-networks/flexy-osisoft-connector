@@ -162,10 +162,10 @@ public class OSIsoftConfig {
   private static final long QUEUE_DATA_POLL_MAX_BEHIND_TIME_MINS_DEFAULT =
       HistoricalDataQueueManager.DISABLED_MAX_HIST_FIFO_GET_BEHIND_MINS;
 
-  /*
-   * The maximum time (in mins) which data polling may run behind. Is set to
-   * {@link HistoricalDataQueueManager#DISABLED_MAX_HIST_FIFO_GET_BEHIND_MINS} as a default, but
-   * this can be overwritten by the configuration file.
+  /**
+   * The maximum time (in mins) which data polling may run behind. Is set to {@link
+   * HistoricalDataQueueManager#DISABLED_MAX_HIST_FIFO_GET_BEHIND_MINS} as a default, but this can
+   * be overwritten by the configuration file.
    */
   private static long historicalDataQueueMaxFallBehindMin =
       QUEUE_DATA_POLL_MAX_BEHIND_TIME_MINS_DEFAULT;
