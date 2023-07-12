@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.14
+### Major Changes
++ None
+### Minor Changes
++ Added wait for WAN IP upon connector startup to improve reliability
+
 ## Version 3.0.13
 ### Major Changes
 + Updated com.hms_networks.americas.sc:extensions library to v1.14.2
