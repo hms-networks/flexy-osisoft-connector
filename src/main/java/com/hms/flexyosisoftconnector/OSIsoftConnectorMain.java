@@ -154,6 +154,15 @@ public class OSIsoftConnectorMain {
 
     Logger.LOG_INFO("Finished initializing tags");
 
+    // Wait for WAN IP
+    try {
+      SCAppManagement.waitForWanIp();
+    } catch (Exception e) {
+      Logger.LOG_CRITICAL(
+          "An error occurred while waiting for the WAN IP address on connector startup.");
+      Logger.LOG_EXCEPTION(e);
+    }
+
     DataPoster dataThread = new DataPoster(payloadMngr);
     dataThread.start();
 
