@@ -563,7 +563,7 @@ public class OSIsoftServer {
   public static boolean postBatch(String payload) {
     boolean requestSuccess =
         RequestHttps(
-            OSIsoftConfig.getTargetURL() + "batch/",
+            OSIsoftConfig.getTargetURL() + "batch",
             "POST",
             OSIsoftConfig.getPostHeaders(),
             payload,
