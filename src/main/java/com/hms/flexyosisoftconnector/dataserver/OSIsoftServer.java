@@ -192,11 +192,7 @@ public class OSIsoftServer {
 
     // url for the dataserver's pi points
     String url =
-        "https://"
-            + OSIsoftConfig.getServerUrl()
-            + "/piwebapi/dataservers/"
-            + OSIsoftConfig.getServerWebID()
-            + "/points";
+        OSIsoftConfig.getServerUrl() + "/dataservers/" + OSIsoftConfig.getServerWebID() + "/points";
 
     // Check if the tag already exists in the dataserver
     requestSuccess =
@@ -293,8 +289,8 @@ public class OSIsoftServer {
               }
               requestSuccess =
                   RequestHttps(
-                      OSIsoftConfig.getTargetURL()
-                          + "points/"
+                      OSIsoftConfig.getServerUrl()
+                          + "/points/"
                           + tagWebID
                           + "/attributes/pointsource",
                       "PUT",
@@ -563,7 +559,7 @@ public class OSIsoftServer {
   public static boolean postBatch(String payload) {
     boolean requestSuccess =
         RequestHttps(
-            OSIsoftConfig.getTargetURL() + "batch",
+            OSIsoftConfig.getServerUrl() + "/batch",
             "POST",
             OSIsoftConfig.getPostHeaders(),
             payload,
