@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.15
+### Major Changes
++ None
+### Minor Changes
++ Align PIWEBAPI expected URL with the rest of the connector requests.
+
 ## Version 3.0.14
 ### Major Changes
 + None
