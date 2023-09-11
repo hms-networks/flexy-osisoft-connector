@@ -486,24 +486,6 @@ public class OSIsoftConfig {
   }
 
   /**
-   * Get the target URL
-   *
-   * @return the target URL
-   */
-  public static String getTargetURL() {
-    return getServerUrl();
-  }
-
-  /**
-   * Get the type ID
-   *
-   * @return the type ID
-   */
-  public static String getTypeID() {
-    return typeID;
-  }
-
-  /**
    * Get the flexy name
    *
    * @return the flexy name
