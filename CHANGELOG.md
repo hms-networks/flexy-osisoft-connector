@@ -1,5 +1,11 @@
 # Flexy OSIsoft Changelog
 
+## Version 3.0.16
+### Major Changes
++ None
+### Minor Changes
++ Bug fix: PIWEBAPI URL is now working as expected. 
+
 ## Version 3.0.15
 ### Major Changes
 + None
