@@ -98,7 +98,7 @@ public class PayloadBuilder {
   public static String addPointOldFormat(DataPoint dataPoint, String timeStamp, int batchCount) {
     int index = dataPoint.getTagId() - tagWebIdListIndexOffset;
     String webId = tagWebIdList[index];
-    String targetURL = "https://" + OSIsoftConfig.getServerUrl() + "/piwebapi/";
+    String targetURL = OSIsoftConfig.getServerUrl();
     String authCredentials = OSIsoftConfig.getServerLogin();
 
     String payload =
