@@ -1,5 +1,9 @@
 # Ewon Flexy OSIsoft Connector
 
+## Warning on Maintenance Status
+This project remains as a reference, but is not actively being developed or maintained. 
+If you are interested working with Flexy data in OSI PI, please see the [Ewon developer documentation](https://developer.ewon.biz/) for details on connecting to the DataMailbox and Talk2M APIs.
+
 ## About
 
 This application connects tags from a Flexy to an OSIsoft PI dataserver.
